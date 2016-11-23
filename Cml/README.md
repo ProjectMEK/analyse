@@ -1,4 +1,4 @@
-<H1><center>Dossier Cml</center></H1>
+<center><H1>Dossier Cml</H1></center>
 
 C --> Classe<br/>
 m --> multi<br/>
