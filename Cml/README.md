@@ -1,6 +1,6 @@
 <H1>Dossier Cml</H1>
-<H4>
-C --> Classe<br/>
+
+C --> <H6>Classe</H6><H9>Classe</H9><H12>Classe</H12><br/>
 m --> multi<br/>
 l --> Lingue<br/>
 </H4>
