@@ -17,24 +17,97 @@ uicontrol('Position', [x y L H], 'Style', 'text', 'String', lesMots);
 <H2>Fichiers utiles</H2>
 Comme je l’ai mentionné plus haut, je vais partir du développement de la lecture d’un fichier Keithley pour expliquer la démarche.
 
-  <table cellspacing="0" cellpadding="4" border="0" width="90%">
-  <th>Nom du mfile</th><th>Description</th>
-    <tr valign="top">
-      <td width="20%">
-        <p><center>
-           CLirKeithley.m
-        </center></p>
-      </td>
-      <td>
-        <p>
-        	Code de la classe CLirKeithley. Gère tout le travail pour mener à bien la lecture du fichier (classe principale).<br/>
-        </p>
-      </td>
-    </tr>
-  </table>
+<table cellspacing="0" cellpadding="4" border="0" width="80%">
+<th>Nom du mfile</th><th>Description</th>
+  <tr valign="top">
+    <td width="20%">
+      <p><center>
+         CLirKeithley.m
+      </center></p>
+    </td>
+    <td>
+      <p>
+      	Code de la classe CLirKeithley. Gère tout le travail pour mener à bien la lecture du fichier (classe principale).<br/>
+      </p>
+    </td>
+  </tr>
+  <tr valign="top">
+    <td width="20%">
+      <p><center>
+         CLirOutils.m
+      </center></p>
+    </td>
+    <td>
+      <p>
+      	Code de la classe CLirOutils. (La classe CLirKeithley en hérite). Contient des outils utilisés par tous les types de lecteur de fichier.<br/>
+      </p>
+    </td>
+  </tr>
+  <tr valign="top">
+    <td width="20%">
+      <p><center>
+         GUILirKeithley.m
+      </center></p>
+    </td>
+    <td>
+      <p>
+      	Code du GUI utile pour la lecture.<br/>
+      </p>
+    </td>
+  </tr>
+  <tr valign="top">
+    <td width="20%">
+      <p><center>
+         Cml\CGUIMLLire.m
+      </center></p>
+    </td>
+    <td>
+      <p>
+      	Code de la classe CGuiMLLire. On se sert de ses propriétés pour stocker le texte à afficher dans le GUI.<br/>
+      </p>
+    </td>
+  </tr>
+  <tr valign="top">
+    <td width="20%">
+      <p><center>
+         CBaseStringGUI.m
+      </center></p>
+    </td>
+    <td>
+      <p>
+      	Code de la classe CBaseStringGUI. (Toutes les classes CGuiML… en héritent). Contient des outils pour gérer la récupération des strings.<br/>
+      </p>
+    </td>
+  </tr>
+  <tr valign="top">
+    <td width="20%">
+      <p><center>
+         Lang\langue_fr.m
+      </center></p>
+    </td>
+    <td>
+      <p>
+      	Fonction pour créer la BD (doc\fr.mat) qui sera lu par Analyse, version française et contenant les chaînes de caractères utiles au GUI.<br/>
+      </p>
+    </td>
+  </tr>
+  <tr valign="top">
+    <td width="20%">
+      <p><center>
+         Lang\langue_en.m
+      </center></p>
+    </td>
+    <td>
+      <p>
+      	Fonction pour créer la BD (doc\en.mat) qui sera lu par Analyse, version anglaise et contenant les chaînes de caractères utiles au GUI.<br/>
+      </p>
+    </td>
+  </tr>
+</table>
 
-
-On retrouvera ici les classes utiles pour avoir les strings par défaut (en français).
-Dans le dossier Lang, on trouvera des mfile pour fabriquer les fichiers de string dans différentes langues.
-
-ex.  en français,  ../lang/langue_fr.m
+Lorsque l’on bâti le GUI, ici GUILirKeithley.m, les chaînes de caractères doivent être définies dans une classe, ici CGUIMLLire.m (dans le dossier Cml). Les propriétés de cette classe contiendront les chaînes de caractères, version française. Toutes les classes CGUIML…
+-	Hériteront de CBaseStringGUI
+-	Leur constructeur doit lancer :  Obj.init(‘nom_struct’) 
+La méthode init appartient à CBaseStringGUI. Elle s’occupera de
+-	Récupérer la structure « nom_struct » .
+-	Modifier les propriétés en vue de l’affichage dans le GUI.
