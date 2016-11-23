@@ -1,9 +1,9 @@
 <H1>Dossier Cml</H1>
-
-C --> <H6>Classe</H6><H9>Classe</H9><H12>Classe</H12><br/>
+<H6>
+C --> Classe<br/>
 m --> multi<br/>
 l --> Lingue<br/>
-</H4>
+</H6>
 <H2>Introduction</H2>
 Analyse est devenu multilingue au début 2015. Suite aux demandes des étudiants du monde anglophone qui retournaient y travailler comme professeur après avoir fait un Bac/maîtrise ou doc  en kinésiologie.
 Ce fichier de documentation s’adresse au programmeur et non à l’utilisateur. Car ce dernier n’a pas à se soucier de la façon dont est gérée le multilinguisme, il doit seulement savoir qu’on peut changer la langue via le GUI des préférences.
