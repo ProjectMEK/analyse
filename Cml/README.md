@@ -17,6 +17,22 @@ uicontrol('Position', [x y L H], 'Style', 'text', 'String', lesMots);
 <H2>Fichiers utiles</H2>
 Comme je l’ai mentionné plus haut, je vais partir du développement de la lecture d’un fichier Keithley pour expliquer la démarche.
 
+  <table cellspacing="0" cellpadding="4" border="0" width="90%">
+  <th>Nom du mfile</th><th>Description</th>
+    <tr valign="top">
+      <td width="20%">
+        <p><center>
+           CLirKeithley.m
+        </center></p>
+      </td>
+      <td>
+        <p>
+        	Code de la classe CLirKeithley. Gère tout le travail pour mener à bien la lecture du fichier (classe principale).<br/>
+        </p>
+      </td>
+    </tr>
+  </table>
+
 
 On retrouvera ici les classes utiles pour avoir les strings par défaut (en français).
 Dans le dossier Lang, on trouvera des mfile pour fabriquer les fichiers de string dans différentes langues.
