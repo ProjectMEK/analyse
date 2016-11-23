@@ -1,6 +1,6 @@
 Dossier Cml
 
-C --> Classe
+C --> Classe<br/>
 m --> multi
 l --> Lingue
 
