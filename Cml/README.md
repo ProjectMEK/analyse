@@ -108,7 +108,7 @@ Comme je l’ai mentionné plus haut, je vais partir du développement de la lec
 Lorsque l’on bâti le GUI, ici GUILirKeithley.m, les chaînes de caractères doivent être définies dans une classe, ici CGUIMLLire.m (dans le dossier Cml). Les propriétés de cette classe contiendront les chaînes de caractères, version française. Toutes les classes CGUIML…
 </p>
 -	Hériteront de CBaseStringGUI
--	Leur constructeur doit lancer :  Obj.init(‘nom_struct’)
+-	Leur constructeur doit lancer :  Obj.init(‘nom_struct’)<br/>
 <p>
 La méthode init appartient à CBaseStringGUI. Elle s’occupera de
 </p>
