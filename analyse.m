@@ -3,9 +3,18 @@
 % Initié au Laboratoire GRAME
 % Département de Kinésiologie
 %
-% MEK - première version utile: Oct 1998
+% Première version utile: Oct 1998
 %
 % Copyrigth 1998 à 2016
+%   Auteur principal: Marcel Étienne Kaszap
+%   ont participé en apportant des idées ou du code
+%     Normand Teasdale
+%     Martin Simoneau
+%     Olivier Martin
+%     Caroline 
+%     Thelma 
+%     Gérald  (son développement sur le selspot n'est plus utilisé)
+%     Jean-Philippe Pialasse
 %
 % dtchnl -> tableau des datas (pour un canal)
 %           (i,k): les 'i' sont les samples, les 'k' les essais
@@ -22,14 +31,15 @@
 %  Pour lancer l'application, le nom du fichier seulement
 %      analyse  ou analyse()
 %
+%-------------------------
 function analyse(varargin)
   %----------------------------------
   % Adresse du fichier de préférences
   %----------------------------------
   FF =fullfile(tempdir(), 'grame.mat');
+
   if nargin == 0
     commande ='ouverture';
-    pourQui ='grame';      %*-*-*-***** ONCOMPILE POUR QUI *****
   else
     commande =varargin{1};
   end
@@ -39,17 +49,21 @@ function analyse(varargin)
   %---------------
   case 'ouverture'
     %
-    % CAnalyse.initial(version(num), version(texte), Commentaire)
+    % CAnalyse.initial(version(num), version(texte))
     %
     try
+      % initialise les valeurs par défaut global pour l'application
       CValet.valdefaut();
+      % création de l'instance unique de l'application
       hA =CAnalyse.getInstance();
-      hA.initial(8.0226, '8.02.26', pourQui);  % 8.0227 n'a pas été compilé
+      hA.initial(8.0226, '8.02.26');
+      % lecture du fichier des préférences
       tmp =LeerParam(FF);
       hA.initLesPreferencias(tmp);
+      % création du GUI principal
       hA.OFig =CDessine();
     catch tuhermanita
-      parleMoiDe(tuhermanita)
+      parleMoiDe(tuhermanita);
     end
 
   %-----------------------------------------------
@@ -68,9 +82,7 @@ function analyse(varargin)
       	return;
     	end
     end
-    if strcmpi(OA.OAntiVol.tag, 'grame')
-      sauveLesPref(OA, FF);
-    end
+    sauveLesPref(OA, FF);
     wmfig =findobj('type','figure','tag','WmFig');
     if ~ isempty(wmfig)
       delete(wmfig);
@@ -85,11 +97,11 @@ function analyse(varargin)
   end  %case
 end
 
-%
+%----------------------------------------
 % Sauvegarde des paramètres (préférences)
 % afin de pouvoir ré-ouvrir dans le même
 % mode qu'à la fermeture.
-%
+%---------------------------------
 function sauveLesPref(OAn, leFich)
   if OAn.Fic.pref.conserver
     diablo.lepath =pwd;
@@ -110,11 +122,13 @@ function sauveLesPref(OAn, leFich)
   end
 end
 
-%
-% mai 2013, commence la gestion des préférences
-% impliquant une modification dans les paramètres
-% sauvegardés pour la ré-ouverture
-%
+%----------------------------------------------------------
+% mai 2013, commence la gestion des préférences impliquants
+% une modification dans les paramètres sauvegardés pour la
+% ré-ouverture.
+% Fonction pour lire le fichier des préférences, S sera le
+% path complet du dit fichier.
+%-------------------------
 function cur =LeerParam(S)
   cur =[];
   try
