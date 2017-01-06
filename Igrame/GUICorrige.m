@@ -1,9 +1,9 @@
 %
 % Interface (GUI) pour la correction des datos
-% en entrée il faut fournir un handle sur un objet de classe CWcorrige
+% en entrée il faut fournir un handle sur un objet de classe CCorrige
 % en sortie, on retourne le handle de la figure
 %
-function fig =IWcorrige(Ppa)
+function fig =GUICorrige(Ppa)
   hdchnl =Ppa.Hdchnl;
   vg =Ppa.Vg;
   vg.valeur =1;
@@ -189,7 +189,7 @@ function fig =IWcorrige(Ppa)
             'HorizontalAlignment','left', 'String','Tous les points qui ...', 'Style','checkbox', 'Value',0, ...
             'TooltipString','Cochez pour Modifier tous les points qui rencontrent le critère sélectionné');
   posy =posy-haut-my2;
-  lesmots ={'  sont  >=  à: ';'  sont  =  à: ';'  sont  <=  à: '};
+  lesmots ={'  sont  >=  à: ';'  sont   =  à: ';'  sont  <=  à: '};
   ptiLa =La*.75; deltaLa =La-ptiLa;
   uicontrol('Parent',pan, 'Tag','LBChoixCritere', 'Style','Popupmenu', 'FontSize',11, 'Position',[posx+deltaLa posy ptiLa haut], ...
             'Fontname','courier', 'String',lesmots, 'callback',@Ppa.ChangeCritere, 'BackgroundColor',[1 1 1], 'Enable','off', ...

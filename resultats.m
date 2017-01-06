@@ -7,12 +7,6 @@
 %
 % Chacunes des lignes du fichier de résultat représentent un essai.
 %
-%*************************************
-% Modification future...
-% R =readtable('fichier_de_sortie_actuel')
-% puis on sauvegarde R dans un fichier .mat
-%
-%
 function resultats(varargin)
   if nargin == 0
      commande = 'ouverture';
@@ -165,23 +159,23 @@ function resultats(varargin)
     wr.path    =pname;
     wr.curpath =pwd;
     wr.foname  =fname;
-    p =get(wr.separe,'Value');                      % ## séparateur = p
+    p =get(wr.separe,'Value');                     % # séparateur = p
     foo ={',', ';', ' ', char(9)};
     formul.p         = foo{p};
-    formul.lescan    =wr.cano.getValue();          % ## canaux utiles
-    formul.entete    = get(wr.entete,'Value');     % ## on écrit une ligne d'entête
-    formul.noess     = get(wr.noess,'Value');      % ## on écrit le # de l'essai
-    formul.com1      = get(wr.Com1,'Value');       % ## on écrit le premier champ commentaire
-    formul.com1txt   = get(wr.Com1Txt,'String');   % ## on lit le premier champ commentaire
-    formul.com2      = get(wr.Com2,'Value');       % ## on écrit le second champ commentaire
-    formul.com2txt   = get(wr.Com2Txt,'String');   % ## on lit le second champ commentaire
-    formul.categ     = get(wr.categ,'Value');      % ## on écrit le nom des catégories
-    formul.adname    = get(wr.adname,'Value');     % ## on écrit le nom des canaux
-    formul.nomstim   = get(wr.nomstim,'Value');    % ## on écrit le nom du stim
-    formul.numero    = get(wr.numero,'Value');     % ## on écrit le numero du stim
-    formul.point     = get(wr.point,'Value');      % ## on écrit la position des pts (abcisse)
-    formul.amplit    = get(wr.amplit,'Value');     % ## on écrit l'amplitude des pts (ordonnée)
-    formul.comment   = get(wr.comment,'Value');    % ## on ajoute un champ vide
+    formul.lescan    =wr.cano.getValue();          % # canaux utiles
+    formul.entete    = get(wr.entete,'Value');     % # on écrit une ligne d'entête
+    formul.noess     = get(wr.noess,'Value');      % # on écrit le # de l'essai
+    formul.com1      = get(wr.Com1,'Value');       % # on écrit le premier champ commentaire
+    formul.com1txt   = get(wr.Com1Txt,'String');   % # on lit le premier champ commentaire
+    formul.com2      = get(wr.Com2,'Value');       % # on écrit le second champ commentaire
+    formul.com2txt   = get(wr.Com2Txt,'String');   % # on lit le second champ commentaire
+    formul.categ     = get(wr.categ,'Value');      % # on écrit le nom des catégories
+    formul.adname    = get(wr.adname,'Value');     % # on écrit le nom des canaux
+    formul.nomstim   = get(wr.nomstim,'Value');    % # on écrit le nom du stim
+    formul.numero    = get(wr.numero,'Value');     % # on écrit le numero du stim
+    formul.point     = get(wr.point,'Value');      % # on écrit la position des pts (abcisse)
+    formul.amplit    = get(wr.amplit,'Value');     % # on écrit l'amplitude des pts (ordonnée)
+    formul.comment   = get(wr.comment,'Value');    % # on ajoute un champ vide
     formul.echel     =get(findobj('Tag','EchelleTps'), 'Value')-1;
     formul.precis    =strtrim(get(findobj('Tag','NbChiffPrecis'), 'String'));
     if formul.categ & ~vg.niveau

@@ -1,0 +1,1904 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<html>
+<head>
+  <link rel=stylesheet type="text/css" href="analyse.css">
+  <STYLE TYPE="text/css"><!--
+  #mek-std {text-align: justify; width: 95%; margin-left: 2.5%}
+  #mek-space {width: 95% }
+  #mek-stdp {text-align: justify; width: 95%; margin-left: 2.5%; text-indent: 2.5%}
+  #mek-stdcent {text-align: center; width: 95%; margin-left: 2.5%; text-indent: 2.5%}
+  #mek-std905p {text-align: justify; width: 90%; margin-left: 5%; text-indent: 2.5%}
+  #mek-std7010p {text-align: justify; width: 70%; margin-left: 5%; text-indent: 2.5%}
+  #mek-tabp {text-align: justify; margin-left: 2%; text-indent: 2.5%}
+  --></STYLE>
+</head>
+<body>
+  <a name=letop></a>
+  <p ID=mek-stdp>
+    Au début il y avait GR. Alors il dit: "qu'ANALYSE soit". Ils virent que cela était bon, mais ils
+    demandèrent les modifications suivantes...<br>
+  <p class="adroite" ID=mek-space><a href="#lafin"><i>Le Créateur.</i></a></p>
+  <table cellspacing="0" cellpadding="4" border="0" width="95%">
+  <th>Date</th><th>Modification</th>
+    <tr valign="top">
+      <td width="20%">
+        <p><center>
+          Après le 23 mars 2009 <br>
+          Version 7.04.14 et plus...
+        </center></p>
+      </td>
+      <td>
+        <p>
+          <a href="histo.html">Corrections jusqu'à ce jour!</a>
+        </p>
+      </td>
+    </tr>
+    <tr valign="top">
+      <td width="20%">
+        <p><center>
+          23 mars 2009 <br>
+          Version 7.04.14
+        </center></p>
+      </td>
+      <td>
+        <p>
+          Correction dans la lecture des fichiers Textes. Mauvaise interprétation des lignes
+          finissant par un ou des délimiteurs.
+        </p>
+      </td>
+    </tr>
+    <tr valign="top">
+      <td width="20%">
+        <p><center>
+          11 mars 2009 <br>
+          Version 7.04.13
+        </center></p>
+      </td>
+      <td>
+        <p>
+          Modification dans la lecture des fichiers Textes qui contiennent plusieurs essais.
+          On peut lire des fichiers dont les essais ne sont pas un en dessous de l'autre,
+          mais plutôt un à côté de l'autre.
+          De plus, je commence la gestion du "multiple" moniteurs.
+        </p>
+      </td>
+    </tr>
+    <tr valign="top">
+      <td width="20%">
+        <p><center>
+          25 février 2009 <br>
+          Version 7.04.12
+        </center></p>
+      </td>
+      <td>
+        <p>
+          Correction dans la lecture des fichiers C3D et dans la sortie du module EMG/Changement de polarité.
+        </p>
+      </td>
+    </tr>
+    <tr valign="top">
+      <td width="20%">
+        <p><center>
+          8 décembre 2008 <br>
+          Version 7.04.11
+        </center></p>
+      </td>
+      <td>
+        <p>
+          Correction dans les modules d'intégrations (Math-définie et Emg-successive).
+        </p>
+      </td>
+    </tr>
+    <tr valign="top">
+      <td width="20%">
+        <p><center>
+          2 décembre 2008 <br>
+          Version 7.04.10
+        </center></p>
+      </td>
+      <td>
+        <p>
+          Modifier la manière d'ajouter des fichiers afin de maximiser l'espace mémoire 
+        </p>
+      </td>
+    </tr>
+    <tr valign="top">
+      <td width="20%">
+        <p><center>
+          12 novembre 2008 <br>
+          Version 7.04.09
+        </center></p>
+      </td>
+      <td>
+        <p>
+          Ajout: MENU Modifier/Correction(Couper les Pics) 
+        </p>
+      </td>
+    </tr>
+    <tr valign="top">
+      <td width="20%">
+        <p><center>
+          4 novembre 2008 <br>
+          Version 7.04.08
+        </center></p>
+      </td>
+      <td>
+        <p>
+          Correction: Gestion de la mémoire. Sauvegarde de DTCHNL en "SINGLE" 
+        </p>
+      </td>
+    </tr>
+    <tr valign="top">
+      <td width="20%">
+        <p><center>
+          19 juin 2008 <br>
+          Version 7.04.07
+        </center></p>
+      </td>
+      <td>
+        <p>
+          Correction: Traitement de canal peut agir sur les essais de différentes longeurs.
+          La commande "Rebâtir catégories" vous invitera maintenant à conserver le Niveau
+          Stimulus comme référence pour rebâtir (Sera utile lors des ajouts).
+        </p>
+      </td>
+    </tr>
+    <tr valign="top">
+      <td width="20%">
+        <p><center>
+          6 mars 2008 <br>
+          Version 7.04.06
+        </center></p>
+      </td>
+      <td>
+        <p>
+          Correction: Le calcul des angles ne se faisait pas sur des fichiers ayant un
+          seul essai... ss =size(dtchnl); tmp =zeros(u, v, ss(3)) etc...
+        </p>
+      </td>
+    </tr>
+    <tr valign="top">
+      <td width="20%">
+        <p><center>
+          29 février 2008 <br>
+          Version 7.04.05
+        </center></p>
+      </td>
+      <td>
+        <p>
+          Correction: Les fonctions pour filtrer et/ou dérivé fonctionnaient sur
+          l'essai le plus court. Maintenant ils fonctionnent sur hdchnl(i,j).nsmpls
+        </p>
+      </td>
+    </tr>
+    <tr valign="top">
+      <td width="20%">
+        <p><center>
+          25 janvier 2008 <br>
+          Version 7.04.04
+        </center></p>
+      </td>
+      <td>
+        <p>
+          Correction: À la sortie de DColl, les fichiers ne pouvaient afficher en mode XY.
+        </p>
+      </td>
+    </tr>
+    <tr valign="top">
+      <td width="20%">
+        <p><center>
+          18 octobre 2007 <br>
+          Version 7.04.03
+        </center></p>
+      </td>
+      <td>
+        <p>
+          Correction: Lorsque l'on avait un fichier ouvert et que l'on voulait
+          ouvrir un nouveau fichier, si on choisissait ANNULER, et que l'on
+          allait sauvegarder par la suite, certaines variables étaient perdu
+          rendant le fichier illisible pour Analyse.
+        </p>
+      </td>
+    </tr>
+    <tr valign="top">
+      <td width="20%">
+        <p><center>
+          28 septembre 2007 <br>
+          Version 7.04.02
+        </center></p>
+      </td>
+      <td>
+        <p>
+          Correction d'un petit pépin lors de l'ouverture des fichiers AIM3D.
+        </p>
+      </td>
+    </tr>
+    <tr valign="top">
+      <td width="20%">
+        <p><center>
+          24 août 2007 <br>
+          Version 7.04.01
+        </center></p>
+      </td>
+      <td>
+        <p>
+          Compilation avec la dernière version de Matlab (R2007a)<br>
+          Grand ménage de VG lors d'ouverture de fichier Analyse.<br>
+          Attention, il faudra installer le nouveau MCR.
+        </p>
+      </td>
+    </tr>
+    <tr valign="top">
+      <td width="20%">
+        <p><center>
+           16 août 2007 <br>
+          Version 7.03.26
+        </center></p>
+      </td>
+      <td>
+        <p>
+          Correction à l'ouverture, on remplace les NaN par des zéros. et les valeurs des
+          champs relatives à l'affichage XY sont filtrés à l'ouverture.
+        </p>
+      </td>
+    </tr>
+    <tr valign="top">
+      <td width="20%">
+        <p><center>
+           25 juillet 2007 <br>
+          Version 7.03.24
+        </center></p>
+      </td>
+      <td>
+        <p>
+          Ajout de l'ouverture des fichiers AIM-3D. <br>
+          Correction du mode barré 'Manuel/Automatique' à l'ouverture d'un nouveau fichier.
+        </p>
+      </td>
+    </tr>
+    <tr valign="top">
+      <td width="20%">
+        <p><center>
+           24 juillet 2007 <br>
+          Version 7.03.23
+        </center></p>
+      </td>
+      <td>
+        <p>
+          La dernière correction empêchait de fermer les fichiers. <br>
+        </p>
+      </td>
+    </tr>
+    <tr valign="top">
+      <td width="20%">
+        <p><center>
+           23 juillet 2007 <br>
+          Version 7.03.22
+        </center></p>
+      </td>
+      <td>
+        <p>
+          Correction Erreur de marquage manuel, j'ai désactivé la barre d'outils. <br>
+        </p>
+      </td>
+    </tr>
+    <tr valign="top">
+      <td width="20%">
+        <p><center>
+           6 juillet 2007 <br>
+          Version 7.03.21
+        </center></p>
+      </td>
+      <td>
+        <p>
+          Correction dans la fonction DIFFER. <br>
+        </p>
+      </td>
+    </tr>
+    <tr valign="top">
+      <td width="20%">
+        <p><center>
+           5 juillet 2007 <br>
+          Version 7.03.20
+        </center></p>
+      </td>
+      <td>
+        <p>
+          Correction de l'initialisation de la variable VG. <br>
+        </p>
+      </td>
+    </tr>
+    <tr valign="top">
+      <td width="20%">
+        <p><center>
+           4 juillet 2007 <br>
+          Version 7.03.19
+        </center></p>
+      </td>
+      <td>
+        <p>
+          Lors de la création d'un nouvel AXE, ajout de la possibilité de "geler" les
+          courbes affichées. Correction lors du déplacemnet des points.<br>
+          Ajout de l'aide dans les modules de marquage et traitement de canal. <br>
+        </p>
+      </td>
+    </tr>
+    <tr valign="top">
+      <td width="20%">
+        <p><center>
+           27 Juin 2007 <br>
+          Version 7.03.18
+        </center></p>
+      </td>
+      <td>
+        <p>
+          Correction des problèmes suites aux modif de la version précédente...<br>
+        </p>
+      </td>
+    </tr>
+    <tr valign="top">
+      <td width="20%">
+        <p><center>
+           27 Juin 2007 <br>
+          Version 7.03.17
+        </center></p>
+      </td>
+      <td>
+        <p>
+          Correction des problèmes avec le Zoom/Marquage. Aussi les échelles de temps.
+          ménage dans la variable VG. Modification dans la gestion du Zoom.<br>
+        </p>
+      </td>
+    </tr>
+    <tr valign="top">
+      <td width="20%">
+        <p><center>
+           13 Mars 2007 <br>
+          Version 7.03.16
+        </center></p>
+      </td>
+      <td>
+        <p>
+          Ajout de la synchronisation par canal. Tous les canaux doivent avoir
+          des points marqués. La fonction s'exécutera même si les fréquences
+          d'acquisition et/ou  les longueurs des canaux sont différentes.<br><br>
+          L'ancienne synchronisation s'appelle: Synchro (Essais)<br>
+        </p>
+      </td>
+    </tr>
+    <tr valign="top">
+      <td width="20%">
+        <p><center>
+           9 Janvier 2007 <br>
+          Version 7.03.15
+        </center></p>
+      </td>
+      <td>
+        <p>
+          Ajout de la correction des angles à cause des limites dû au
+          domaine des fonctions trigonométriques (dans le menu Modifier/Corriger)<br>
+          Modification de la fonction "Cacul d'angle"<br>
+        </p>
+      </td>
+    </tr>
+    <tr valign="top">
+      <td width="20%">
+        <p><center>
+           8 Janvier 2007 <br>
+          Version 7.03.14
+        </center></p>
+      </td>
+      <td>
+        <p>
+          Ajout de la fonction "Cacul d'angle" dans le menu MATH<br>
+        </p>
+      </td>
+    </tr>
+    <tr valign="top">
+      <td width="20%">
+        <p><center>
+           30 Novembre 2006 <br>
+          Version 7.03.13
+        </center></p>
+      </td>
+      <td>
+        <p>
+          Compilation faite avec Matlab V7.3-R2006b <br>
+        </p>
+      </td>
+    </tr>
+    <tr valign="top">
+      <td width="20%">
+        <p><center>
+           13 Novembre 2006 <br>
+          Version 7.03.12
+        </center></p>
+      </td>
+      <td>
+        <p>
+          Correction dans le module Traitement de canal, l'erreur se produisait<br>
+          lorsque l'on choisissait quelques essais seulement (ex: [1 2 5]).<br>
+        </p>
+      </td>
+    </tr>
+    <tr valign="top">
+      <td width="20%">
+        <p><center>
+           19 Octobre 2006 <br>
+          Version 7.03.11
+        </center></p>
+      </td>
+      <td>
+        <p>
+          Dans le menu Édit-Canaux, ajout de la modification<br>
+          de la fréquence d'acquisition. Ce n'est pas un (de/re)sampling.<br>
+        </p>
+      </td>
+    </tr>
+    <tr valign="top">
+      <td width="20%">
+        <p><center>
+           31 Juillet 2006 <br>
+          Version 7.03.10
+        </center></p>
+      </td>
+      <td>
+        <p>
+          Ajout dans le menu Modifier: Découper.<br>
+          Permet de découper un ou des canaux en portion. <br>
+        </p>
+      </td>
+    </tr>
+    <tr valign="top">
+      <td width="20%">
+        <p><center>
+           25 Juillet 2006 <br>
+          Version 7.03.09
+        </center></p>
+      </td>
+      <td>
+        <p>
+          Modification dans le traitement de canal, ajout du canal de sortie.<br>
+          Et aussi, opération sur canaux ayant différentes fréquences d'acquisitions. <br>
+        </p>
+      </td>
+    </tr>
+    <tr valign="top">
+      <td width="20%">
+        <p><center>
+           10 Juillet 2006 <br>
+          Version 7.03.08
+        </center></p>
+      </td>
+      <td>
+        <p>
+          Correction dans l'exportation des points avec différentes fréquence d'acquisition.<br>
+          Et aussi, ouverture d'un fichier RAW contenant des points marqués. <br>
+        </p>
+      </td>
+    </tr>
+    <tr valign="top">
+      <td width="20%">
+        <p><center>
+           28 Juin 2006 <br>
+          Version 7.03.07
+        </center></p>
+      </td>
+      <td>
+        <p>
+          Sauvegarde d'une nouvelle variable "autre" afin d'extensionner <br>
+          la portée du format Analyse. <br>
+        </p>
+      </td>
+    </tr>
+    <tr valign="top">
+      <td width="20%">
+        <p><center>
+           2 Juin 2006 <br>
+          Version 7.03.06
+        </center></p>
+      </td>
+      <td>
+        <p>
+          Correction dans l'ouverture, la fréquence était celle <br>
+          du canal 1 et essai 1 pour tous. <br>
+        </p>
+      </td>
+    </tr>
+    <tr valign="top">
+      <td width="20%">
+        <p><center>
+           18 Mai 2006 <br>
+          Version 7.03.05
+        </center></p>
+      </td>
+      <td>
+        <p>
+          Modification dans le déplacement des points <br>
+          On peut maintenant changer l'ordonnée d'un point marqué. <br>
+          Aussi, changement dans la question pour sauvegarder et/ou fermer. <br>
+          Changement dans la fonction d'aide aussi. <br>
+        </p>
+      </td>
+    </tr>
+    <tr valign="top">
+      <td width="20%">
+        <p><center>
+           21 Mars 2006 <br>
+          Version 7.03.04
+        </center></p>
+      </td>
+      <td>
+        <p>
+          Correction dans l'ouverture des fichiers C3D <br>
+          certaines valeurs étaient des vecteurs et non des scalaires <br>
+        </p>
+      </td>
+    </tr>
+    <tr valign="top">
+      <td width="20%">
+        <p><center>
+           15 décembre 2005 <br>
+          Version 7.03.03
+        </center></p>
+      </td>
+      <td>
+        <p>
+          Correction dans la Synchro, il y avait erreur si les  <br>
+          canaux avaient différentes fréquences d'acquisition <br>
+        </p>
+      </td>
+    </tr>
+    <tr valign="top">
+      <td width="20%">
+        <p><center>
+           1 décembre 2005 <br>
+          Version 7.03.02
+        </center></p>
+      </td>
+      <td>
+        <p>
+          Correction dans le Toolbox EMG et MATH, Intégrations successives et définie <br>
+          Problèmes d'affichage et d'écriture des résultats <br>
+        </p>
+      </td>
+    </tr>
+    <tr valign="top">
+      <td width="20%">
+        <p><center>
+           29 mars 2005 <br>
+          Version 7.03.01
+        </center></p>
+      </td>
+      <td>
+        <p>
+          Compilation faite avec Matlab V7-R14-SP2 <br>
+          Correction dans le Toolbox EMG, Intégrations successives <br>
+          Correction dans le changement des canaux ou essais à partir du clavier <br>
+        </p>
+      </td>
+    </tr>
+    <tr valign="top">
+      <td width="20%">
+        <p><center>
+           15 mars 2005 <br>
+          Version 7.02.21
+        </center></p>
+      </td>
+      <td>
+        <p>
+          Caché le menu "Exporter" à l'ouverture <br>
+          Correction dans la lecture des fichiers C3D <br>
+        </p>
+      </td>
+    </tr>
+    <tr valign="top">
+      <td width="20%">
+        <p><center>
+          3 mars 2005 <br>
+          Version 7.02.20
+        </center></p>
+      </td>
+      <td>
+        <p>
+          Ajout de la lecture des fichiers .C3D (ex: Vicon) <br>
+        </p>
+      </td>
+    </tr>
+    <tr valign="top">
+      <td width="20%">
+        <p><center>
+          18 fév 2005 <br>
+          Version 7.02.19
+        </center></p>
+      </td>
+      <td>
+        <p>
+          Correction de l'ouverture des fichiers RAW. <br>
+          Corrigé le problème lors de l'affichage des échelles de temps. <br>
+        </p>
+      </td>
+    </tr>
+    <tr valign="top">
+      <td width="20%">
+        <p><center>
+          1 fév 2005 <br>
+          Version 7.02.18
+        </center></p>
+      </td>
+      <td>
+        <p>
+          Ajouter un "ListBox" pour le choix du canal lors du marquage manuel. <br>
+          Corrigé le problème lors de la suppression d'un canal et l'affichage en mode-XY. <br>
+          Correction dans l'affichage de la fenêtre: déplacer un point. <br>
+        </p>
+      </td>
+    </tr>
+    <tr valign="top">
+      <td width="20%">
+        <p><center>
+          25 nov 2004 <br>
+          Version 7.02.17
+        </center></p>
+      </td>
+      <td>
+        <p>
+          Enlever le filtre de la fonction "DECIMATE". <br>
+          Fonction "CUT", amélioration de l'affichage du texte. <br>
+        </p>
+      </td>
+    </tr>
+    <tr valign="top">
+      <td width="20%">
+        <p><center>
+          8 nov 2004 <br>
+          Version 7.02.16
+        </center></p>
+      </td>
+      <td>
+        <p>
+          Correction de l'affichage de la légende avec plus de 14 catégories<br>
+        </p>
+      </td>
+    </tr>
+    <tr valign="top">
+      <td width="20%">
+        <p><center>
+          4 nov 2004 <br>
+          Version 7.02.15
+        </center></p>
+      </td>
+      <td>
+        <p>
+          Révision du marquage pour début/fin vs montée/descente<br>
+        </p>
+      </td>
+    </tr>
+    <tr valign="top">
+      <td width="20%">
+        <p><center>
+          21 oct 2004 <br>
+          Version 7.02.14
+        </center></p>
+      </td>
+      <td>
+        <p>
+          Correction dans Écart-Type et moyenne, les canaux étaient inversés.<br>
+        </p>
+      </td>
+    </tr>
+    <tr valign="top">
+      <td width="20%">
+        <p><center>
+          2 oct 2004 <br>
+          Version 7.02.13
+        </center></p>
+      </td>
+      <td>
+        <p>
+          Correction dans Normalisation temporelle
+        </p>
+      </td>
+    </tr>
+    <tr valign="top">
+      <td width="20%">
+        <p valign=top><center>
+          1 sept 2004 <br>
+          Version 7.02.12
+        </center></p>
+      </td>
+      <td>
+        <p>
+          Correction dans Édit canal pour l'affichage des noms modifiés.<br>
+          Décimation nécessite des variables Double() en Input:(à cause du filtfilt).<br>
+          Correction aussi de l'Affichage des point en XY.
+        </p>
+      </td>
+    </tr>
+    <tr valign="top">
+      <td width="20%">
+        <p valign=top><center>
+          31 aout 2004 <br>
+          Version 7.02.11
+        </center></p>
+      </td>
+      <td>
+        <p>
+          Correction dans le module d'Ajout...<br>
+        </p>
+      </td>
+    </tr>
+    <tr valign="top">
+      <td width="20%">
+        <p valign=top><center>
+          30 aout 2004 <br>
+          Version 7.02.10
+        </center></p>
+      </td>
+      <td>
+        <p>
+          Correction dans le filtrage polynimial.<br>
+        </p>
+      </td>
+    </tr>
+    <tr valign="top">
+      <td width="20%">
+        <p valign=top><center>
+          19 aout 2004 <br>
+          Version 7.02.09
+        </center></p>
+      </td>
+      <td>
+        <p>
+          Affichage de la légende...<br>
+        </p>
+      </td>
+    </tr>
+    <tr valign="top">
+      <td width="20%">
+        <p valign=top><center>
+          18 aout 2004 <br>
+          Version 7.02.08
+        </center></p>
+      </td>
+      <td>
+        <p>
+          Affichage de l'abcisse des points et écriture des résultats...<br>
+        </p>
+      </td>
+    </tr>
+    <tr valign="top">
+      <td width="20%">
+        <p valign=top><center>
+          17 aout 2004 <br>
+          Version 7.02.07
+        </center></p>
+      </td>
+      <td>
+        <p>
+          Encore SPTool... maintenant, on accepte n'importe quel nom pour le filtre...<br>
+        </p>
+      </td>
+    </tr>
+    <tr valign="top">
+      <td width="20%">
+        <p valign=top><center>
+          16 aout 2004 <br>
+          Version 7.02.06
+        </center></p>
+      </td>
+      <td>
+        <p>
+          Question de compatibilité, on "Save" double précision.<br>
+          Correction dans 'Moyenne et Écart type'.<br>
+          Correction aussi dans filtre avec SPTool.<br>
+        </p>
+      </td>
+    </tr>
+    <tr valign="top">
+      <td width="20%">
+        <p valign=top><center>
+          30 juil 2004 <br>
+          Version 7.02.05
+        </center></p>
+      </td>
+      <td>
+        <p>
+          Passage en simple précision (32 Bits) pour Dtchnl.<br>
+          Quelques corrections mineures dû à ce changement.<br>
+        </p>
+      </td>
+    </tr>
+    <tr valign="top">
+      <td width="20%">
+        <p valign=top><center>
+          28 juil 2004 <br>
+          Version 7.02.04
+        </center></p>
+      </td>
+      <td>
+        <p>
+          Changement du "RendererMode" --> 'auto'.<br>
+        </p>
+      </td>
+    </tr>
+    <tr valign="top">
+      <td width="20%">
+        <p valign=top><center>
+          27 juil 2004 <br>
+          Version 7.02.03
+        </center></p>
+      </td>
+      <td>
+        <p>
+          Correction de multiples bugs apparût suite aux modifications de la structure Hdchnl.<br>
+          Ajout du déplacement des point marqués.<br>
+        </p>
+      </td>
+    </tr>
+    <tr valign="top">
+      <td width="20%">
+        <p valign=top><center>
+          23 juil 2004 <br>
+          Version 7.02.02
+        </center></p>
+      </td>
+      <td>
+        <p>
+          Correction d'un bug dans traitement de canal.<br>
+        </p>
+      </td>
+    </tr>
+    <tr valign="top">
+      <td width="20%">
+        <p valign=top><center>
+          7 juil 2004 <br>
+          Version 7.02.01
+        </center></p>
+      </td>
+      <td>
+        <p>
+          Un début d'aide est amorcé, voir menu "aide/rappel en cas de panique".<br>
+          Hdchnl est maintenant une structure de matrice plutôt qu'une matrice de structure,
+          Ça devrait accélérer les calculs.<br> 
+        </p>
+      </td>
+    </tr>
+    <tr valign="top">
+      <td width="20%">
+        <p valign=top><center>
+          28 juin 2004 <br>
+          Version 7.01.01
+        </center></p>
+      </td>
+      <td>
+        <p>
+          Compilation avec Matlab V7. Maintenant on devrait pouvoir compiler presque tout.<br>
+          Le choix "Unicode" a été privilégié par Matlab pour l'écriture dans les fichiers, 
+          on aura donc un format v6 et v7 d'Analyse.<br>
+        </p>
+      </td>
+    </tr>
+    <tr valign="top">
+      <td width="20%">
+        <p valign=top><center>
+          21 juin 2004 <br>
+          Version 6.01.25
+        </center></p>
+      </td>
+      <td>
+        <p>
+          Enlever un point "flushait" la structure "vg".<br>
+          Changement dans la nomenclature des version d'Analyse.<br>
+        </p>
+      </td>
+    </tr>
+    <tr valign="top">
+      <td width="20%">
+        <p valign=top><center>
+          16 juin 2004 <br>
+          Version 6.24
+        </center></p>
+      </td>
+      <td>
+        <p>
+          modification dans la gestion des nouveaux axes(affichage).<br>
+          Ajout d'une translation dans la fonction rotation.<br>
+          Amélioration de la fonction pour corriger les datas "manquantes".<br>
+        </p>
+      </td>
+    </tr>
+    <tr valign="top">
+      <td width="20%">
+        <p valign=top><center>
+          3 juin 2004 <br>
+          Version 6.23
+        </center></p>
+      </td>
+      <td>
+        <p>
+          correction de la normalisation suite aux ajouts de la version 6.2<br>
+          modification dans le marquage des montées/descentes, on recherche une pente
+          +/- pour travailler correctement.<br>
+          Ajout d'une fenêtre "marquage temporelle".<br>
+        </p>
+      </td>
+    </tr>
+    <tr valign="top">
+      <td width="20%">
+        <p valign=top><center>
+          26 mai 2004 <br>
+          Version 6.2
+        </center></p>
+      </td>
+      <td>
+        <p>
+          Modification du marquage en général.<br>
+          Ajout de la notion point bidon.<br>
+          Correction lors de l'ajout: problème avec le nb d'essai/canaux ajouté.<br>
+        </p>
+      </td>
+    </tr>
+    <tr valign="top">
+      <td width="20%">
+        <p valign=top><center>
+          11 mai 2004 <br>
+          Version 6.0
+        </center></p>
+      </td>
+      <td>
+        <p>
+          Ajout du marquage en mode XY, avec possibilité de marqué plusieurs points à l'horizontal 
+          ou à la vertical.<br>
+          Ajout des "AXES" multiples pour visionner les signaux.<br>
+          Ajout des fonctions trigonométriques dans le traitement de canal.<br>
+          Correction lors du marquage avec une échelle de temps.<br>
+          Ré-aménagement des mode de marquage automatique: On peut maintenant marquer le pt max, 
+          min, début et fin de descente, début et fin de montée en même temps.<br>
+          De plus, dans la même passe, on peut exporter en même temps que l'on marque.<br>
+        </p>
+      </td>
+    </tr>
+    <tr valign="top">
+      <td width="20%">
+        <p valign=top><center>
+          26 février 2004 <br>
+          Version 5.7
+        </center></p>
+      </td>
+      <td>
+        <p>
+          Modification pour corriger les incohérences de sweeptime-rate-nsmpls dans "CUT".<br>
+          Dans les lecture des fichiers Textes, correction pour tenir compte des logiciels qui 
+          placent des strings, comme "missing" lorsqu'ils manquent des datas.<br>
+          Aussi dans Correction à zéro, il y avait un petit Bug en mode multi-canal.<br>
+        </p>
+      </td>
+    </tr>
+    <tr valign="top">
+      <td width="20%">
+        <p valign=top><center>
+          19 février 2004 <br>
+          Version 5.6
+        </center></p>
+      </td>
+      <td>
+        <p>
+          Correction de l'affichage en mode Analyse Visuelle (1024X768) et accélération de 
+          l'affichage graphique.<br>
+          Dans le marquage de point manuel, on peut se servir des lettre "C E N" flèche haut 
+          et bas, ESC pour changer de canal/essai/niveau.<br>
+        </p>
+      </td>
+    </tr>
+    <tr valign="top">
+      <td width="20%">
+        <p valign=top><center>
+          6 février 2004 <br>
+          Version 5.5
+        </center></p>
+      </td>
+      <td>
+        <p>
+          Correction d'un petit Bug dans la lecture des fichiers SELSPOT++.<br>
+          Correction majeure dans les fonctions EMG: RMS, MAV, NORM, DIST...<br>
+        </p>
+      </td>
+    </tr>
+    <tr valign="top">
+      <td width="20%">
+        <p valign=top><center>
+          29 janvier 2004 <br>
+          Version 5.4
+        </center></p>
+      </td>
+      <td>
+        <p>
+          Affichage en mode X-Y permet maintenant plusieurs canaux xy en même temps.<br>
+          De plus, on peut afficher en mode X-Y pour une période de temps choisie.<br>
+          Modification de la lecture des fichiers format KEITHLEY afin de rendre les 
+          Datas plus conforme avec ANALYSE.<br>
+        </p>
+      </td>
+    </tr>
+    <tr valign="top">
+      <td width="20%">
+        <p valign=top><center>
+          9 décembre 2003 <br>
+          Version 5.3
+        </center></p>
+      </td>
+      <td>
+        <p>
+          Modification dans la fonction d'ajout d'un fichier à un autre, ça ne fonctionnait 
+          pas si on avait seulement 1 essai à joindre.<br>
+          Ajout d'un curseur de défilement vertical.<br>
+          Changement dans l'interface, la plupart des "checkbox" qui étaient au dessus de 
+          la fenêtre graphique sont maintenant dans le menu Outil.<br>
+        </p>
+      </td>
+    </tr>
+    <tr valign="top">
+      <td width="20%">
+        <p valign=top><center>
+          11 septembre 2003 <br>
+          Version 5.25
+        </center></p>
+      </td>
+      <td>
+        <p>
+          Correction dans la lecture des fichiers Selspot++, ajout des canaux A/D du système selspot.<br>
+          Correction lors d'ajout d'un autre fichier, certaines valeurs étaient misent à zéros.<br>
+          Correction dans "FFT" avec points déjà marqués.<br>
+        </p>
+      </td>
+    </tr>
+    <tr valign="top">
+      <td width="20%">
+        <p valign=top><center>
+          7 Juillet 2003 <br>
+          Version 5.24
+        </center></p>
+      </td>
+      <td>
+        <p>
+          Correction dans la lecture des fichiers textes (plusieurs essais par fichier).<br>
+        </p>
+      </td>
+    </tr>
+    <tr valign="top">
+      <td width="20%">
+        <p valign=top><center>
+          25 Juin 2003 <br>
+          Version 5.23
+        </center></p>
+      </td>
+      <td>
+        <p>
+          Modification dans marquage d'une amplitude précise, on peut marqué le poucentage 
+          d'un point déjà marqué.<br>
+        </p>
+      </td>
+    </tr>
+    <tr valign="top">
+      <td width="20%">
+        <p valign=top><center>
+          19 Juin 2003 <br>
+          Version 5.22
+        </center></p>
+      </td>
+      <td>
+        <p>
+          Modification dans marquage successif à partir d'un point déjà marqué.<br>
+        </p>
+      </td>
+    </tr>
+    <tr valign="top">
+      <td width="20%">
+        <p valign=top><center>
+          16 Juin 2003 <br>
+          Version 5.21
+        </center></p>
+      </td>
+      <td>
+        <p>
+          Modification dans Selspot++: Séparation par étapes indépendantes de la lectures 
+          des datas brutes et de leur transformation.<br>
+          Ajout d'un bouton pour sauvegarder les paramètres pour une utilisation ultérieure.<br>
+        </p>
+      </td>
+    </tr>
+    <tr valign="top">
+      <td width="20%">
+        <p valign=top><center>
+          4 Juin 2003 <br>
+          Version 5.2
+        </center></p>
+      </td>
+      <td>
+        <p>
+          Modification dans Selspot++: optimisation en vitesse de la lecture.<br>
+          Ajout d'un fichier de paramètres(texte) pour l'entrée des datas.<br>
+        </p>
+      </td>
+    </tr>
+    <tr valign="top">
+      <td width="20%">
+        <p valign=top><center>
+          1 avril 2003 <br>
+          Version 5.13
+        </center></p>
+      </td>
+      <td>
+        <p>
+          Correction dans RMS si on a un seul essai.<br>
+        </p>
+      </td>
+    </tr>
+    <tr valign="top">
+      <td width="20%">
+        <p valign=top><center>
+          10 mars 2003 <br>
+          Version 5.12
+        </center></p>
+      </td>
+      <td>
+        <p>
+          Correction dans la synchronisation dynamique "échelle de temps" pour les essais 
+          dont les canaux n'ont pas la même fréquence.<br>
+          Correction dans l'écriture des résultats avec espace et tab.<br>
+        </p>
+      </td>
+    </tr>
+    <tr valign="top">
+      <td width="20%">
+        <p valign=top><center>
+          7 mars 2003 <br>
+          Version 5.1
+        </center></p>
+      </td>
+      <td>
+        <p>
+          Correction dans la function "Intégral définie" et "intégrale succ."<br>
+          Ajout de la synchronisation dynamique "échelle de temps".<br>
+        </p>
+      </td>
+    </tr>
+    <tr valign="top">
+      <td width="20%">
+        <p valign=top><center>
+          31 janvier 2003 <br>
+          Version 5.09
+        </center></p>
+      </td>
+      <td>
+        <p>
+          Correction dans la function "Intégral définie".<br>
+          correction ds la gestion du clavier et des catégories.<br>
+        </p>
+      </td>
+    </tr>
+    <tr valign="top">
+      <td width="20%">
+        <p valign=top><center>
+          24 janvier 2003 <br>
+          Version 5.08
+        </center></p>
+      </td>
+      <td>
+        <p>
+          Correction dans la function "rebase".<br>
+          Ajout de la prise en charge de certaines touches du clavier flèche[haut/bas]
+          (C:canal, E:essai, N: niveau-catégorie).<br>
+        </p>
+      </td>
+    </tr>
+    <tr valign="top">
+      <td width="20%">
+        <p valign=top><center>
+          9 janvier 2003 <br>
+          Version 5.07
+        </center></p>
+      </td>
+      <td>
+        <p>
+          Correction dans la function "corrige".<br>
+        </p>
+      </td>
+    </tr>
+    <tr valign="top">
+      <td width="20%">
+        <p valign=top><center>
+          8 janvier 2003 <br>
+          Version 5.06
+        </center></p>
+      </td>
+      <td>
+        <p>
+          Correction dans la lecture des fichiers Selspot++.<br>
+          Correction dans l'écriture "Intégrale définie".<br>
+        </p>
+      </td>
+    </tr>
+    <tr valign="top">
+      <td width="20%">
+        <p valign=top><center>
+          19 décembre 2002 <br>
+          Version 5.05
+        </center></p>
+      </td>
+      <td>
+        <p>
+          Fonction RMS: Correction dans le calcul de la valeur du temps à afficher.<br>
+        </p>
+      </td>
+    </tr>
+    <tr valign="top">
+      <td width="20%">
+        <p valign=top><center>
+          5 décembre 2002 <br>
+          Version 5.04
+        </center></p>
+      </td>
+      <td>
+        <p>
+          Modification dans la fonction COUPER, à la place de mettre à ZÉRO les essais 
+          de courte durée, on répète la dernière valeur.<br>
+          Correction d'erreur de syntaxe dans l'affichage, RMS et Catégorie.<br>
+        </p>
+      </td>
+    </tr>
+    <tr valign="top">
+      <td width="20%">
+        <p valign=top><center>
+          4 décembre 2002 <br>
+          Version 5.03
+        </center></p>
+      </td>
+      <td>
+        <p>
+          Modification dans l'ouverture des fichiers textes.<br>
+          Ajout de la modification des noms de catégorie (Édite catégorie).<br>
+        </p>
+      </td>
+    </tr>
+    <tr valign="top">
+      <td width="20%">
+        <p valign=top><center>
+          27 novembre 2002 <br>
+          Version 5.02
+        </center></p>
+      </td>
+      <td>
+        <p>
+          Fin de la revision globale pour enlever les petits bugs apparût dans la ré-organisation.<br>
+          Mise à jour de La fonction DIRECTION.<br>
+          Dans l'interface Filtre-traitement Polynomial, ajout d'un indicateur pour montrer 
+          le travail en cours.<br>
+        </p>
+      </td>
+    </tr>
+    <tr valign="top">
+      <td width="20%">
+        <p valign=top><center>
+          21 novembre 2002 <br>
+          Version 5.01
+        </center></p>
+      </td>
+      <td>
+        <p>
+          Ré-organisation complète des fichiers "m-file" afin d'annuler les variables 
+          globales. Maintenant, seule DTCHNL est encore global.<br>
+          Les points marqués dans un fichier sont conservés lors de l'ajout.<br>
+          Les catégories sont aussi conservées lors d'un ajout.<br>
+          La fonction "coupure" peut être utilisée pour des essais ayant différentes 
+          longueurs (Ils seront normalisés aux canal ayant le plus de points).<br>
+        </p>
+      </td>
+    </tr>
+    <tr valign="top">
+      <td width="20%">
+        <p valign=top><center>
+          24 septembre 2002 <br>
+          Version 4.65
+        </center></p>
+      </td>
+      <td>
+        <p>
+          Correction d'une erreur lors de l'ajout des fichiers Analyse, les catégories 
+          étaient mal gérées.<br>
+        </p>
+      </td>
+    </tr>
+    <tr valign="top">
+      <td width="20%">
+        <p valign=top><center>
+          20 septembre 2002 <br>
+          Version 4.64
+        </center></p>
+      </td>
+      <td>
+        <p>
+          Correction d'une erreur lors de l'ouverture des fichiers DATAC qui ont plus d'une
+          session, mais certaines inutilisées.<br>
+        </p>
+      </td>
+    </tr>
+    <tr valign="top">
+      <td width="20%">
+        <p valign=top><center>
+          13 septembre 2002 <br>
+          Version 4.63
+        </center></p>
+      </td>
+      <td>
+        <p>
+          Ajouter la possibilité de marquer plusieurs points manuellement sans avoir à cliquer 
+          sur le bouton marquer à toutes les fois. ATTENTION: si vous utilisez la barre de 
+          défilement au bas du graphique, vous devrez marquer avec le bouton droit de la souris.<br>
+          Optimisation de la routine Moyenne et écart-type des courbes. Ils sont maintenant 
+          calculés dans la même fonction.<br>
+        </p>
+      </td>
+    </tr>
+    <tr valign="top">
+      <td width="20%">
+        <p valign=top><center>
+          29 août 2002 <br>
+          Version 4.62
+        </center></p>
+      </td>
+      <td>
+        <p>
+          Ajouter l'option d'enlever des lignes d'entêtes au fichier texte.<br>
+        </p>
+      </td>
+    </tr>
+    <tr valign="top">
+      <td width="20%">
+        <p valign=top><center>
+          23 août 2002 <br>
+          Version 4.61
+        </center></p>
+      </td>
+      <td>
+        <p>
+          Correction dans l'ouverture des Méga-Fichier Selspot++ et réglé l'ouverture des 
+          fichiers textes délimités.<br>
+        </p>
+      </td>
+    </tr>
+    <tr valign="top">
+      <td width="20%">
+        <p valign=top><center>
+          26 juillet 2002 <br>
+          Version 4.6
+        </center></p>
+      </td>
+      <td>
+        <p>
+          Ajout de la fonction CORRIGE(menu:modifier) pour réparer une courbe ou il 
+          manque des points.<br>
+          Ajout de "L'AJOUT" d'un fichier Matlab...<br>
+        </p>
+      </td>
+    </tr>
+    <tr valign="top">
+      <td width="20%">
+        <p valign=top><center>
+          23 juillet 2002 <br>
+          Version 4.56
+        </center></p>
+      </td>
+      <td>
+        <p>
+          Optimisation du module EMG: ZERO-CROSSING(revision complète de l'algorithme et de 
+          l'écriture des résultats)<br>
+          ACorrection dans le module edit-catégories.<br>
+        </p>
+      </td>
+    </tr>
+    <tr valign="top">
+      <td width="20%">
+        <p valign=top><center>
+          20 juin 2002 <br>
+          Version 4.54
+        </center></p>
+      </td>
+      <td>
+        <p>
+          Enlever l'utilisation de la fonction "Eval" dans le code source servant à 
+          l'ouverture des fichiers Keithley.<br>
+          correction de l'affichage en mode XY lorsque les canaux ont un nb de points différents<br>
+          Correction du filtre Butterworth, travailler sur le vrai nombre de sample plutôt 
+          que sur toute la matrice.<br>  "basedir..."
+        </p>
+      </td>
+    </tr>
+    <tr valign="top">
+      <td width="20%">
+        <p valign=top><center>
+          27 mai 2002 <br>
+          Version 4.53
+        </center></p>
+      </td>
+      <td>
+        <p>
+          Correction lors de l'ouverture des fichiers autres que Matlab.<br>
+          Ajout de l'ouverture des fichiers Keithley (Thelma).<br>
+          correction de l'affichage des différentes fenêtres.<br>
+        </p>
+      </td>
+    </tr>
+    <tr valign="top">
+      <td width="20%">
+        <p valign=top><center>
+          16 avril 2002 <br>
+          Version 4.51
+        </center></p>
+      </td>
+      <td>
+        <p>
+          En utilisant SPTOOL du toolbox "Signal Processing", on peut générer une variété 
+          de filtre que l'on peut ensuite Exporter dans un fichier. Ces filtres sont 
+          maintenant récupérables dans ANALYSE.<br>
+        </p>
+      </td>
+    </tr>
+    <tr valign="top">
+      <td width="20%">
+        <p valign=top><center>
+          9 avril 2002 <br>
+          Version 4.5
+        </center></p>
+      </td>
+      <td>
+        <p>
+          Défilement lent et rapide de la fenêtre lorsque l'on utilise l'affichage manuel 
+          de l'axe des X.<br>
+          On incorpore la Fonction Decimate de Matlab (DECIMATE filters the data with an 
+          eighth order Chebyshev Type I lowpass filter with cutoff frequency .8*(Fs/2)/R, 
+          before resampling).<br>
+        </p>
+      </td>
+    </tr>
+    <tr valign="top">
+      <td width="20%">
+        <p valign=top><center>
+          27 mars 2002 <br>
+          Version 4.41
+        </center></p>
+      </td>
+      <td>
+        <p>
+          Affichage proportionnel de l'amplitude des courbes.<br>
+          Fermeture de Analyse.exe à partir du X dans le coin supérieur droit. Même chose 
+          pour la plupart des fenêtres de travail.<br>
+          Calcul des paramètres de l'ellipse se fait maintenant en fonction des catégories.<br>
+          Correction du problème qui faisait geler ANALYSE après l'affichage d'une courbe qui 
+          contenait (FM FMoy ou Max dans les points marqués).<br>
+        </p>
+      </td>
+    </tr>
+    <tr valign="top">
+      <td width="20%">
+        <p valign=top><center>
+          15 mars 2002 <br>
+          Version 4.4
+        </center></p>
+      </td>
+      <td>
+        <p>
+          Ajout de la modification des échelles X et Y du graphique.<br>
+          L'option barrer nous permet de garder l'échelle suite à un zoom.<br>
+        </p>
+      </td>
+    </tr>
+    <tr valign="top">
+      <td width="20%">
+        <p valign=top><center>
+          12 mars 2002 <br>
+          Version 4.31
+        </center></p>
+      </td>
+      <td>
+        <p>
+          Correction de quelques autres "Bebittes" par rapport à l'affichage des points 
+          qui ont été coupés.<br>
+        </p>
+      </td>
+    </tr>
+    <tr valign="top">
+      <td width="20%">
+        <p valign=top><center>
+          8 mars 2002 <br>
+          Version 4.3
+        </center></p>
+      </td>
+      <td>
+        <p>
+          Correction de quelques autres "Bebittes".<br>
+        </p>
+      </td>
+    </tr>
+    <tr valign="top">
+      <td width="20%">
+        <p valign=top><center>
+          1 mars 2002 <br>
+          Version 4.21
+        </center></p>
+      </td>
+      <td>
+        <p>
+          Correction de quelques "Bebittes" lors de la suppression des pts marqués, 
+          de l'ouverture des fichiers DATAC.<br>
+          Ajout de l'affichage de la version dans AIDE.<br>
+        </p>
+      </td>
+    </tr>
+    <tr valign="top">
+      <td width="20%">
+        <p valign=top><center>
+          27 février 2002 <br>
+          Version 4.2
+        </center></p>
+      </td>
+      <td>
+        <p>
+          Ajout du "RESIZE" de la fenêtre principale.<br>
+          Correction de quelques "Bebittes" lors du marquage et de la ré-ouverture 
+          d'un nouveau fichier.<br>
+          Dans l'interface principale, le bouton marquer s'applique à toutes les courbes affichées.<br>
+          De plus, dans la fenêtre qui sert à effacer un point, on y retrouve maintenant 
+          (abcisse, ordonnée).<br>
+        </p>
+      </td>
+    </tr>
+    <tr valign="top">
+      <td width="20%">
+        <p valign=top><center>
+          26 février 2002 <br>
+          Version 4.1
+        </center></p>
+      </td>
+      <td>
+        <p>
+          Correction de quelques petites "Bebittes" suite aux modifications majeures de la 
+          version 4.0.(gestion des catégories et ré-ouverture).<br>
+        </p>
+      </td>
+    </tr>
+    <tr valign="top">
+      <td width="20%">
+        <p valign=top><center>
+          25 février 2002 <br>
+          Version 4.0
+        </center></p>
+      </td>
+      <td>
+        <p>
+          Test de la longueur de temps à couper avant de procéder à la coupure.<br>
+          Modification majeure de la gestion de l'affichage afin de donner plus de 
+          fonctionnalité autour des axes.<br>
+          Test du nombres de canaux et essais entre la matrice et l'entête.<br>
+          Correction d'un Bug lors de l'impression.<br>
+          Ajout d'un critère "Niveau par défaut" dans les catégories. Lors de l'affichage, 
+          on peut permutter la catégorie principale.<br>
+        </p>
+      </td>
+    </tr>
+    <tr valign="top">
+      <td width="20%">
+        <p valign=top><center>
+          16 janvier 2002 <br>
+          Version 3.5
+        </center></p>
+      </td>
+      <td>
+        <p>
+          Lecture des fichiers SIGMA (Jean-Louis Vercher)<br>
+          Modification de l'exportation des datas (le menu est maintenant sous FICHIER).<br>
+          Ajout d'une vérification du size de DTCHNL par rapport au nombre de datas inscrites 
+          dans l'entête (Même chose pour la synchronisation).<br>
+        </p>
+      </td>
+    </tr>
+    <tr valign="top">
+      <td width="20%">
+        <p valign=top><center>
+          13 décembre 2001 <br>
+          Version 3.41
+        </center></p>
+      </td>
+      <td>
+        <p>
+          écriture des résultats: correction pour les points marqués au temps <= 0.<br>
+        </p>
+      </td>
+    </tr>
+    <tr valign="top">
+      <td width="20%">
+        <p valign=top><center>
+          6 décembre 2001 <br>
+          Version 3.4
+        </center></p>
+      </td>
+      <td>
+        <p>
+          Normalisation Temporelle: wnormalTemps.m fichier fait par Thelma à Marseille 
+          (rebaptisé: wnormtmp.m)<br>
+          Modification dans l'écriture des résultats pour tenir compte des essais qui ont 
+          des canaux avec différents nombres de points marqués.<br>
+          Modification dans l'édition des catégories afin de pouvoir choisir les essais par stimulus.<br>
+          Enlever les essais gère les catégories correctement et est plus rapide.<br>
+        </p>
+      </td>
+    </tr>
+    <tr valign="top">
+      <td width="20%">
+        <p valign=top><center>
+          16 octobre 2001 <br>
+          Version 3.32
+        </center></p>
+      </td>
+      <td>
+        <p>
+          Ajout du fichier SORTCELLCHAR.DLL dans le dossier \GRAME\TOOLBOX\MATLAB\DATAFUN <br>
+          Modification du fichier WK1READ.M de Matlab suite à la version 6 Release 12.1.<br>
+          SauvegarderSous a nécessité la modification de la commande "save(fichier, 
+          'var1','var2',...)"<br>
+        </p>
+      </td>
+    </tr>
+    <tr valign="top">
+      <td width="20%">
+        <p valign=top><center>
+          12 octobre 2001 <br>
+          Version 3.31
+        </center></p>
+      </td>
+      <td>
+        <p>
+          Correction: lors de l'ouverture de plusieurs fichiers, la mise en ordre 
+          alphabétique se fera après un UPPERCASE.<br>
+        </p>
+      </td>
+    </tr>
+    <tr valign="top">
+      <td width="20%">
+        <p valign=top><center>
+          9 octobre 2001 <br>
+          Version 3.3
+        </center></p>
+      </td>
+      <td>
+        <p>
+          ajout des fichier DATAC par dessus n'importe quel autres fihier déjà ouvert.<br>
+          Correction de la gestion du fenêtrage d'édition des catégories.<br>
+        </p>
+      </td>
+    </tr>
+    <tr valign="top">
+      <td width="20%">
+        <p valign=top><center>
+          début juillet 2001 <br>
+          Version 3.10
+        </center></p>
+      </td>
+      <td>
+        <p>
+          Implémentation du traitement de canal.<br>
+        </p>
+      </td>
+    </tr>
+    <tr valign="top">
+      <td width="20%">
+        <p valign=top><center>
+          fin juin 2001 <br>
+          Version 3.02
+        </center></p>
+      </td>
+      <td>
+        <p>
+          Correction de petits problèmes d'affichage qui rendaient les étudiants bourru à la longue.<br>
+        </p>
+      </td>
+    </tr>
+    <tr valign="top">
+      <td width="20%">
+        <p valign=top><center>
+          fin février 2001 <br>
+          Version 3.01
+        </center></p>
+      </td>
+      <td>
+        <p>
+          Implémentation de l'Interface d'analyse visuelle. Donne la possibilité d'afficher 
+          tous les essais ou les canaux dans des fenêtres séparées.<br>
+        </p>
+      </td>
+    </tr>
+    <tr valign="top">
+      <td width="20%">
+        <p valign=top><center>
+          février 2001 <br>
+          Version 2.1
+        </center></p>
+      </td>
+      <td>
+        <p>
+          Nouvelle interface pour le marquage. Donne la possibilité de marqué par essai 
+          ou par catégorie.<br>
+          Écriture des résultats permet de sortir les canaux même s'il n'y a pas de pts marqués.<br>
+        </p>
+      </td>
+    </tr>
+    <tr valign="top">
+      <td width="20%">
+        <p valign=top><center>
+          début février 2001 <br>
+          Version 2.01
+        </center></p>
+      </td>
+      <td>
+        <p>
+          Lors de la sauvegarde, la première fois, si le fichier ouvert n'est pas en 
+          format Matlab, on demande confirmation avant d'écraser.<br>
+        </p>
+      </td>
+    </tr>
+    <tr valign="top">
+      <td width="20%">
+        <p valign=top><center>
+          24 janvier 2001 <br>
+          Version 2.0
+        </center></p>
+      </td>
+      <td>
+        <p>
+          Première version compilé et barré avec la clé.<br>
+        </p>
+      </td>
+    </tr>
+    <tr valign="top">
+      <td width="20%">
+        <p valign=top><center>
+          12 Septembre 2000 <br>
+          Version
+        </center></p>
+      </td>
+      <td>
+        <p>
+          Gestion des catégories dans l'écriture des résultats.<br>
+          Première esquisse de l'addition et la soustraction de canaux (Caroline).<br>
+        </p>
+      </td>
+    </tr>
+    <tr valign="top">
+      <td width="20%">
+        <p valign=top><center>
+          11 Septembre 2000 <br>
+          Version 1.1
+        </center></p>
+      </td>
+      <td>
+        <p>
+          Tant attendu: les catégories. Édition et affichage des essais par catégorie. Lors 
+          de la lecture des fichiers DATAC, les Stimulus sont entrés aussi comme une catégorie 
+          (Niveau 1 = Stimulus). <br>
+        </p>
+      </td>
+    </tr>
+    <tr valign="top">
+      <td width="20%">
+        <p valign=top><center>
+          début Septembre 2000 <br>
+          Version 
+        </center></p>
+      </td>
+      <td>
+        <p>
+          ajout des calculs de trajectoire, des moyennes et écarts types dans le menu MATH, 
+          et aussi dans le menu outil: différence de pts et exportation. (Caroline)<br>
+        </p>
+      </td>
+    </tr>
+    <tr valign="top">
+      <td width="20%">
+        <p valign=top><center>
+          fin août 2000 <br>
+          Version 
+        </center></p>
+      </td>
+      <td>
+        <p>
+          Option PRINT qui permet la sortie à l'imprimante ou bien dans un fichier JPEG, ou 
+          encore copie-collé en format Bitmap.<br>
+        </p>
+      </td>
+    </tr>
+    <tr valign="top">
+      <td width="20%">
+        <p valign=top><center>
+          16 août 2000 <br>
+          Version 
+        </center></p>
+      </td>
+      <td>
+        <p>
+          assignation du numéro de stimulus à la variable: hdchnl(canal,essai).numero.<br>
+        </p>
+      </td>
+    </tr>
+    <tr valign="top">
+      <td width="20%">
+        <p valign=top><center>
+          Juillet 2000 <br>
+          Version 1.03
+        </center></p>
+      </td>
+      <td>
+        <p>
+          ajoute la possibilité de lire plusieurs essais dans le même fichier .WK1 (Excel)<br>
+          Modifie la présentation des résultats (une seule ligne par essai).<br>
+          Ajout de la lecture des fichier textes délimités.<br>
+          Ajout des "fonction1-2-..-10" dans le menu Spécial pour permettre aux utilisateurs 
+          d'être un peu plus autonome.<br>
+          "Waitbar" lors de la lecture.<br>
+          Début d'une fonction d'aide dans le menu.<br>
+          Ajout de l'option "point" permettant de masquer les points marqués.<br>
+        </p>
+      </td>
+    </tr>
+    <tr valign="top">
+      <td width="20%">
+        <p valign=top><center>
+          Mai 2000 <br>
+          Version 1.02
+        </center></p>
+      </td>
+      <td>
+        <p>
+          corrige un bug lors de la lecture/écriture des fichiers DATAC de grand format.<br>
+        </p>
+      </td>
+    </tr>
+    <tr valign="top">
+      <td width="20%">
+        <p valign=top><center>
+          Hiv-Print 2000 <br>
+          Version 
+        </center></p>
+      </td>
+      <td>
+        <p>
+          Traitement EMG: Rectification, Lissage, RMS, MAV, FM-FMoy-Max, Normalisation, 
+          Intégration, Intégrations successives, Changement de polarité et Distribution de 
+          probabilité d''Amplitude. (Caroline)<br>
+        </p>
+      </td>
+    </tr>
+    <tr valign="top">
+      <td width="20%">
+        <p valign=top><center>
+          1997-2000 <br>
+          Version 1
+        </center></p>
+      </td>
+      <td>
+        <p>
+          Élaboration de la structure des fichiers Analyse afin de conserver les informations 
+          utiles d'une session à l'autre. Création de l'interface, lecture des fichier DATAC, 
+          gestion des canaux et essais, fonction de base du style CUT,SYNCHRO...<br>
+        </p>
+      </td>
+    </tr>
+  </table>
+  <p>
+  <a href="#letop">Retour au début</a>
+  <a name=lafin></a>
+  <p class="centrer">
+  <img src="img/mascot.jpg"></p>
+  <p class="centrer">Je croyais qu'ils avaient trouvé ça bon  :-0</p>
+</body>
+</html>

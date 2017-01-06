@@ -1,7 +1,7 @@
 %
 % CRÉATION DES MENUS DE L'INTERFACE (GUI) PRINCIPALE
 function IpMenu(obj)
-%#function mnouvre, wimprime, wedit, wcpcan, wgroupdata, traitraject, wtoul, waide
+%#function mnouvre, impression, editCan, cpCan, wgroupdata, traitraject, guiToul, aideDoc
 % ÉDITION DES MENUS: dlg.mnuip
   OA =CAnalyse.getInstance();
   GM =OA.Gmenu;
@@ -22,10 +22,10 @@ function IpMenu(obj)
   uimenu('Parent',mmnu, 'Callback','mnouvre(CFichEnum.EMG, false)', 'Label',tt.fileouvrirotemg, 'Enable','on');
   uimenu('Parent',mmnu, 'Callback','mnouvre(CFichEnum.Keithley, false)', 'Label',tt.fileouvrirotkeit, 'Enable','on');
   % AJOUTER
-  uimenu('Parent',mnu, 'tag', 'IpmnuAjouter', 'Label',tt.fileajout, 'Callback',@GM.wajout, 'enable','off');
+  uimenu('Parent',mnu, 'tag', 'IpmnuAjouter', 'Label',tt.fileajout, 'Callback',@GM.ajouterFichier, 'enable','off');
   % BATCH
   uimenu('Parent',mnu, 'tag', 'IpmnuBatch', 'Label',tt.filebatch, ...
-         'Callback','wbatch', 'Enable','off');
+         'Callback','batchEditExec', 'Enable','off');
   % FERMER
   uimenu('Parent',mnu, 'tag', 'IpmnuFermer', 'Callback',@OA.fermerfich, ...
          'Label',tt.filefermer, 'Enable','off');
@@ -43,9 +43,9 @@ function IpMenu(obj)
          'Enable','off', 'Label',tt.fileecritresult);
   % PRINT
   mmnu =uimenu('Parent',mnu, 'separator','on', 'Label',tt.fileprint);
-  uimenu('Parent',mmnu, 'Callback','wimprime(''copcol'')', 'Label',tt.fileprintcopiecoller);
-  uimenu('Parent',mmnu, 'Callback','wimprime(''jpeg'')', 'Label',tt.fileprintjpeg);
-  uimenu('Parent',mmnu, 'Callback','wimprime(''imprimer'')', 'Label',tt.fileprintimprimer);
+  uimenu('Parent',mmnu, 'Callback','impression(''copcol'')', 'Label',tt.fileprintcopiecoller);
+  uimenu('Parent',mmnu, 'Callback','impression(''jpeg'')', 'Label',tt.fileprintjpeg);
+  uimenu('Parent',mmnu, 'Callback','impression(''imprimer'')', 'Label',tt.fileprintimprimer);
   % FICHIERS RÉCENTS
   mmnu =uimenu('Parent',mnu, 'tag','FRmnu','separator','on', 'Label',tt.filedernierouvert);
   for U =1:OA.Fic.como
@@ -55,15 +55,15 @@ function IpMenu(obj)
   end
   % Préférences
   uimenu('Parent',mnu, 'Callback',@GM.lesPreferencias, 'Label',tt.filepreferences);
-  % 'arcommence'
-  uimenu('Parent',mnu, 'Callback','grame(''arcommence'')', 'separator','on', 'Label',tt.fileredemarrer);
+  % 'ARcommence'
+  uimenu('Parent',mnu, 'Callback','analyse(''arcommence'')', 'separator','on', 'Label',tt.fileredemarrer);
   % TERMINUS
-  uimenu('Parent',mnu, 'Callback','grame(''terminus'')', 'Label',tt.fileterminus);
+  uimenu('Parent',mnu, 'Callback','analyse(''terminus'')', 'Label',tt.fileterminus);
 % EDIT
   mnu =uimenu('Parent',elfig, 'tag','IpmnuEdit', 'Label',tt.edit, 'Enable','off');
-  uimenu('Parent',mnu, 'Label',tt.editcanal, 'Callback','wedit');
-  uimenu('Parent',mnu, 'Label',tt.editcopiecanal, 'Callback','wcpcan');
-  uimenu('Parent',mnu, 'Label',tt.editdatautil, 'Callback','wgroupdata','visible','off'); %***OFF
+  uimenu('Parent',mnu, 'Label',tt.editmajcan, 'Callback','majCan');
+  uimenu('Parent',mnu, 'Label',tt.editcanal, 'Callback','editCan');
+  uimenu('Parent',mnu, 'Label',tt.editcopiecanal, 'Callback','cpCan');
   uimenu('Parent',mnu, 'Label',tt.editcatego, 'separator','on', 'Callback',@GM.EditCategorie);
   uimenu('Parent',mnu, 'Label',tt.editrebatircatego, 'Callback',@GM.RebatirCategorie);
   uimenu('Parent',mnu, 'Label',tt.editecheltemps, 'separator','on', 'Callback',@GM.EditEchelTps);
@@ -127,35 +127,33 @@ function IpMenu(obj)
   mmnu =uimenu('Parent',mnu, 'tag','IpmnuTemps', 'Label',tt.ouechtempo);
   uimenu('Parent',mmnu, 'callback',@GM.echeltmp,...
          'tag','IpmnutempsNormal', 'checked','on', 'Label',tt.ouechtempodefaut);
-  uimenu('Parent',mnu, 'tag','IpmnuFig', 'callback','wtoul(''letinew'')', 'Label',tt.ouajoutaxe,'enable','off'); % *****off
   uimenu('Parent',mnu, 'Callback',@GM.importpt, 'Separator','on', 'Label',tt.ouimportpoint);
   uimenu('Parent',mnu, 'Callback',@GM.marquage, 'Label',tt.oumark);
-  uimenu('parent',mnu,'tag','IpmnuZoom','Separator','on', 'Label',tt.ouzoom,'callback','wtoul(''zoomonoff'')');
-  uimenu('parent',mnu,'tag','IpmnuCoord', 'Label',tt.ouaffichercoord,'callback','wtoul(''affichecoord'')');
+  uimenu('parent',mnu,'tag','IpmnuZoom','Separator','on', 'Label',tt.ouzoom,'callback','guiToul(''zoomonoff'')');
+  uimenu('parent',mnu,'tag','IpmnuCoord', 'Label',tt.ouaffichercoord,'callback','guiToul(''affichecoord'')');
   mmnu =uimenu('parent',mnu,'Label',tt.oucouleur);
-  uimenu('Parent',mmnu, 'tag','IpmnuColcan', 'Callback','wtoul(''colore_canal'')',...
+  uimenu('Parent',mmnu, 'tag','IpmnuColcan', 'Callback','guiToul(''colore_canal'')',...
          'Label',tt.oucouleurcan);
-  uimenu('Parent',mmnu, 'Label',tt.oucouleuress, 'tag','IpmnuColess', 'Callback','wtoul(''colore_essai'')');
+  uimenu('Parent',mmnu, 'Label',tt.oucouleuress, 'tag','IpmnuColess', 'Callback','guiToul(''colore_essai'')');
   uimenu('Parent',mmnu, 'Label',tt.oucouleurcat, 'tag','IpmnuColcat',...
-         'Callback','wtoul(''colore_categorie'')');
+         'Callback','guiToul(''colore_categorie'')');
   uimenu('Parent',mnu, 'tag','IpmnuLegende', 'Label',tt.oulegend, ...
-         'Callback','wtoul(''la_legende'')', 'Separator','on');
+         'Callback','guiToul(''la_legende'')', 'Separator','on');
   uimenu('Parent',mnu, 'Label',tt.ouechant, 'tag','IpmnuSmpl',...
-         'Callback','wtoul(''ligne_type'')');
+         'Callback','guiToul(''ligne_type'')');
   uimenu('Parent',mnu, 'Label',tt.ouptmarkatexte, 'tag','IpmnuPoint', ...
-         'Callback','wtoul(''outil_point'')');
+         'Callback','guiToul(''outil_point'')');
   uimenu('Parent',mnu, 'Label',tt.ouptmarkstexte, 'tag','IpmnuPointSansTexte', ...
-         'Callback','wtoul(''AffichePointSansTexte'')');
+         'Callback','guiToul(''AffichePointSansTexte'')');
   uimenu('Parent',mnu, 'Label',tt.ouaffprop, 'tag','Ipmnutrich',...
-         'Callback','wtoul(''la_trich'')');
+         'Callback','guiToul(''la_trich'')');
   uimenu('Parent',mnu, 'Label',tt.ouxy,'tag','IpmnuXy', 'Separator','on',...
-         'Callback','wtoul(''modexy'')');
+         'Callback','guiToul(''modexy'')');
 % QUEL FICHIER
   mnu =uimenu('Parent',elfig, 'Label',tt.quelfichier, 'tag','QuelFichierMnu');
 % AIDE
   mnu =uimenu('Parent',elfig, 'Label',tt.hlp);
-  uimenu('Parent',mnu, 'Label',tt.hlpdoc, 'Enable','On', 'Callback','waide(''leweb'')');
-  uimenu('Parent',mnu, 'Label',tt.hlplog, 'Callback','waide(''histoire'')');
-  uimenu('Parent',mnu, 'Label',tt.hlpabout, 'Callback','waide');
-  uimenu('Parent',mnu, 'Label',tt.hlprecup, 'Callback',@OA.recuperer, 'Separator','on');
+  uimenu('Parent',mnu, 'Label',tt.hlpdoc, 'Enable','On', 'Callback','aideDoc(''leweb'')');
+  uimenu('Parent',mnu, 'Label',tt.hlplog, 'Callback','aideDoc(''histoire'')');
+  uimenu('Parent',mnu, 'Label',tt.hlpabout, 'Callback','aideDoc');
 end

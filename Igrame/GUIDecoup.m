@@ -1,13 +1,13 @@
 %
 % Interface (GUI) pour demander les infos relatives au découpage
-%   - enlever du temps au début ou à la fin des canaux/essais
+%   - garder du temps avant et après un point marqué
 %
 % MEK - juillet 2009
 %       retravailler 1 nov 2011
 %
-% EN ENTRÉE on a obj --> un objet de la classe CWdecoup
+% EN ENTRÉE on a Ppa --> un objet de la classe CDecoup
 %
-function IWdecoup(obj)
+function GUIDecoup(Ppa)
   OA =CAnalyse.getInstance();
   Ofich =OA.findcurfich();
   hdchnl =Ofich.Hdchnl;
@@ -19,10 +19,11 @@ function IWdecoup(obj)
   end
   lapos =positionfen('G','H',675,350);
   lafig = figure('Name','MENU DÉCOUPE', 'tag','DecoupeLafig',...
-        'Position',lapos, 'CloseRequestFcn',@obj.fermer,...
+        'Position',lapos, 'CloseRequestFcn',@Ppa.fermer,...
         'DefaultUIControlBackgroundColor',[0.8 0.8 0.8],...
         'defaultUIControlunits','normalized ',...
         'defaultUIControlFontSize',12, 'Resize','on');
+  Ppa.fig =lafig;
   % fenêtre séparé en deux: 0.3 et 0.7
   % PARTIE DE GAUCHE
   margex =0.03;margey =0.05;htext =0.075;fengch =0.35;fendrt =1-fengch;
@@ -32,7 +33,7 @@ function IWdecoup(obj)
           'Style','text', 'String','Canal de référence');
   haut =htext*0.7; posy =posy-haut; canref =1;
   uicontrol('Parent',lafig, 'tag','DecoupeCanalRef', 'FontSize',10, ...
-          'callback',@obj.quelcan, ...
+          'callback',@Ppa.quelcan, ...
           'BackgroundColor',[1 1 1], 'Position',[posx posy large haut], ...
           'String',hdchnl.Listadname, 'Style','popupmenu', 'Value',canref);
   haut =htext; posy =posy-margey-2*haut;large =fengch-2.1*margex;
@@ -42,7 +43,7 @@ function IWdecoup(obj)
   haut =margey;posx =posx+large; large=large/4; posx =posx-large/2;
   uicontrol('Parent',lafig, 'tag','DecoupeTouCan', 'Position',[posx posy large haut], ...
             'FontSize',9, 'HorizontalAlignment','left', 'String','Tous', ...
-            'Style','checkbox', 'Value',0, 'Callback', @obj.toucan);
+            'Style','checkbox', 'Value',0, 'Callback', @Ppa.toucan);
   posboxtou =[posx+4*margex posy large haut];
   posx =margex;haut =posy*0.85;posy =posy-haut;large =fengch-2*margex;
   posbox =[posx posy large haut];
@@ -66,12 +67,12 @@ function IWdecoup(obj)
   uicontrol('Parent',lafig, 'tag','DecoupeQueFaire',...
           'Position',[posx posy large haut], 'enable','off',...
           'HorizontalAlignment','center', 'String',letype, ...
-          'Callback',@obj.choix, 'Style','popupmenu', 'Value',1);
+          'Callback',@Ppa.choix, 'Style','popupmenu', 'Value',1);
   % CHOIX 1-2-3
   uicontrol('Parent',lafig, 'tag','DecoupeTousPoints', ...
           'Position',posboxtou, ...
           'FontSize',9, 'HorizontalAlignment','left', 'String','Tous', ...
-          'Style','checkbox', 'Value',0, 'Callback', @obj.toupts);
+          'Style','checkbox', 'Value',0, 'Callback', @Ppa.toupts);
   posbox([1 3]) =posboxtou([1 3]);
   ppp ={'1'};
   for U =2:max(hdchnl.npoints(canref,:))
@@ -135,8 +136,8 @@ function IWdecoup(obj)
           'Position',[posx+large posy large*0.75 haut], ...
           'Style','edit', 'String','1');
   posx =posx+0.25*large;large =large*1.65;posy =posy/3;
-  uicontrol('Parent',lafig, 'Callback',@obj.travail, ...
+  uicontrol('Parent',lafig, 'Callback',@Ppa.travail, ...
           'Position',[posx posy large haut], 'String','Au travail');
-  obj.elchoix();
-  set(lafig,'WindowStyle','modal');
+  Ppa.elchoix();
+  Ppa.setFigModal();
 end
