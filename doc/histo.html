@@ -1,0 +1,1623 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<html>
+<head>
+  <link rel=stylesheet type="text/css" href="analyse.css">
+  <STYLE TYPE="text/css"><!--
+  #mek-std {text-align: justify; width: 95%; margin-left: 2.5%}
+  #mek-space {width: 95% }
+  #mek-stdp {text-align: justify; width: 95%; margin-left: 2.5%; text-indent: 2.5%}
+  #mek-stdcent {text-align: center; width: 95%; margin-left: 2.5%; text-indent: 2.5%}
+  #mek-std905p {text-align: justify; width: 90%; margin-left: 5%; text-indent: 2.5%}
+  #mek-std7010p {text-align: justify; width: 70%; margin-left: 5%; text-indent: 2.5%}
+  #mek-tabp {text-align: justify; margin-left: 2%; text-indent: 2.5%}
+  --></STYLE>
+</head>
+<body>
+  <a name=letop></a>
+  <p ID=mek-stdp>
+    Au début il y avait GR. Alors il dit: "qu'ANALYSE soit". Ils virent que cela était bon, mais ils
+    demandèrent les modifications suivantes...<br/>
+  <p class="adroite" ID=mek-space><a href="#lafin"><i>Le Créateur.</i></a></p>
+  <table cellspacing="0" cellpadding="4" border="0" width="95%">
+  <th>Date</th><th>Modification</th>
+    <tr valign="top">
+      <td width="20%">
+        <p><center>
+            2017 <br/>
+          Version 8.02.
+        </center></p>
+      </td>
+      <td>
+        <p>
+        	Ajout "f" dans la commande de sauvegarde afin de forcer l'écriture dans certains
+        	cas comme sous les dossiers de Google Drive.<br/>
+        	Ajout du menu "Édit/MAJ infos des canaux sélectionnés" permettant de mettre à jour
+        	les infos des canaux sélectionnés.<br/>
+        </p>
+      </td>
+    </tr>
+    <tr valign="top">
+      <td width="20%">
+        <p><center>
+           15 novembre 2016 <br/>
+          Version 8.02.27
+        </center></p>
+      </td>
+      <td>
+        <p>
+        	Tout le marquage est multilingue.<br/>
+        	Ajout de commentaire dans la barre de status.<br/>
+        	Le passage au marquage et sa sortie sont mieux gérés.<br/>
+        </p>
+      </td>
+    </tr>
+    <tr valign="top">
+      <td width="20%">
+        <p><center>
+           27 octobre 2016 <br/>
+          Version 8.02.26
+        </center></p>
+      </td>
+      <td>
+        <p>
+        	Ajout du marquage des Onset pour les signaux EMG<br/>
+        </p>
+      </td>
+    </tr>
+    <tr valign="top">
+      <td width="20%">
+        <p><center>
+           30 septembre 2016 <br/>
+          Version 8.02.25
+        </center></p>
+      </td>
+      <td>
+        <p>
+        	Modification de l'ouverture, certaines coquilles invisibles
+        	à l'utilisateur. ET AUTRE... WinMAJ!!!<br/>
+        </p>
+      </td>
+    </tr>
+    <tr valign="top">
+      <td width="20%">
+        <p><center>
+           2 août 2016 <br/>
+          Version 8.02.24
+        </center></p>
+      </td>
+      <td>
+        <p>
+        	Correction des valeurs pour la plateforme Optima.<br/>
+        </p>
+      </td>
+    </tr>
+    <tr valign="top">
+      <td width="20%">
+        <p><center>
+           27 mai 2016 <br/>
+          Version 8.02.23
+        </center></p>
+      </td>
+      <td>
+        <p>
+        	Correction d'un petit bug dans le marquage. Une variable non-initialisée.<br/>
+        </p>
+      </td>
+    </tr>
+    <tr valign="top">
+      <td width="20%">
+        <p><center>
+           8 avril 2016 <br/>
+          Version 8.02.22
+        </center></p>
+      </td>
+      <td>
+        <p>
+        	Ajout de la lecture des fichiers provenant de la carte Keithley<br/>
+        </p>
+      </td>
+    </tr>
+    <tr valign="top">
+      <td width="20%">
+        <p><center>
+           9 mars 2016 <br/>
+          Version 8.02.21
+        </center></p>
+      </td>
+      <td>
+        <p>
+        	Correction du calcul CPx et CPy pour la plateforme Optima<br/>
+        </p>
+      </td>
+    </tr>
+    <tr valign="top">
+      <td width="20%">
+        <p><center>
+           4 mars 2016 <br/>
+          Version 8.02.20
+        </center></p>
+      </td>
+      <td>
+        <p>
+        	Ajout du calcul CPx et CPy pour la plateforme Optima<br/>
+        </p>
+      </td>
+    </tr>
+    <tr valign="top">
+      <td width="20%">
+        <p><center>
+           10 septembre 2015 <br/>
+          Version 8.02.19
+        </center></p>
+      </td>
+      <td>
+        <p>
+        	Erreur de frappe dans une ligne de code pour la fermeture des fichiers<br/>
+        </p>
+      </td>
+    </tr>
+    <tr valign="top">
+      <td width="20%">
+        <p><center>
+           4 septembre 2015 <br/>
+          Version 8.02.18
+        </center></p>
+      </td>
+      <td>
+        <p>
+        	Modification dans la manière de sauvegarder les fichiers. On sauvegarde d'abord<br/>
+        	dans un fichier temporaire puis on copie à l'emplacemnet final.<br/>
+        </p>
+      </td>
+    </tr>
+    <tr valign="top">
+      <td width="20%">
+        <p><center>
+           27 juillet 2015 <br/>
+          Version 8.02.17
+        </center></p>
+      </td>
+      <td>
+        <p>
+        	Optimisation dans la recherche des montées/descentes en marquage automatique<br/>
+        	Traitement de calnal<br/>
+        	-  correction d'un petit bug dans le calcul de la longueur<br/>
+        	-  Ajout des fonctions "DIFF et CUMSUM"<br/>
+        </p>
+      </td>
+    </tr>
+    <tr valign="top">
+      <td width="20%">
+        <p><center>
+           16 avril 2015 <br/>
+          Version 8.02.16
+        </center></p>
+      </td>
+      <td>
+        <p>
+        	Premier effort de "bilinguisation"<br/>
+        	Le menu principal et l'interface de gestion des préférences sont multilingues<br/>
+        	<br/>
+        </p>
+      </td>
+    </tr>
+    <tr valign="top">
+      <td width="20%">
+        <p><center>
+           23 mars 2015 <br/>
+          Version 8.02.15
+        </center></p>
+      </td>
+      <td>
+        <p>
+        	Correction dans l'Ajout de l'ouverture des fichiers EMG (.mat)<br/>
+        	<br/>
+        </p>
+      </td>
+    </tr>
+    <tr valign="top">
+      <td width="20%">
+        <p><center>
+           20 mars 2015 <br/>
+          Version 8.02.14
+        </center></p>
+      </td>
+      <td>
+        <p>
+        	Dans Traitement de canal, la valeur "Pi" et le bouton "inv" ne fonctionnait pas.<br/>
+        	De même que les opérations sur des canaux de différentes fréquences buggaient<br/>
+        	si un essai avait seulement un échantillon<br/>
+        	Correction à l'ouverture, la variable "autre" peut causer une erreur<br/>
+        	Ajout de l'ouverture des fichiers EMG (.mat)<br/>
+        	<br/>
+        </p>
+      </td>
+    </tr>
+    <tr valign="top">
+      <td width="20%">
+        <p><center>
+          20 novembre 2014 <br/>
+          Version 8.02.13
+        </center></p>
+      </td>
+      <td>
+        <p>
+        	Modification dans le filtrage avec sptool<br/>
+        	ajout d'une pause lors de l'ouverture de l'interface<br/>
+        </p>
+      </td>
+    </tr>
+    <tr valign="top">
+      <td width="20%">
+        <p><center>
+          17 novembre 2014 <br/>
+          Version 8.02.12
+        </center></p>
+      </td>
+      <td>
+        <p>
+        	Modification dans le filtrage avec sptool<br/>
+        	on peut maintenant avoir plusieurs filtres dans le "fichier sptool"<br/>
+        </p>
+      </td>
+    </tr>
+    <tr valign="top">
+      <td width="20%">
+        <p><center>
+          30 octobre 2014 <br/>
+          Version 8.02.11
+        </center></p>
+      </td>
+      <td>
+        <p>
+        	Correction d'un bug dans le marquage d'amplitude<br/>
+        	lorsque l'on choisissait une plage de travail<br/>
+        </p>
+      </td>
+    </tr>
+    <tr valign="top">
+      <td width="20%">
+        <p><center>
+          16 septembre 2014 <br/>
+          Version 8.02.10
+        </center></p>
+      </td>
+      <td>
+        <p>
+        	Correction de quelques procédures/algorythmes dans le<br/>
+        	marquage des montées/descentes<br/>
+        </p>
+      </td>
+    </tr>
+    <tr valign="top">
+      <td width="20%">
+        <p><center>
+          29 août 2014 <br/>
+          Version 8.02.09
+        </center></p>
+      </td>
+      <td>
+        <p>
+        	En test, la détection des changements par somme cumulative<br/>
+        	dans l'interface de marquage<br/>
+        </p>
+      </td>
+    </tr>
+    <tr valign="top">
+      <td width="20%">
+        <p><center>
+          22 août 2014 <br/>
+          Version 8.02.08
+        </center></p>
+      </td>
+      <td>
+        <p>
+        	Correction d'un petit bug lors de l'ouverture de certains fichier lorsque itype == []<br/>
+        </p>
+      </td>
+    </tr>
+    <tr valign="top">
+      <td width="20%">
+        <p><center>
+          5 août 2014 <br/>
+          Version 8.02.07
+        </center></p>
+      </td>
+      <td>
+        <p>
+        	Dans l'interface du marquage, j'ai peaufiné l'algorithme pour trouver<br/>
+        	les début/fin des montée/descente<br/>
+        </p>
+      </td>
+    </tr>
+    <tr valign="top">
+      <td width="20%">
+        <p><center>
+          30 juillet 2014 <br/>
+          Version 8.02.06
+        </center></p>
+      </td>
+      <td>
+        <p>
+        	Dans l'interface du marquage, j'ai mis à jour les commentaires dans le marquage début/fin des montée/descente<br/>
+        </p>
+      </td>
+    </tr>
+    <tr valign="top">
+      <td width="20%">
+        <p><center>
+          25 juillet 2014 <br/>
+          Version 8.02.05
+        </center></p>
+      </td>
+      <td>
+        <p>
+        	Correction dans le calcul du COP. Donne un avertissement maintenant<br/>
+        	si CATEGO est vide<br/>
+        	Dans l'interface de correction, j'ai ajouté au menu "nouvelle valeur entre deux points"<br/>
+        	la possibilité de modifier <, > ou = à une valeur<br/>
+        	Dans l'interface du marquage, j'ai régularisé le marquage début/fin des montée/descente<br/>
+        	Et ajouté la possibilité de marqué toutes les occurences de début/fin des montée/descente<br/>
+        	<br/>
+        </p>
+      </td>
+    </tr>
+    <tr valign="top">
+      <td width="20%">
+        <p><center>
+          23 mai 2014 <br/>
+          Version 8.02.04
+        </center></p>
+      </td>
+      <td>
+        <p>
+        	Correction dans le calcul du COP. lorsque les bornes étaient formées de<br/>
+        	deux points identiques. On affichera "0" dans ces cas<br/>
+        	<br/>
+        </p>
+      </td>
+    </tr>
+    <tr valign="top">
+      <td width="20%">
+        <p><center>
+          31 mars 2014 <br/>
+          Version 8.02.03
+        </center></p>
+      </td>
+      <td>
+        <p>
+        	Correction de l'affichage de plusieurs niveau si le niveau par défaut<br/>
+        	était vide, ça gelait<br/>
+        	Maintenant si on désélectionne l'affichage des points marqués, <br/>
+        	ils ne sont pas calculé en background<br/>
+        	stat4COP ne fonctionnait pas car il manquait un fichier...<br/>
+        	<br/>
+        </p>
+      </td>
+    </tr>
+    <tr valign="top">
+      <td width="20%">
+        <p><center>
+          4 mars 2014 <br/>
+          Version 8.02.02
+        </center></p>
+      </td>
+      <td>
+        <p>
+        	Ajout du Notch-Filer dans le filtrage ButterWorth<br/>
+        	Correction à l'ouverture de la première version "8.02.x"<br/>
+        	<br/>
+        </p>
+      </td>
+    </tr>
+    <tr valign="top">
+      <td width="20%">
+        <p><center>
+           22 novembre  2013 <br/>
+          Version 8.02.01
+        </center></p>
+      </td>
+      <td>
+        <p>
+        	Compilation avec la version R2013b (8.2)<br/>
+        	Correction affiche échantillons lorsque multi-lignes sans légende<br/>
+        	Ajout de l'affichage des coordonnées (DataCursorBar)<br/>
+        	Revue la gestion des préférences, maintenant C,est OK<br/>
+          Ajout d'ENUM dans le code<br/>
+        </p>
+      </td>
+    </tr>
+    <tr valign="top">
+      <td width="20%">
+        <p><center>
+           20 juin 2013 <br/>
+          Version 7.15.47
+        </center></p>
+      </td>
+      <td>
+        <p>
+        	Ajout de la gestion des préférences<br/>
+          Correction dans le marquage d'amplitude, il perdait certain pic<br/>
+        	Modif dans le "checkup" de hdchnl à l'ouverture<br/>
+        </p>
+      </td>
+    </tr>
+    <tr valign="top">
+      <td width="20%">
+        <p><center>
+          22 mars 2013 <br/>
+          Version 7.15.46
+        </center></p>
+      </td>
+      <td>
+        <p>
+          Correction dans la correction entre deux points<br/>
+        </p>
+      </td>
+    </tr>
+    <tr valign="top">
+      <td width="20%">
+        <p><center>
+          14 mars 2013 <br/>
+          Version 7.15.45
+        </center></p>
+      </td>
+      <td>
+        <p>
+          Correction Filtre/ButterWorth...<br/>
+          On filtre les canaux qui ont des points et on ne touche pas aux autres <br/>
+          Dans differ, si on donne une largeur de fenêtre inférieur à 2 <br/>
+          on obtiendra une dérivé RAW, sans filtre, (Xi+1)-(Xi) <br/>
+        </p>
+      </td>
+    </tr>
+    <tr valign="top">
+      <td width="20%">
+        <p><center>
+          8 mars 2013 <br/>
+          Version 7.15.44
+        </center></p>
+      </td>
+      <td>
+        <p>
+          Correction dans marquage monter/descente<br/>
+        </p>
+      </td>
+    </tr>
+    <tr valign="top">
+      <td width="20%">
+        <p><center>
+          5 mars 2013 <br/>
+          Version 7.15.43
+        </center></p>
+      </td>
+      <td>
+        <p>
+          Correction dans Emg/Intégration...<br/>
+          et par la bande, lecture dans ptchnl, valeur des points <br/>
+          ajout dans la classe CCatego: fnc pour lire nom ou numéro cat <br/>
+          dans marquage temporel: on ne marque plus par-dessus le pt de ref <br/>
+        </p>
+      </td>
+    </tr>
+    <tr valign="top">
+      <td width="20%">
+        <p><center>
+           20 février 2013 <br/>
+          Version 7.15.42
+        </center></p>
+      </td>
+      <td>
+        <p>
+          Modification de l'interface de marquage automatique<br/>
+          Correction dans l'afficahge (auto/barrer/manuel)<br/>
+          <br/>
+        </p>
+      </td>
+    </tr>
+    <tr valign="top">
+      <td width="20%">
+        <p><center>
+           10 décembre 2012 <br/>
+          Version 7.15.41
+        </center></p>
+      </td>
+      <td>
+        <p>
+          Correction dans "Traitement polynomial"<br/>
+        </p>
+      </td>
+    </tr>
+    <tr valign="top">
+      <td width="20%">
+        <p><center>
+           30 novembre 2012 <br/>
+          Version 7.15.40
+        </center></p>
+      </td>
+      <td>
+        <p>
+          Ajout du calcul: Stat4COP<br/>
+          <br/>
+          <br/>
+        </p>
+      </td>
+    </tr>
+    <tr valign="top">
+      <td width="20%">
+        <p><center>
+           26 novembre 2012 <br/>
+          Version 7.15.39
+        </center></p>
+      </td>
+      <td>
+        <p>
+          Réparer un bug dans la fonction Correction "entre deux points"<br/>
+          Corrigé bug dans l'inteface marquage...
+          Ajout dans le choix de (point/temps)--> (Pf-Pi)/10
+          <br/>
+          <br/>
+        </p>
+      </td>
+    </tr>
+    <tr valign="top">
+      <td width="20%">
+        <p><center>
+           31 octobre 2012 <br/>
+          Version 7.15.38
+        </center></p>
+      </td>
+      <td>
+        <p>
+          Changé ECEF vers LLA du menu Math vers le menu Trajectoire<br/>
+          Ajout du calcul "fpltamti9"<br/>
+          <br/>
+        </p>
+      </td>
+    </tr>
+    <tr valign="top">
+      <td width="20%">
+        <p><center>
+          15 octobre 2012 <br/>
+          Version 7.15.37
+        </center></p>
+      </td>
+      <td>
+        <p>
+          Correction dans Intégrale successives et Rectification<br/>
+          La lecture du stimulus ne vérifiait pas si c'était vide<br/>
+        </p>
+      </td>
+    </tr>
+    <tr valign="top">
+      <td width="20%">
+        <p><center>
+          6 septembre 2012 <br/>
+          Version 7.15.36
+        </center></p>
+      </td>
+      <td>
+        <p>
+          Ajouter 2 champs commentaires dans l'écriture des résultats<br/>
+        </p>
+      </td>
+    </tr>
+    <tr valign="top">
+      <td width="20%">
+        <p><center>
+          27 août 2012 <br/>
+          Version 7.15.35
+        </center></p>
+      </td>
+      <td>
+        <p>
+          Correction dans Ajout de l'ouverture des fichier ".H5 (I2M)"<br/>
+        </p>
+      </td>
+    </tr>
+    <tr valign="top">
+      <td width="20%">
+        <p><center>
+          27 août 2012 <br/>
+          Version 7.15.34
+        </center></p>
+      </td>
+      <td>
+        <p>
+          Ajout de l'ouverture des fichier ".H5 (I2M"<br/>
+        </p>
+      </td>
+    </tr>
+    <tr valign="top">
+      <td width="20%">
+        <p><center>
+          18 juin 2012 <br/>
+          Version 7.15.33
+        </center></p>
+      </td>
+      <td>
+        <p>
+          modification de vg.nad dans les autres fonctions<br/>
+          (lorsque l'on voulait les résultats dans le même canal)<br/>
+        </p>
+      </td>
+    </tr>
+    <tr valign="top">
+      <td width="20%">
+        <p><center>
+          15 juin 2012 <br/>
+          Version 7.15.32
+        </center></p>
+      </td>
+      <td>
+        <p>
+          modification de vg.nad dans Butterworth<br/>
+        </p>
+      </td>
+    </tr>
+    <tr valign="top">
+      <td width="20%">
+        <p><center>
+          10 juin 2012 <br/>
+          Version 7.15.31
+        </center></p>
+      </td>
+      <td>
+        <p>
+          Ajout de l'option multi-passe pour la correction des pics<br/>
+        </p>
+      </td>
+    </tr>
+    <tr valign="top">
+      <td width="20%">
+        <p><center>
+          8 juin 2012 <br/>
+          Version 7.15.28 à 30
+        </center></p>
+      </td>
+      <td>
+        <p>
+          Modification majeure dans la correction des pics<br/>
+        </p>
+      </td>
+    </tr>
+    <tr valign="top">
+      <td width="20%">
+        <p><center>
+          15 mai 2012 <br/>
+          Version 7.15.27
+        </center></p>
+      </td>
+      <td>
+        <p>
+          Correction mineure dans l'ajout dun fichier<br/>
+        </p>
+      </td>
+    </tr>
+    <tr valign="top">
+      <td width="20%">
+        <p><center>
+          3 avril 2012 <br/>
+          Version 7.15.26
+        </center></p>
+      </td>
+      <td>
+        <p>
+          Correction dans l'écriture des résultats: ajout de la précision décimale<br/>
+        </p>
+      </td>
+    </tr>
+    <tr valign="top">
+      <td width="20%">
+        <p><center>
+          28 mars 2012 <br/>
+          Version 7.15.25
+        </center></p>
+      </td>
+      <td>
+        <p>
+          Correction dans la gestion des 2 boutons pour le choix cm ou m<br/>
+          Ajout du module "Importer point (Y vs X) --> les coordonnées doivent être séparées par des espaces<br/>
+          dans le fichier .INI<br/>
+        </p>
+      </td>
+    </tr>
+    <tr valign="top">
+      <td width="20%">
+        <p><center>
+          26 mars 2012 <br/>
+          Version 7.15.24
+        </center></p>
+      </td>
+      <td>
+        <p>
+          Correction dans la synchro par essai, no de point P1 ou 1<br/>
+          Après marquage manuel, j'ai ajouté un réaffiche pour que les nouveaux points soit disponible dans la fen effacer<br/>
+          Ajout de 2 boutons dans le calcul ECEF2LLA pour ne pas avoir à convertir manuellement en mètres<br/>
+          Ajout de la lecture des fichier XML pour auto-21<br/>
+        </p>
+      </td>
+    </tr>
+    <tr valign="top">
+      <td width="20%">
+        <p><center>
+          22 mars 2012 <br/>
+          Version 7.15.23
+        </center></p>
+      </td>
+      <td>
+        <p>
+          Correction dans l'ouverture des anciens format de fichiers venant de Cinegraf<br/>
+          Petit bug dans la routine de correction lorsqu'il n'y avait qu'un point à corriger<br/>
+        </p>
+      </td>
+    </tr>
+    <tr valign="top">
+      <td width="20%">
+        <p><center>
+          8 mars 2012 <br/>
+          Version 7.15.22
+        </center></p>
+      </td>
+      <td>
+        <p>
+          Correction dans le mode Copie/Coller, lorsque l'on revenait à Analyse<br/>
+          l'affichage Se faisait dans un nouvel Axes<br/>
+        </p>
+      </td>
+    </tr>
+    <tr valign="top">
+      <td width="20%">
+        <p><center>
+          6 mars 2012 <br/>
+          Version 7.15.21
+        </center></p>
+      </td>
+      <td>
+        <p>
+          Correction dans AJOUT, lorsque l'on ajoutait le même fichier<br/>
+        </p>
+      </td>
+    </tr>
+    <tr valign="top">
+      <td width="20%">
+        <p><center>
+          27 février 2012 <br/>
+          Version 7.15.20
+        </center></p>
+      </td>
+      <td>
+        <p>
+          Modification non-apparente dans la DLL-commun<br/>
+          (dans Hdchnl.ModifSize)<br/>
+        </p>
+      </td>
+    </tr>
+    <tr valign="top">
+      <td width="20%">
+        <p><center>
+          24 février 2012 <br/>
+          Version 7.15.19
+        </center></p>
+      </td>
+      <td>
+        <p>
+          Modification non-apparente dans la DLL-commun<br/>
+        </p>
+      </td>
+    </tr>
+    <tr valign="top">
+      <td width="20%">
+        <p><center>
+          21 février 2012 <br/>
+          Version 7.15.18
+        </center></p>
+      </td>
+      <td>
+        <p>
+          Ajout dans la routine pour calculer les virage du travail par point<br/>
+          Lorsque l'on a un choix de points ou de temps pour un interval<br/>
+          On peut maintenant donner Pi à Pf-10 ou encore P1-10 à P1+10<br/>
+        </p>
+      </td>
+    </tr>
+    <tr valign="top">
+      <td width="20%">
+        <p><center>
+          20 février 2012 <br/>
+          Version 7.15.17
+        </center></p>
+      </td>
+      <td>
+        <p>
+          Calibration de la routine pour calculer les virage gauche et droit avec le GPS<br/>
+          Il faudra revoir pour les différentes utilisations: auto, ski, marche...<br/>
+        </p>
+      </td>
+    </tr>
+    <tr valign="top">
+      <td width="20%">
+        <p><center>
+          9 février 2012 <br/>
+          Version 7.15.16
+        </center></p>
+      </td>
+      <td>
+        <p>
+          Ajout de la correction des Pics de façon à garder le plateau (dans le menu Correction)<br/>
+        </p>
+      </td>
+    </tr>
+    <tr valign="top">
+      <td width="20%">
+        <p><center>
+          2 février 2012 <br/>
+          Version 7.15.15
+        </center></p>
+      </td>
+      <td>
+        <p>
+          Correction d'un bug avec le calcul d'angle<br/>
+          Ajout de la correction des débuts et fin de canal (dans le menu Correction)<br/>
+        </p>
+      </td>
+    </tr>
+    <tr valign="top">
+      <td width="20%">
+        <p><center>
+          25 janvier 2012 <br/>
+          Version 7.15.14
+        </center></p>
+      </td>
+      <td>
+        <p>
+          Nouveau menu sous Trajectoire: GPS<br/>
+          Pour faire le calcul de la distance parcourue et trouver les virage à gauche et droite<br/>
+        </p>
+      </td>
+    </tr>
+    <tr valign="top">
+      <td width="20%">
+        <p><center>
+          24 janvier 2012 <br/>
+          Version 7.15.13
+        </center></p>
+      </td>
+      <td>
+        <p>
+          Retrait tempo. du calcul de distance à partir de Longitude-Latitude<br/>
+          Correction d'un bug, si on ouvre un fichier, on ferme et on ré-ouvre: ça plante <br/>
+          Les fichiers de travail temporaire se trouve maintenant dans %TEMP%<br/>
+        </p>
+      </td>
+    </tr>
+    <tr valign="top">
+      <td width="20%">
+        <p><center>
+          12 janvier 2012 <br/>
+          Version 7.15.12
+        </center></p>
+      </td>
+      <td>
+        <p>
+          Ajout du calcul de distance à partir de Longitude-Latitude<br/>
+          Ajouté la possibilité de garder les points marqués dans le canal<br/>
+          de sortie du traitement de canal<br/>
+          Correction de l'affichage de la fenêtre Mode XY<br/>
+          <br/>
+        </p>
+      </td>
+    </tr>
+    <tr valign="top">
+      <td width="20%">
+        <p><center>
+          22 novembre 2011 <br/>
+          Version 7.15.11
+        </center></p>
+      </td>
+      <td>
+        <p>
+          Correction d'un nouveau bug dans le découpage<br/>
+          avec les canaux qui n'ont pas ou peu de points<br/>
+        </p>
+      </td>
+    </tr>
+    <tr valign="top">
+      <td width="20%">
+        <p><center>
+          2 novembre 2011 <br/>
+          Version 7.15.10
+        </center></p>
+      </td>
+      <td>
+        <p>
+          Correction d'un bug dans le découpage<br/>
+          et aussi dans l'ouverture des fichiers "derniers ouverts"<br/>
+        </p>
+      </td>
+    </tr>
+    <tr valign="top">
+      <td width="20%">
+        <p><center>
+          31 octobre 2011 <br/>
+          Version 7.15.09
+        </center></p>
+      </td>
+      <td>
+        <p>
+          Retour au fichier CTF+DLL<br/>
+          La première Ouverture sera habituelle, mais les ouvertures<br/>
+          subséquentes seront rapides<br/>
+        </p>
+      </td>
+    </tr>
+    <tr valign="top">
+      <td width="20%">
+        <p><center>
+          6 septembre 2011 <br/>
+          Version 7.15.08
+        </center></p>
+      </td>
+      <td>
+        <p>
+          Retour de la fonction Exportation<br/>
+        </p>
+      </td>
+    </tr>
+    <tr valign="top">
+      <td width="20%">
+        <p><center>
+          17 août 2011 <br/>
+          Version 7.15.07
+        </center></p>
+      </td>
+      <td>
+        <p>
+          Le fichier des paramètres "grame.mat" sera conservé dans tempdir de Windows<br/>
+        </p>
+      </td>
+    </tr>
+    <tr valign="top">
+      <td width="20%">
+        <p><center>
+          10 août 2011 <br/>
+          Version 7.15.06
+        </center></p>
+      </td>
+      <td>
+        <p>
+          Ajout d'une nouvelle librairie: commun.dll<br/>
+        </p>
+      </td>
+    </tr>
+    <tr valign="top">
+      <td width="20%">
+        <p><center>
+          27 juillet 2011 <br/>
+          Version 7.15.05
+        </center></p>
+      </td>
+      <td>
+        <p>
+          NOUVEAU: On a maintenant Analyse.exe et Analyse.dll (au lieu de Analyse.ctf)<br/>
+          Ajout de l'échelle de temps dans l'écriture des résultats<br/>
+        </p>
+      </td>
+    </tr>
+    <tr valign="top">
+      <td width="20%">
+        <p><center>
+          20 juillet 2011 <br/>
+          Version 7.15.04
+        </center></p>
+      </td>
+      <td>
+        <p>
+          Correction dans l'affichage de cette page d'histoire...<br/>
+          Correction dans ajout fichier<br/>
+        </p>
+      </td>
+    </tr>
+    <tr valign="top">
+      <td width="20%">
+        <p><center>
+          19 juillet 2011 <br/>
+          Version 7.15.03
+        </center></p>
+      </td>
+      <td>
+        <p>
+          Correction d'un bug dans le marquage manuel en mode X-Y<br/>
+        </p>
+      </td>
+    </tr>
+    <tr valign="top">
+      <td width="20%">
+        <p><center>
+          14 juillet 2011 <br/>
+          Version 7.15.02
+        </center></p>
+      </td>
+      <td>
+        <p>
+          Correction d'un bug dans le marquage manuel<br/>
+          et dans  "Ouverture des fichiers récents"<br/>
+        </p>
+      </td>
+    </tr>
+    <tr valign="top">
+      <td width="20%">
+        <p><center>
+          28 juin 2011 <br/>
+          Version 7.12.04
+        </center></p>
+      </td>
+      <td>
+        <p>
+          Amélioration de l'affichage du nom des "Stimulus-Catégories"<br/>
+          avec le numéro de l'essai<br/>
+        </p>
+      </td>
+    </tr>
+    <tr valign="top">
+      <td width="20%">
+        <p><center>
+          23 mai 2011 <br/>
+          Version 7.12.01
+        </center></p>
+      </td>
+      <td>
+        <p>
+        	NOUVELLE VERSION DU MCR D'ANALYSE: R2011a<br/>
+          Ajout de la lecture des fichiers textes<br/>
+        </p>
+      </td>
+    </tr>
+    <tr valign="top">
+      <td width="20%">
+        <p><center>
+          24 mars 2011 <br/>
+          Version 7.08.34
+        </center></p>
+      </td>
+      <td>
+        <p>
+          Correction des problèmes d'affichage de la liste des catégories<br/>
+          en mode multi-fichier ainsi que dans l'interface de marquage<br/>
+        </p>
+      </td>
+    </tr>
+    <tr valign="top">
+      <td width="20%">
+        <p><center>
+          30 mars 2011 <br/>
+          Version 7.08.35
+        </center></p>
+      </td>
+      <td>
+        <p>
+          Correction des problèmes lors de sélection de plusieurs canaux<br/>
+        </p>
+      </td>
+    </tr>
+    <tr valign="top">
+      <td width="20%">
+        <p><center>
+          14 février 2011 <br/>
+          Version 7.08.33
+        </center></p>
+      </td>
+      <td>
+        <p>
+          Optimisation dans le marquage manuel<br/>
+        </p>
+      </td>
+    </tr>
+    <tr valign="top">
+      <td width="20%">
+        <p><center>
+          4 février 2011 <br/>
+          Version 7.08.32
+        </center></p>
+      </td>
+      <td>
+        <p>
+          Début d'optimisation dans le marquage en XY<br/>
+          Amélioration de l'affichage en changeant les options<br/>
+        </p>
+      </td>
+    </tr>
+    <tr valign="top">
+      <td width="20%">
+        <p><center>
+          4 février 2011 <br/>
+          Version 7.08.31
+        </center></p>
+      </td>
+      <td>
+        <p>
+          Correction dans le marquage en XY<br/>
+          et aussi pour l'ouverture des fichiers récents<br/>
+        </p>
+      </td>
+    </tr>
+    <tr valign="top">
+      <td width="20%">
+        <p><center>
+          3 février 2011 <br/>
+          Version 7.08.30
+        </center></p>
+      </td>
+      <td>
+        <p>
+          Correction dans le marquage en XY<br/>
+          On marque selon les X en donnant l'écart type en Y, ou bien<br/>
+          On marque selon les Y en donnant l'écart type en X<br/>
+        </p>
+      </td>
+    </tr>
+    <tr valign="top">
+      <td width="20%">
+        <p><center>
+          15 décembre 2010 <br/>
+          Version 7.08.29
+        </center></p>
+      </td>
+      <td>
+        <p>
+          Correction dans l'ouverture des fichiers, ajouter une<br/>
+          mise à jour de HDCHNL pour les champs min et max<br/>
+        </p>
+      </td>
+    </tr>
+    <tr valign="top">
+      <td width="20%">
+        <p><center>
+          17 novembre 2010 <br/>
+          Version 7.08.28
+        </center></p>
+      </td>
+      <td>
+        <p>
+          Ajout de la conversion ECEF-->LLA pour le GPS<br/>
+          Ré-introduction du module EMG<br/>
+          Rajout du no des canaux pour l'affichage<br/>
+          Correction dans l'affichage des noms de essai-catégorie<br/>
+          Correction dans l'affichage des points dans l'interface de marquage<br/>
+        </p>
+      </td>
+    </tr>
+    <tr valign="top">
+      <td width="20%">
+        <p><center>
+          20 octobre 2010 <br/>
+          Version 7.08.27
+        </center></p>
+      </td>
+      <td>
+        <p>
+          correction dans la fonction "couper par section"<br/>
+        </p>
+      </td>
+    </tr>
+    <tr valign="top">
+      <td width="20%">
+        <p><center>
+          14 octobre 2010 <br/>
+          Version 7.08.26
+        </center></p>
+      </td>
+      <td>
+        <p>
+          Ajout de la fonction abs() et longueur vectoriel<br/>
+          dans le traitement de canal<br/>
+        </p>
+      </td>
+    </tr>
+    <tr valign="top">
+      <td width="20%">
+        <p><center>
+          13 septembre 2010 <br/>
+          Version 7.08.25
+        </center></p>
+      </td>
+      <td>
+        <p>
+          correction sur la synchro des essais.<br/>
+          gel des boîtes de sélection canal/essai/catégorie lors de l'affichage<br/>
+        </p>
+      </td>
+    </tr>
+    <tr valign="top">
+      <td width="20%">
+        <p><center>
+          18 juin 2010 <br/>
+          Version 7.08.24
+        </center></p>
+      </td>
+      <td>
+        <p>
+          Moyenne et écart type ne vidait pas les datas de la classe dtchnl<br/>
+          <br/>
+        </p>
+      </td>
+    </tr>
+    <tr valign="top">
+      <td width="20%">
+        <p><center>
+          3 juin 2010 <br/>
+          Version 7.08.23
+        </center></p>
+      </td>
+      <td>
+        <p>
+          Correction dans la synchronisation des canaux<br/>
+          même Problème que pour les essais<br/>
+        </p>
+      </td>
+    </tr>
+    <tr valign="top">
+      <td width="20%">
+        <p><center>
+          27 mai 2010 <br/>
+          Version 7.08.22
+        </center></p>
+      </td>
+      <td>
+        <p>
+          Correction dans la synchronisation des essais<br/>
+          Problème dû à des fréquences d'aquisitions différentes entre canaux<br/>
+          et une couille dans le potage<br/>
+        </p>
+      </td>
+    </tr>
+    <tr valign="top">
+      <td width="20%">
+        <p><center>
+          5 mars 2010 <br/>
+          Version 7.08.21
+        </center></p>
+      </td>
+      <td>
+        <p>
+          Correction dans la gestion des variables dans le module "Traitement de canal"<br/>
+        </p>
+      </td>
+    </tr>
+    <tr valign="top">
+      <td width="20%">
+        <p><center>
+          19 janvier 2010 <br/>
+          Version 7.08.20
+        </center></p>
+      </td>
+      <td>
+        <p>
+          Petit bug, correction du calcul de la distance parcourue<br/>
+        </p>
+      </td>
+    </tr>
+    <tr valign="top">
+      <td width="20%">
+        <p><center>
+          18 janvier 2010 <br/>
+          Version 7.08.19
+        </center></p>
+      </td>
+      <td>
+        <p>
+          Ajout du calcul de la distance parcourue, 2D et 3D<br/>
+        </p>
+      </td>
+    </tr>
+    <tr valign="top">
+      <td width="20%">
+        <p><center>
+          12 janvier 2010 <br/>
+          Version 7.08.18
+        </center></p>
+      </td>
+      <td>
+        <p>
+          Correction d'un petit bug avec le découpage...<br/>
+        </p>
+      </td>
+    </tr>
+    <tr valign="top">
+      <td width="20%">
+        <p><center>
+          6 janvier 2010 <br/>
+          Version 7.08.17
+        </center></p>
+      </td>
+      <td>
+        <p>
+          Le fichier de travail sera créer dans le dossier<br/>
+          de l'application Analyse<br/>
+        </p>
+      </td>
+    </tr>
+    <tr valign="top">
+      <td width="20%">
+        <p><center>
+          1er décembre 2009 <br/>
+          Version 7.08.16
+        </center></p>
+      </td>
+      <td>
+        <p>
+          petite correction dans la synchro<br/>
+          Ajout couper par section<br/>
+        </p>
+      </td>
+    </tr>
+    <tr valign="top">
+      <td width="20%">
+        <p><center>
+          26 novembre 2009 <br/>
+          Version 7.08.15
+        </center></p>
+      </td>
+      <td>
+        <p>
+          correction dans la synchro par essai, mauvaise synchro si le <br/>
+          canal de référence n'avait pas la même fréquence que les autres<br/>
+        </p>
+      </td>
+    </tr>
+    <tr valign="top">
+      <td width="20%">
+        <p><center>
+          26 novembre 2009 <br/>
+          Version 7.08.14
+        </center></p>
+      </td>
+      <td>
+        <p>
+          correction dans Ajout de fichier et synchronisation des canaux<br/>
+          
+        </p>
+      </td>
+    </tr>
+    <tr valign="top">
+      <td width="20%">
+        <p><center>
+          24 novembre 2009 <br/>
+          Version 7.08.13
+        </center></p>
+      </td>
+      <td>
+        <p>
+          correction dans supprimer canal et échelle temps<br/>
+          
+        </p>
+      </td>
+    </tr>
+    <tr valign="top">
+      <td width="20%">
+        <p><center>
+          24 novembre 2009 <br/>
+          Version 7.08.12
+        </center></p>
+      </td>
+      <td>
+        <p>
+          correction dans marquage manuel suite au modif de échelle de temps<br/>
+          
+        </p>
+      </td>
+    </tr>
+    <tr valign="top">
+      <td width="20%">
+        <p><center>
+          24 novembre 2009 <br/>
+          Version 7.08.11
+        </center></p>
+      </td>
+      <td>
+        <p>
+          correction dans Traitement de canal<br/>
+          
+        </p>
+      </td>
+    </tr>
+    <tr valign="top">
+      <td width="20%">
+        <p><center>
+          23 novembre 2009 <br/>
+          Version 7.08.10
+        </center></p>
+      </td>
+      <td>
+        <p>
+          correction dans Édit échelle de temps et catégorie<br/>
+          
+        </p>
+      </td>
+    </tr>
+    <tr valign="top">
+      <td width="20%">
+        <p><center>
+          20 novembre 2009 <br/>
+          Version 7.08.09
+        </center></p>
+      </td>
+      <td>
+        <p>
+          correction dans Rebâtir catégorie<br/>
+          
+        </p>
+      </td>
+    </tr>
+    <tr valign="top">
+      <td width="20%">
+        <p><center>
+          17 novembre 2009 <br/>
+          Version 7.08.08
+        </center></p>
+      </td>
+      <td>
+        <p>
+          Petit bug dans Differ et traitement polynomial<br/>
+          correction dans l'Affichage et la gestion des stimulus<br/>
+          
+        </p>
+      </td>
+    </tr>
+    <tr valign="top">
+      <td width="20%">
+        <p><center>
+          16 novembre 2009 <br/>
+          Version 7.08.07
+        </center></p>
+      </td>
+      <td>
+        <p>
+          Corrections dans la gestion de l'affichage du mode XY<br/>
+          il y avait problème si on effaçait des canaux<br/>
+          Ajout d'un menu: Outils/Afficher points marqués sans texte
+        </p>
+      </td>
+    </tr>
+    <tr valign="top">
+      <td width="20%">
+        <p><center>
+          12 novembre 2009 <br/>
+          Version 7.08.06
+        </center></p>
+      </td>
+      <td>
+        <p>
+          Corrections dans l'affichage lorsque le nom des niveaux ou catégories<br/>
+          étaient inférieurs à 2 caraactères
+        </p>
+      </td>
+    </tr>
+    <tr valign="top">
+      <td width="20%">
+        <p><center>
+          12 novembre 2009 <br/>
+          Version 7.08.05
+        </center></p>
+      </td>
+      <td>
+        <p>
+          Ajout de: Écriture des résultats<br/>
+          Corrections dans le marquege manuel et les touches C-E-N<br/>
+          pour l'affichage avec les flèches
+        </p>
+      </td>
+    </tr>
+    <tr valign="top">
+      <td width="20%">
+        <p><center>
+          10 novembre 2009 <br/>
+          Version 7.08.04
+        </center></p>
+      </td>
+      <td>
+        <p>
+          Ajout de: Axes Automatique-Manuel-Barré<br/>
+        </p>
+      </td>
+    </tr>
+    <tr valign="top">
+      <td width="20%">
+        <p><center>
+          4 novembre 2009 <br/>
+          Version 7.08.03
+        </center></p>
+      </td>
+      <td>
+        <p>
+          Ajout de<br/>
+          - Édit canal<br/>
+          - Copie canal<br/>
+        </p>
+      </td>
+    </tr>
+    <tr valign="top">
+      <td width="20%">
+        <p><center>
+          3 novembre 2009 <br/>
+          Version 7.08.02
+        </center></p>
+      </td>
+      <td>
+        <p>
+          Ajout de<br/>
+          - Édit catégorie<br/>
+          - Rebâtir catégorie<br/>
+          - Édit échelle de temps<br/>
+        </p>
+      </td>
+    </tr>
+    <tr valign="top">
+      <td width="20%">
+        <p><center>
+          27 octobre 2009 <br/>
+          Version 7.08.01
+        </center></p>
+      </td>
+      <td>
+        <p>
+          Bug majeur dans l'Ajout de fichier<br/>
+          On travaille en version V7.3 (plus volumineux, plus rapide)<br/>
+          mais on sauvegerde en V7 car il y a compression en mode -append<br/>
+        </p>
+      </td>
+    </tr>
+    <tr valign="top">
+      <td width="20%">
+        <p><center>
+          23 octobre 2009 <br/>
+          Version 7.07.991
+        </center></p>
+      </td>
+      <td>
+        <p>
+          Ajout de fichier comme nouveaux essais ou canaux <br/>
+          Cet ajout peut être multi-fichier, il sera fait en ordre alphabétique
+        </p>
+      </td>
+    </tr>
+    <tr valign="top">
+      <td width="20%">
+        <p><center>
+          14 octobre 2009 <br/>
+          Version 7.07.99
+        </center></p>
+      </td>
+      <td>
+        <p>
+          Ré-écriture d'Analyse, en Orienté-Objet <br/>
+          Modifications principales <br/>
+          on travail sur un canal en mémoire à la fois (avant c'était dtchnl au complet) <br/>
+          On peut ouvrir plusieurs fichiers en même temps <br/>
+          les points marqués affichent le numéro et la coordonné xy <br/>
+          ajout d'un menu "ouvrir dernier"
+        </p>
+      </td>
+    </tr>
+    <tr valign="top">
+      <td width="20%">
+        <p><center>
+          Avant le 24 mars 2009 <br/>
+          Version 7.04.14 et moins...
+        </center></p>
+      </td>
+      <td>
+        <p>
+          <a href="vieuxhisto.html">Corrections depuis le Big bang!</a>
+        </p>
+      </td>
+    </tr>
+  </table>
+  <p>
+  <a href="#letop">Retour au début</a>
+  <a name=lafin></a>
+  <p class="centrer">
+  <img  src="img/mascot.jpg"></p>
+  <p class="centrer">Je croyais qu'ils avaient trouvé ça bon  :-0 </p>
+</body>
+</html>
