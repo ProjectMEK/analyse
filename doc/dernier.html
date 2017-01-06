@@ -1,0 +1,40 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<html lang="fr">
+  <head>
+    <link rel="shortcut icon" href="img/analyse.gif" />
+    <title>Laboratoire GRAME, Historique d'Analyse</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
+    <meta name="robots" content="noindex,nofollow">
+    <style type="text/css">
+      div.iframe { text-align:center; }
+      iframe#ifrm { width:90%; height:80%}
+      H1.titre {text-align:center; font-weight:bold;}
+    </style>
+<BR>    <script src="/js/dw_viewport.js" type="text/javascript"></script>
+  </head>
+  <body>
+    <H1 class="titre">
+        Historique du Logiciel Analyse
+    </H1><p></p>
+    <div class="iframe">
+      <iframe name="ifrm" id="ifrm" src="histo.html" frameborder="0">
+        Votre version du navigateur internet ne supporte pas iframes. Car 
+        <a href="histo.html">l'Historique d'analyse</a> devrait être affiché
+        si vous utilisiez un navigateur compatible.
+      </iframe>
+    </div>
+    <script type="text/javascript">
+      function setIframe(h) {
+        var theIframe = document.getElementById? document.getElementById('ifrm'): document.all? document.all['ifrm']: null;
+        if (theIframe) {
+          viewport.getWinHeight();
+          //  both theIframe.height and theIframe.style.height seem to work 
+          theIframe.style.height = Math.round( h * viewport.height ) + "px";
+          theIframe.style.marginTop = Math.round( (viewport.height - parseInt(theIframe.style.height) )/2 ) + "px";
+        }
+      }
+      setIframe(.8);
+      window.onresize = function() { setIframe(.8) }
+    </script>
+  </body>
+</html>

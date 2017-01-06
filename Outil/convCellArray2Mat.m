@@ -1,5 +1,5 @@
 %%
-% Convertir un tableau de cellules qui contient des chiffres au format
+% Convertir un tableau de cellules qui contient des chiffres du format
 % texte ou numérique vers une matrice numérique
 %
 function v =convCellArray2Mat(u)

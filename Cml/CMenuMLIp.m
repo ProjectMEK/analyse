@@ -39,9 +39,9 @@ classdef CMenuMLIp < CBaseStringGUI
 
     %edit
     edit ='&Edit';
+    editmajcan ='MAJ infos des canaux sélectionnés';
     editcanal ='&Canal';
     editcopiecanal ='Co&pie canal';
-    editdatautil ='Regrouper données utiles';
     editcatego ='C&atégorie';
     editrebatircatego ='&Rebâtir Catégories';
     editecheltemps ='Échelle de &temps';
@@ -108,7 +108,6 @@ classdef CMenuMLIp < CBaseStringGUI
     ou ='O&utils';
     ouechtempo ='Échelle &temporelle';
     ouechtempodefaut ='Retour à la normale';
-    ouajoutaxe ='Ajouter AXE';
     ouimportpoint ='&Importer point (Y vs X)';
     oumark ='&Marquer';
     ouzoom ='Zoom';

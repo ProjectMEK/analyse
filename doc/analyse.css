@@ -1,0 +1,30 @@
+  p             {text-align: justify; width: 95%; margin-left: 2.5%}
+  p.decn0       {text-indent: 2.5%}
+  p.n1          {width: 90%; margin-left: 5%}
+  p.decn1       {width: 90%; margin-left: 5%; text-indent: 2.5%}
+  p.n2          {width: 80%; margin-left: 10%}
+  p.decn2       {width: 80%; margin-left: 10%; text-indent: 2.5%}
+  p.n3          {width: 70%; margin-left: 15%}
+  p.decn3       {width: 70%; margin-left: 15%; text-indent: 2.5%}
+  p.centrer     {text-align:center;}
+  p.adroite     {text-align:right;}
+  BODY {font-size: 12pt; 
+        font-family: "Times New Roman";
+        line-height: 14pt;
+        bgcolor: ffffff;
+        text: 000000;
+        link: 0000ff;
+        vlink: 800080;
+        alink: ff0000}
+  H1 {font-size: 24pt;
+      font-family: "Arial";
+      font-weight: bold;
+      color: 000000;
+      z-index: 0}
+  H1.titre {text-align:center;}
+  H2 {font-size: 20pt;
+      font-family: "Arial";
+      font-weight: bold;
+      margin-top: 30pt;
+      color: 000000}
+  A  {text-decoration: none}
