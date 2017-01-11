@@ -59,10 +59,6 @@ function vercar =quelver(laver)
     vercar ='6';
     return;
   end
-  vcar =[num2str(laver) '0000'];
-  if laver < 10
-    vercar =[vcar(1) '.' vcar(3:4) '.' vcar(5:6)];
-  else
-    vercar =[vcar(1:2) '.' vcar(4:5) '.' vcar(6:7)];
-  end
+  vcar =num2str(laver, '%2.4f');
+  vercar =[vcar(1:end-2) '.' vcar(end-1:end)];
 end
