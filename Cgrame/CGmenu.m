@@ -35,6 +35,7 @@
 %   marquage(thisObj,src,event)
 %   moindre(thisObj,src,event)
 %   moyectype(thisObj,src,event)
+%   moypoint(thisObj,src,event)
 %   Normalis(thisObj, src, event)
 %   normalise(thisObj,src,event)
 %   normaltemps(thisObj,src,event)
@@ -64,7 +65,7 @@ classdef CGmenu < handle
 
     %------------
     % CONSTRUCTOR
-    % EN ENTRÉE on papa un objet de la classe CAnalyse
+    % EN ENTRÉE on veut: papa un objet de la classe CAnalyse
     %-----------------------------
     function thisObj =CGmenu(papa)
       thisObj.hA =papa;
@@ -175,8 +176,12 @@ classdef CGmenu < handle
       ellipse();
     end
     %-------
-    function moyectype(thisObj,src,event)      % Moyenne et Ecart-type
+    function moyectype(thisObj,src,event)      % Moyenne et Ecart-type par catégorie
       essmoy();
+    end
+    %-------
+    function moypoint(thisObj,src,event)       % Moyenne autour des points marqués
+      moyAutourPt();
     end
     %-------
     function angulo(thisObj,src,event)         % Calcul d'angle

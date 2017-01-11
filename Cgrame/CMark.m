@@ -320,7 +320,7 @@ classdef (Sealed)  CMark < CGuiMark
     %           IF DESCENTE, CALCUL_PEAK(-X); END
     %
     %---------------------------------------
-    function fncPanelMontee(obj, Ofich, val)
+    function fncPanelMontee(tO, Ofich, val)
       if ~(val.dbtmnt || val.dbtdsc || val.finmnt || val.findsc)
         me =MException('Analyse:CMark:fncPanelMontee', tO.potravchmddm);
         throw(me);
@@ -369,7 +369,7 @@ classdef (Sealed)  CMark < CGuiMark
           end
           deltaY =val.deltaY;
           if deltaY < 0
-            %voir CGuiMark.lirVarPanelMontee(obj, s)
+            %voir CGuiMark.lirVarPanelMontee(tO, s)
             % On prend alors le pourcentage de l'amplitude(max-min)
             deltaY =-(max(dt.Dato.(dt.Nom)(dbut:smplmax,val.alltri(jj)))-min(dt.Dato.(dt.Nom)(dbut:smplmax,val.alltri(jj))))*deltaY/100;
           end
@@ -425,7 +425,7 @@ classdef (Sealed)  CMark < CGuiMark
               smpl =test1;
               if val.dbtmnt
                 if (espp2+smpl(1) > 0) & val.testDeltaY(smpl, dt, jj, espp2, deltaY)
-                  indpt =obj.copieVersExtra(hdchnl, ptchnl, val, ii, jj, indpt, smpl(1), dbut);
+                  indpt =tO.copieVersExtra(hdchnl, ptchnl, val, ii, jj, indpt, smpl(1), dbut);
                   decremente =true;
                   lept =lept+1;
                   waitbar(lafrac, hWB, lesmots(val.csrc(ii), val.alltri(jj),lept));
@@ -433,7 +433,7 @@ classdef (Sealed)  CMark < CGuiMark
               end
               if val.finmnt
                 if (smpl(2) > smpl(1)) & (smpl(2) <= smplmax) & val.testDeltaY(smpl, dt, jj, espp2, deltaY)
-                  indpt =obj.copieVersExtra(hdchnl, ptchnl, val, ii, jj, indpt, smpl(2), dbut);
+                  indpt =tO.copieVersExtra(hdchnl, ptchnl, val, ii, jj, indpt, smpl(2), dbut);
                   decremente =true;
                   lept =lept+1;
                   waitbar(lafrac, hWB, lesmots(val.csrc(ii), val.alltri(jj),lept));
@@ -485,7 +485,7 @@ classdef (Sealed)  CMark < CGuiMark
               smpl =test1;
               if val.dbtdsc
                 if (smpl(1) > 0) & val.testDeltaY(smpl, dt, jj, espp2, deltaY)
-                  indpt =obj.copieVersExtra(hdchnl, ptchnl, val, ii, jj, indpt, smpl(1), dbut);
+                  indpt =tO.copieVersExtra(hdchnl, ptchnl, val, ii, jj, indpt, smpl(1), dbut);
                   decremente =true;
                   lept =lept+1;
                   waitbar(lafrac, hWB, lesmots(val.csrc(ii), val.alltri(jj),lept));
@@ -493,7 +493,7 @@ classdef (Sealed)  CMark < CGuiMark
               end
               if val.findsc
                 if (smpl(2) > smpl(1)) & (smpl(2) <= smplmax) & val.testDeltaY(smpl, dt, jj, espp2, deltaY)
-                  indpt =obj.copieVersExtra(hdchnl, ptchnl, val, ii, jj, indpt, smpl(2), dbut);
+                  indpt =tO.copieVersExtra(hdchnl, ptchnl, val, ii, jj, indpt, smpl(2), dbut);
                   decremente =true;
                   lept =lept+1;
                   waitbar(lafrac, hWB, lesmots(val.csrc(ii), val.alltri(jj),lept));

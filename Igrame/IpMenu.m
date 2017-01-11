@@ -90,6 +90,7 @@ function IpMenu(obj)
   uimenu('Parent',mnu, 'Label',tt.mathnormaltemp, 'Callback',@GM.normaltemps);
   uimenu('Parent',mnu, 'Label',tt.mathellipsconf, 'Callback',@GM.ellipse);
   uimenu('Parent',mnu, 'Label',tt.mathmoyectyp, 'Callback',@GM.moyectype);
+  uimenu('Parent',mnu, 'Label',tt.mathmoyptmarq, 'Callback',@GM.moypoint);
   uimenu('Parent',mnu, 'Label',tt.mathcalcang, 'Callback',@GM.angulo);
   uimenu('Parent',mnu, 'Label',tt.mathtraitcan, 'Callback',@GM.tretcanal);
 % EMG

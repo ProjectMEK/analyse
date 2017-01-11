@@ -79,6 +79,7 @@ function varargout =langue_en(varargin)
     S.mnuip.mathnormaltemp ='Temporal standardization';
     S.mnuip.mathellipsconf ='Confidence ellipse';
     S.mnuip.mathmoyectyp ='Mean and Standard Deviation';
+    S.mnuip.mathmoyptmarq ='Mean around points scored';
     S.mnuip.mathcalcang ='Calculates angles';
     S.mnuip.mathtraitcan ='Channel treatment...';
 

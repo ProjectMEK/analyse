@@ -134,7 +134,11 @@ function exportacion(varargin)
     nbdonmax =max(hdchnl.nsmpls(canaux,1));
     for ij =1:nombress
       % Ligne de titre par essai à exporter
-      contenu =[saut 'NO ESSAI: ' num2str(essai(ij)) ' (Stimulus: ' vg.nomstim{hdchnl.numstim(essai(ij))} ')' saut];
+      try
+        contenu =[saut 'NO ESSAI: ' num2str(essai(ij)) ' (Stimulus: ' vg.nomstim{hdchnl.numstim(essai(ij))} ')' saut];
+      catch
+        contenu =[saut 'NO ESSAI: ' num2str(essai(ij)) ' (Stimulus: vide)' saut];
+      end
       fprintf(fileident, '%s', contenu);
       fprintf(fileident, '%s', frequence);
       fprintf(fileident, '%s', valcan);
