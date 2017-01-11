@@ -79,6 +79,8 @@ function varargout =langue_es(varargin)
     S.mnuip.mathnormaltemp ='Normalización temporal';
     S.mnuip.mathellipsconf ='Confianza elipse';
     S.mnuip.mathmoyectyp ='Media y desviación estándar';
+    S.mnuip.mathmoyectyp ='Moy./Ecart-type par catégorie';
+    S.mnuip.mathmoyptmarq ='Media alrededor de los puntos marcados';
     S.mnuip.mathcalcang ='Calcula el ángulo';
     S.mnuip.mathtraitcan ='Tratamiento de canal';
 

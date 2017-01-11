@@ -26,7 +26,7 @@ function varargout = aideDoc(varargin)
       lesmots{end+1} ={['(Dernière sauvegarde: Version ' vermot ')'], 1, 7};
     end
     lesmots{end+1} ={'Matlab R2013b', 1, 0};
-    lesmots{end+1} ={[char(169) ' 1998-2016'], 2, 8};
+    lesmots{end+1} ={[char(169) ' 1998-2017'], 2, 8};
     lesmots{end+1} ={'** Prenez note que Analyse ne sera', 2, 8};
     lesmots{end+1} ={'jamais une version finale. Pour les', 0, 8};
     lesmots{end+1} ={['puristes, la version est: ' OA.Fic.vermot 'b'], 0, 8};
