@@ -5,7 +5,7 @@
 %
 % Première version utile: Oct 1998
 %
-% Copyrigth 1998 à 2016
+% Copyrigth 1998 à 2017
 %   Auteur principal: Marcel Étienne Kaszap
 %   ont participé en apportant des idées ou du code
 %     Normand Teasdale
@@ -56,7 +56,7 @@ function analyse(varargin)
       CValet.valdefaut();
       % création de l'instance unique de l'application
       hA =CAnalyse.getInstance();
-      hA.initial(8.0226, '8.02.26');
+      hA.initial(8.0229, '8.02.29');
       % lecture du fichier des préférences
       tmp =LeerParam(FF);
       hA.initLesPreferencias(tmp);

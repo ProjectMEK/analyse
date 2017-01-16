@@ -78,7 +78,8 @@ function varargout =langue_fr(varargin)
     S.mnuip.mathnormal ='&Normalise';
     S.mnuip.mathnormaltemp ='Normalisation Temporelle';
     S.mnuip.mathellipsconf ='Ellipse de confiance';
-    S.mnuip.mathmoyectyp ='Moyenne et Écart-type';
+    S.mnuip.mathmoyectyp ='Moy./Ecart-type par catégorie';
+    S.mnuip.mathmoyptmarq ='Moyenne autour des points marqués';
     S.mnuip.mathcalcang ='Calcul d''angle';
     S.mnuip.mathtraitcan ='Traitement de canal';
 

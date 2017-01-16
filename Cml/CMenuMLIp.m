@@ -69,7 +69,8 @@ classdef CMenuMLIp < CBaseStringGUI
     mathnormal ='&Normalise';
     mathnormaltemp ='Normalisation Temporelle';
     mathellipsconf ='Ellipse de confiance';
-    mathmoyectyp ='Moyenne et Ecart-type';
+    mathmoyectyp ='Moy./Ecart-type par catégorie';
+    mathmoyptmarq ='Moyenne autour des points marqués';
     mathcalcang ='Calcul d''angle';
     mathtraitcan ='Traitement de canal';
 
