@@ -1,22 +1,24 @@
 %
+% Classe CMoyAutourPt
+%
 % On fait la moyenne autour des points marqués puis on écris
-% le résultat dans un fichier texte
+% le résultat dans un fichier texte.
+%
 %
 classdef CMoyAutourPt < handle
 
   %---------
   properties
-    % identification du fichier au format Analyse courant
+    % identification des fichiers au format Analyse ou texte
     ofich =[];      % handle du fichier courant
     hdchnl =[];     % handle de l'entête des data
     vg =[];         % handle des variables globales
     ptchnl =[];     % handle de l'objet des points marqués
+    fid =[];        % handle du fichier texte pour la sortie
 
+    % Objet graphique
     fig =[];        % handle du GUI GuiMoyAutourPt.m
     wb =[];         % handle de la waitbar
-
-    % identification du fichier texte pour les résultats
-    fid =[];        % handle du fichier texte pour la sortie
 
     % valeur à lire dans le GUI
     can =[];                      % canaux sélectionnés
@@ -27,13 +29,11 @@ classdef CMoyAutourPt < handle
     sep =[];                      % caractère pour séparer les champs dans le fichier de sortie texte
     debfentrav =[];               % début du range de travail
     finfentrav =[];               % fin du range de travail
-
     autour =[];                   % si = 0: on fait la moyenne entre "debfentrav et finfentrav"
                                   % si = 1: on fait la moyenne autour des points marqués
                                   %         entre [point marqué - av_ap] et [point marqué + av_ap]
     av_ap =[];                    % détermine le range pour la moyenne autour des points
     unit =[];                     % 1 --> échantillons, 2 --> secondes
-
   end
 
   %------
@@ -136,6 +136,9 @@ classdef CMoyAutourPt < handle
       % appel de la fonction qui va faire le vrai travail
       tO.faireMoyenne();
 
+      % on ajoute un saut de ligne au fichier
+      fprintf(tO.fid, '\n');
+
       % on ferme tout proprement ce qui a été ouvert.
       fclose(tO.fid);
       close(tO.wb);
@@ -190,8 +193,14 @@ classdef CMoyAutourPt < handle
 
       % on écrit la "légende des noms de canaux"
       for U =1:tO.Ncan
-        fprintf(tO.fid, '  C%i --> %s\n', U, tO.hdchnl.adname{U});
+        fprintf(tO.fid, '\n  C%i --> %s', tO.can(U), tO.hdchnl.adname{tO.can(U)});
       end
+
+    	% on écrit les bornes dans le fichier
+    	fprintf(tO.fid, '\n\nFenêtre de travail, entre %s et %s\n\n', tO.debfentrav, tO.finfentrav);
+
+      % on prépare la ligne de titre qui va contenir le numéro de canal et de point
+      letitre ='Essai';
 
       %
       % Dans les deux cas, on va bâtir une matrice contenant les moyennes calculées
@@ -217,10 +226,74 @@ classdef CMoyAutourPt < handle
       %
       if tO.autour
         % on a choisi le moyennage autour des points marqués
+
+      	% on écrit les paramètres "delta-T" pour le calcul autour des points
+      	typ_unit ={'échantillons', 'secondes'};
+      	fprintf(tO.fid, 'La moyenne a été faite sur +/- %g %s autour du point\n\n', tO.av_ap, typ_unit{tO.unit});
+
+      	% si on a choisi "échantillons", ça ne varie pas
+      	delta =ones(tO.Ncan, tO.Ness)*tO.av_ap;
+      	% si on a choisi "secondes", on peut avoir une valeur différente
+      	if tO.unit == 2
+          delta =delta.*tO.hdchnl.rate(tO.can, tO.ess);
+        end
+
+        % nombre de moyenne max à calculer pour tous
+        Npt =max(max(tO.hdchnl.npoints(tO.can, tO.ess)));
+        MOY =zeros(Npt, tO.Ncan, tO.Ness);    % matrice des moyennes
+        Dt =CDtchnl();                        % objet de la classe CDtchnl pour manipuler les datas
+
+        for U =1:tO.Ncan
+
+          % ligne de titre
+          for K =1:Npt
+            letitre =sprintf('%s%sC%iP%i', letitre, tO.sep, tO.can(U), K);
+          end
+
+          % on lit le canal U
+          tO.ofich.getcanal(Dt, tO.can(U));
+
+          for V =1:tO.Ness
+
+            % on détermine les bornes entre lesquelles il faut moyenner
+            debut =tO.ptchnl.valeurDePoint(tO.debfentrav, tO.can(U), tO.ess(V));
+            fin =tO.ptchnl.valeurDePoint(tO.finfentrav, tO.can(U), tO.ess(V));
+            % vérification de l'ordre croissant entre debut et fin
+            if fin < debut
+            	foo =debut;
+            	debut =fin;
+            	fin =foo;
+            end
+
+            % on fait le tour de tous les points
+            for P =1:Npt
+
+              % il faut vérifier que les points existent
+              % et sont dans la fenêtre de travail [debut:fin]
+              if isempty(debut) || isempty(fin) || P > tO.hdchnl.npoints(tO.can(U), tO.ess(V))
+                MOY(P, U, V) =nan;
+                continue;
+              end
+              foo=tO.hdchnl.point(tO.can(U), tO.ess(V));
+              % on fait la moyenne sur quels échantillons?
+              Ti =tO.ptchnl.Dato(P, foo, 1) - delta(U,V);
+              Tf =tO.ptchnl.Dato(P, foo, 1) + delta(U,V);
+
+              % vérificatin de ces bornes
+              if Ti < debut || Tf > fin
+                MOY(P, U, V) =nan;
+                continue;
+              end
+
+              % on calcule la moyenne entre ces bornes
+              MOY(P, U, V) =mean(Dt.Dato.(Dt.Nom)(Ti:Tf, tO.ess(V)));
+            end
+          end
+        end
+
       else
       	% on a choisi le moyennage entre deux bornes
-      	% on écrit les bornes dans le fichier
-      	fprintf(tO.fid, '\nMoyenne entre %s et %s\n\n', tO.debfentrav, tO.finfentrav);
+        fprintf(tO.fid, 'La moyenne est faite sur l''espace défini ci-haut\n\n');
 
         Npt =1;                               % nombre de moyenne à calculer par canal/essai
         MOY =zeros(Npt, tO.Ncan, tO.Ness);    % matrice des moyennes
@@ -228,8 +301,11 @@ classdef CMoyAutourPt < handle
 
         for U =1:tO.Ncan
 
+          % ligne de titre
+          letitre =sprintf('%s%sC%iP1', letitre, tO.sep, tO.can(U));
+
           % on lit le canal U
-          tO.ofich.getcan(Dt, tO.can(U));
+          tO.ofich.getcanal(Dt, tO.can(U));
 
           for V =1:tO.Ness
 
@@ -244,7 +320,7 @@ classdef CMoyAutourPt < handle
             end
 
             % on calcule la moyenne entre ces bornes
-            MOY(1, tO.can(U), tO.ess(V)) =mean(Dt.Dato.(Dt.Nom)(debut:fin, tO.ess(V)));
+            MOY(1, U, V) =mean(Dt.Dato.(Dt.Nom)(debut:fin, tO.ess(V)));
           end
         end
 
@@ -252,47 +328,30 @@ classdef CMoyAutourPt < handle
         delete(Dt);
       end
 
-  
-      % Ligne de titre des canaux
-      valcan ='No Échantillon';
-      frequence ='Fréquence';
-      for m =1:nombre
-        Dt{m} =CDtchnl();
-        tO.ofich.getcaness(Dt{m}, essai, canaux(m));
-        valcan =[valcan tab deblank(hdchnl.adname{canaux(m)})];
-        frequence =[frequence tab num2str(hdchnl.rate(canaux(m),essai(1))) ' Hz'];
-      end
-      valcan =[valcan saut];
-      frequence =[frequence saut];
-      nbdonmax =max(hdchnl.nsmpls(canaux,1));
-      for ij =1:nombress
-        % Ligne de titre par essai à exporter
-        contenu =[saut 'NO ESSAI: ' num2str(essai(ij)) ' (Stimulus: ' vg.nomstim{hdchnl.numstim(essai(ij))} ')' saut];
-        fprintf(tO.fid, '%s', contenu);
-        fprintf(tO.fid, '%s', frequence);
-        fprintf(tO.fid, '%s', valcan);
-        for i =1:nbdonmax/pas
-          ptrs =((i-1)*pas) + 1;
-          contenu =num2str(ptrs);
-          for can =1:nombre
-            curDt =Dt{can};
-            % au cas ou on a différentes fréquences d'échantillonage
-            if ptrs > hdchnl.nsmpls(canaux(can),essai(ij))
-              contenu =[contenu, tab];
-            else
-              contenu =[contenu, tab, num2str(curDt.Dato.(curDt.Nom)(ptrs, ij))];
-            end
+      % on écrit la ligne de titre des canaux
+      fprintf(tO.fid, '%s', letitre);
+
+      % les moyennes étant calculées on écrit les résultats
+      N =size(MOY,1);   % Nombre de moyenne
+
+      % on passe tous les essais
+      for U =1:tO.Ness
+
+        % écriture du numéro de l'essai
+        fprintf(tO.fid, '\n%i', tO.ess(U));
+
+        % on passe tous les canaux
+        for V =1:tO.Ncan
+
+          % on passe toutes les moyennes
+          for W =1:N
+            % écriture de la moyenne
+            fprintf(tO.fid, '%s%g', tO.sep, MOY(W, V, U));
           end
-          contenu =[contenu saut];
-          fprintf(tO.fid, '%s', contenu);
-          waitbar(i/(nbdonmax/pas));   
         end
       end
-      for m =1:nombre
-        delete(Dt{m});
-      end
-    end
 
+    end
 
     %-------------------------------------------
     % On a cliqué sur la fermeture de la fenêtre
