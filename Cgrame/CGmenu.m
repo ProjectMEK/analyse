@@ -181,7 +181,7 @@ classdef CGmenu < handle
     end
     %-------
     function moypoint(thisObj,src,event)       % Moyenne autour des points marqués
-      moyAutourPt();
+      hMoy =CMoyAutourPt();
     end
     %-------
     function angulo(thisObj,src,event)         % Calcul d'angle
