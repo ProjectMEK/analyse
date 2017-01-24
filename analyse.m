@@ -13,7 +13,7 @@
 %     Olivier Martin
 %     Caroline 
 %     Thelma 
-%     Gérald  (son développement sur le selspot n'est plus utilisé)
+%     Gérald Quaire  (début 1999, ses contributions sur le selspot ne sont plus utilisées)
 %     Jean-Philippe Pialasse
 %
 % dtchnl -> tableau des datas (pour un canal)
@@ -56,6 +56,7 @@ function analyse(varargin)
       CValet.valdefaut();
       % création de l'instance unique de l'application
       hA =CAnalyse.getInstance();
+      % comme paramètres, on lui passe le numéro de version en format numérique et en texte
       hA.initial(8.0229, '8.02.29');
       % lecture du fichier des préférences
       tmp =LeerParam(FF);
