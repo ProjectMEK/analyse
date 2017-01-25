@@ -94,7 +94,7 @@ function startAnalyse(varargin)
   end
 
   % On peut maintenant démarrer Analyse
-  disp('on est prêt!')
+  disp('Les paths sont définis, lancement d''Analyse...')
   analyse();
 
 end
