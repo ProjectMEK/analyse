@@ -41,13 +41,13 @@
 classdef (Sealed) CAnalyse < handle
 
   properties
-    couleur;
-    Fic;
-    Vg;
+    couleur =[];
+    Fic =[];
+    Vg =[];
     laPosXY =[];
-    Hautaxe;          % hauteur initial de l'axe
-    OFig;             % Handle de l'object CDessine
-    Gmenu;            % Gestionnaire des requêtes du menu
+    Hautaxe =[];          % hauteur initial de l'axe
+    OFig =[];             % Handle de l'object CDessine
+    Gmenu =[];            % Gestionnaire des requêtes du menu
   end  %properties
 
   methods (Access =private)
@@ -56,12 +56,16 @@ classdef (Sealed) CAnalyse < handle
     % CONSTRUCTOR
     %--------------------
     function tO =CAnalyse
-      tO.Fic =CFic();
-      tO.Fic.pref =CPref();
-      tO.Vg =CVgBase();
-      tO.Gmenu =CGmenu(tO);
-      tO.couleur{1} =['b-';'k-';'r-';'g-';'c-';'m-';'y-';'b:';'k:';'c:';'r:';'g:';'m:';'y:'];
-      tO.couleur{2} =['+b-';'+k-';'+r-';'+g-';'+c-';'+m-';'+y-';'+b:';'+k:';'+c:';'+r:';'+g:';'+m:';'+y:'];
+      try
+        tO.Fic =CFic();
+        tO.Fic.pref =CPref();
+        tO.Vg =CVgBase();
+        tO.Gmenu =CGmenu(tO);
+        tO.couleur{1} =['b-';'k-';'r-';'g-';'c-';'m-';'y-';'b:';'k:';'c:';'r:';'g:';'m:';'y:'];
+        tO.couleur{2} =['+b-';'+k-';'+r-';'+g-';'+c-';'+m-';'+y-';'+b:';'+k:';'+c:';'+r:';'+g:';'+m:';'+y:'];
+      catch K
+        rethrow(K);
+      end
     end
 
   end  % methods (Access =private)
@@ -75,8 +79,8 @@ classdef (Sealed) CAnalyse < handle
     %-------------------------
     function sObj =getInstance
       persistent localObj;
-      if isempty(localObj) || ~isvalid(localObj)
-        localObj =CAnalyse;
+      if isempty(localObj) || ~isa(localObj, 'CAnalyse')
+        localObj =CAnalyse();
       end
       sObj =localObj;
     end

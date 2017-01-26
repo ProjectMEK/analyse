@@ -24,7 +24,9 @@ classdef CFichierAnalyse < CFichier
     %  CONSTRUCTOR
     %------------------------------------
     function obj =CFichierAnalyse(letype)
-      obj =obj@CFichier(letype);
+      obj =obj@CFichier();
+      obj.Vg =CVgAnalyse();
+      obj.Vg.itype =letype;
       obj.Tpchnl =CTpchnlAnalyse(obj);
       obj.Gr =CGrVar();
     end
