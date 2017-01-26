@@ -61,14 +61,7 @@ function startAnalyse(varargin)
 
   % Maintenant il faut savoir si on est en Matlab ou en Octave
   % les deux environnements utilisent la fonction ver()
-  matlab =false;
-  foo =ver();
-  for U =1:length(foo)
-    if strcmpi(foo(U).Name, 'matlab')
-      matlab =true;
-      break;
-    end
-  end
+  matlab =isempty(ver('Octave'));
 
   %-------------------------------------------------------------------
   % Pour ceux qui ne veulent pas faire un reset des Paths déjà établis
@@ -94,7 +87,8 @@ function startAnalyse(varargin)
   end
 
   % On peut maintenant démarrer Analyse
-  disp('Les paths sont définis, lancement d''Analyse...')
+  mots =sprintf('Les paths sont définis.\nLancement d''Analyse...');
+  disp(mots);
   analyse();
 
 end
