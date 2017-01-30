@@ -10,7 +10,7 @@ classdef CFic < handle
     hfich =[];              % handle des objets CFichier
     curfich =[];            % fichier actif
     lastfich =[];           % ancien fichier actif
-    basedir =pwd;           % dossier ou se trouve analyse.exe
+    basedir =[];            % dossier ou se trouve analyse.m
     ddir =pwd;              % dernier répertoire de travail ouvert
     recent ={};             % nom des derniers fichiers ouverts
     como =0;                % nombre de fichier dans tO.recent
@@ -20,6 +20,15 @@ classdef CFic < handle
   end
 
   methods
+
+    %-------------------------
+    % CONSTRUCTOR
+    %-------------------------
+    function tO = CFic()
+      % ici on a seulement le path du fichier de démarrage à initialiser
+      % il servira de path de base.
+      [tO.basedir, s,s] =fileparts( which('analyse.m'));
+    end
 
     %-------------------------------------------
     % Suite à l'ouverture d'un fichier, On met à
