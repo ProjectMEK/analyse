@@ -21,8 +21,8 @@ classdef CGuiMLAnalyse < CBaseStringGUI
     pbcanmarktip ='Choix du canal pour le marquage manuel';
     pbdelpttip ='Effacer le point sélectionné';
     pbmarmantip ='Marquage manuel avec la souris';
-    pbcoord ='Coord.'
-    pbcoordtip ='Afficher un curseur avec les coordonnées (X,Y)'
+    pbcoord ='Coord.';
+    pbcoordtip ='Afficher un curseur avec les coordonnées (X,Y)';
 
   end  %properties
 
