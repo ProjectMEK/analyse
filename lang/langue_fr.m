@@ -137,6 +137,19 @@ function varargout =langue_fr(varargin)
     S.mnuip.hlpabout ='À propos de';
     S.mnuip.hlprecup ='Récupération';
 
+  	%___________________________________________________________________________
+  	% Variable guiip
+  	% BOUTON DE L'INTERFACE PRINCIPAL
+    %---------------------------------------------------------------------------
+
+    S.guiip.gntudebut ='Vous devez ouvrir un fichier pour commencer.';
+    S.guiip.pbvide ='vide';
+    S.guiip.pbcanmarktip ='Choix du canal pour le marquage manuel';
+    S.guiip.pbdelpttip ='Effacer le point sélectionné';
+    S.guiip.pbmarmantip ='Marquage manuel avec la souris';
+    S.guiip.pbcoord ='Coord.';
+    S.guiip.pbcoordtip ='Afficher un curseur et ses coordonnées (X,Y)';
+
     %___________________________________________________________________________
     % Variable lire
     % GUI POUR LA LECTURE DES DIFFÉRENTS FORMATS SUPPORTÉS
@@ -470,4 +483,4 @@ function varargout =langue_fr(varargin)
   	disp({'Donnez un nom de fichier en entrée ou une variable pour la sortie';...
   	      'Ex.'; 'langue(''fr.mat'') ou bien';'test =langue'});
   end
-return
+end

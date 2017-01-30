@@ -1,7 +1,7 @@
 %
-% Cette fonction va définir les path utiles pour travailler avec Analyse puis va
-% démarrer Analyse. Mais avant tout, il faut avoir downloadé les dossiers
-% nécessaires comme suit, soit que l'ensemble des dossiers est regrouppé dans "src"
+% Cette fonction va dÃ©finir les path utiles pour travailler avec Analyse puis va
+% dÃ©marrer Analyse. Mais avant tout, il faut avoir downloadÃ© les dossiers
+% nÃ©cessaires comme suit, soit que l'ensemble des dossiers est regrouppÃ© dans "src"
 %
 % src/
 % src/startAnalyse.m
@@ -24,7 +24,7 @@
 function startAnalyse(varargin)
 
   % Comme on va travailler avec les paths, il faut savoir dans quel OS on travaille
-  % le caractère pour Séparer les Dossiers sera
+  % le caractÃ¨re pour SÃ©parer les Dossiers sera
   if ispc
     SD ='\';
   elseif isunix
@@ -35,7 +35,7 @@ function startAnalyse(varargin)
     return;
   end
 
-  % On va récupérer le path complet du fichier "setAnalyse.m"
+  % On va rÃ©cupÃ©rer le path complet du fichier "setAnalyse.m"
   moi =which('startAnalyse');
 
   % On va en extirper le path
@@ -48,7 +48,7 @@ function startAnalyse(varargin)
     bpath(end-ltxt+1:end) =[];
   end
 
-  % fabrication du path à ajouter
+  % fabrication du path Ã  ajouter
   bpath_an =[bpath SD 'analyse;'];
   bpath_anCg =[bpath SD 'analyse' SD 'Cgrame;'];
   bpath_anCml =[bpath SD 'analyse' SD 'Cml;'];
@@ -61,23 +61,16 @@ function startAnalyse(varargin)
 
   % Maintenant il faut savoir si on est en Matlab ou en Octave
   % les deux environnements utilisent la fonction ver()
-  matlab =false;
-  foo =ver();
-  for U =1:length(foo)
-    if strcmpi(foo(U).Name, 'matlab')
-      matlab =true;
-      break;
-    end
-  end
+  matlab =isempty(ver('Octave'));
 
   %-------------------------------------------------------------------
-  % Pour ceux qui ne veulent pas faire un reset des Paths déjà établis
+  % Pour ceux qui ne veulent pas faire un reset des Paths dÃ©jÃ  Ã©tablis
   % conserver uniquement les lignes "addpath..." ci-bas
   %-------------------------------------------------------------------
 
   if matlab  % on travaille avec Matlab
 
-    % le path par défaut sera ré-installé par restoredefaultpath()
+    % le path par dÃ©faut sera rÃ©-installÃ© par restoredefaultpath()
     restoredefaultpath();
     % maintenant on va ajouter les path pour Analyse
     addpath(An_path);
@@ -86,15 +79,17 @@ function startAnalyse(varargin)
 
     % La commande pathdef(), nous renvoie la liste des paths pour Octave
     pdef =pathdef();
-    % on va resetter le path à partir des valeurs obtenues
+    % on va resetter le path Ã  partir des valeurs obtenues
     path(pdef);
     % maintenant on va ajouter les path pour Analyse
     addpath(An_path);
 
   end
 
-  % On peut maintenant démarrer Analyse
-  disp('Les paths sont définis, lancement d''Analyse...')
+  % On peut maintenant dÃ©marrer Analyse
+  mots =sprintf('Les paths sont dÃ©finis.\nLancement d''Analyse...');
+  disp(mots);
+
   analyse();
 
 end
