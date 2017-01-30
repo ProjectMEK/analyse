@@ -62,6 +62,9 @@ function analyse(varargin)
       hA.initial(8.0229, '8.02.29');
       % lecture du fichier des préférences (Cette fonction est dans ce mfile)
       tmp =LeerParam(FF);
+
+        disp('rendu ici...')
+
       hA.initLesPreferencias(tmp);
       % création du GUI principal
       hA.OFig =CDessine();
