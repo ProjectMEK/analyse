@@ -10,7 +10,7 @@ function varargout =langue_fr(varargin)
   if nargout | nargin
 
     %___________________________________________________________________________
-  	% Variable repetitive
+  	% Variable répétitive
     %---------------------------------------------------------------------------
     auTravail='Au travail';
 
@@ -472,7 +472,7 @@ function varargout =langue_fr(varargin)
     %Écriture des textes dans le fichier
     if nargin
       if isempty(dir(varargin{1}))
-    	  save(varargin{1},'-struct','S');
+    	  save(varargin{1},'-struct','S', '-v6');
     	else
     	  save(varargin{1},'-struct','S','-append');
     	end
