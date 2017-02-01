@@ -137,6 +137,19 @@ function varargout =langue_en(varargin)
     S.mnuip.hlpabout ='About';
     S.mnuip.hlprecup ='Recovering';
 
+  	%___________________________________________________________________________
+  	% Variable guiip
+  	% BOUTON DE L'INTERFACE PRINCIPAL
+    %---------------------------------------------------------------------------
+
+    S.guiip.gntudebut ='You must open a file to begin.';
+    S.guiip.pbvide ='empty';
+    S.guiip.pbcanmarktip ='Select the channel for manual marking';
+    S.guiip.pbdelpttip ='Delete selected point';
+    S.guiip.pbmarmantip ='Manual marking with the mouse';
+    S.guiip.pbcoord ='Coord.';
+    S.guiip.pbcoordtip ='Display a cursor with his coordinates (X,Y)';
+
     %___________________________________________________________________________
     % Variable lire
     % GUI POUR LA LECTURE DES DIFFÉRENTS FORMATS SUPPORTÉS
@@ -458,7 +471,7 @@ function varargout =langue_en(varargin)
     %Écriture des textes dans le fichier
     if nargin
       if isempty(dir(varargin{1}))
-    	  save(varargin{1},'-struct','S');
+    	  save(varargin{1},'-struct','S', '-v6');
     	else
     	  save(varargin{1},'-struct','S','-append');
     	end

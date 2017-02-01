@@ -58,7 +58,7 @@ classdef CBaseStringGUI < handle
 
       % on vérifie que le fichier existe
       if ~isempty(dir(fname))
-        foo =whos('-File', fname);
+        foo =whos('-file', fname);
 
         % on cherche "V" dans les variables du fichiers
         for U =1:length(foo)
@@ -68,8 +68,10 @@ classdef CBaseStringGUI < handle
             datos =load(fname, V);
             S =datos.(V);
             break;
+
           end
         end
+
       end
 
     end
@@ -127,7 +129,12 @@ classdef CBaseStringGUI < handle
       if isa(V, 'struct')
 
         % on utilise la liste des propriétés de la classe comme base
-        foo =properties(tO);
+        try
+          foo =tO.properties();
+        catch M
+          % "properties" n'est pas implémenté dans Octave
+          foo =fieldnames(tO);
+        end
 
         % on fait le tour des prop.
         for U =1:length(foo)
@@ -138,7 +145,9 @@ classdef CBaseStringGUI < handle
           end
 
         end
+
       end
+
     end
 
   end  %methods

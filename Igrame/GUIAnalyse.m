@@ -1,5 +1,5 @@
 function GUIAnalyse(Ppa)
-%#function guiToul
+%
 % fonction pour Dessiner la figure principale
 % 18 déc 2003, On passe en mode Normalized
 % J'ai fait mes conversion avec une fenêtre de 300X250 mm
@@ -12,6 +12,11 @@ function GUIAnalyse(Ppa)
 
   % handle de l'objet principal de l'application
   OA =CAnalyse.getInstance();
+
+  % Octave se plaint si la position n'est pas un array linéaire
+  if size(OA.Vg.la_pos, 1) > 1
+    OA.Vg.la_pos =OA.Vg.la_pos';
+  end
 
   epay =0.028;
   %
@@ -30,6 +35,9 @@ function GUIAnalyse(Ppa)
   else
     lafig =figure('units','Normalized', 'Resize','on', 'Position',OA.Vg.la_pos);
   end
+
+disp('GUIAnalyse.m : revision rendu ici...');
+
 
   % initialisation des valeurs par défauts de la figure
   set(lafig, 'Name',ML.name, 'tag', 'IpTraitement',...

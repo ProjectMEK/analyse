@@ -10,7 +10,7 @@ function varargout =langue_fr(varargin)
   if nargout | nargin
 
     %___________________________________________________________________________
-  	% Variable repetitive
+  	% Variable répétitive
     %---------------------------------------------------------------------------
     auTravail='Au travail';
 
@@ -136,6 +136,19 @@ function varargout =langue_fr(varargin)
     S.mnuip.hlplog ='Historique';
     S.mnuip.hlpabout ='À propos de';
     S.mnuip.hlprecup ='Récupération';
+
+  	%___________________________________________________________________________
+  	% Variable guiip
+  	% BOUTON DE L'INTERFACE PRINCIPAL
+    %---------------------------------------------------------------------------
+
+    S.guiip.gntudebut ='Vous devez ouvrir un fichier pour commencer.';
+    S.guiip.pbvide ='vide';
+    S.guiip.pbcanmarktip ='Choix du canal pour le marquage manuel';
+    S.guiip.pbdelpttip ='Effacer le point sélectionné';
+    S.guiip.pbmarmantip ='Marquage manuel avec la souris';
+    S.guiip.pbcoord ='Coord.';
+    S.guiip.pbcoordtip ='Afficher un curseur et ses coordonnées (X,Y)';
 
     %___________________________________________________________________________
     % Variable lire
@@ -459,7 +472,7 @@ function varargout =langue_fr(varargin)
     %Écriture des textes dans le fichier
     if nargin
       if isempty(dir(varargin{1}))
-    	  save(varargin{1},'-struct','S');
+    	  save(varargin{1},'-struct','S', '-v6');
     	else
     	  save(varargin{1},'-struct','S','-append');
     	end
@@ -470,4 +483,4 @@ function varargout =langue_fr(varargin)
   	disp({'Donnez un nom de fichier en entrée ou une variable pour la sortie';...
   	      'Ex.'; 'langue(''fr.mat'') ou bien';'test =langue'});
   end
-return
+end

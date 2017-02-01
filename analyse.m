@@ -7,7 +7,7 @@
 %
 % Copyrigth 1998 à 2017
 %   Auteur principal: Marcel Étienne Kaszap
-%   ont participé en apportant des idées ou du code
+%   ont participé en apportant des idées, du code et/ou de l'argent
 %     Normand Teasdale
 %     Martin Simoneau
 %     Olivier Martin
@@ -33,6 +33,8 @@
 %
 %-------------------------
 function analyse(varargin)
+  % On coupe les warning pour éviter trop de "crap information"
+  warning('off','all');
   %----------------------------------
   % Adresse du fichier de préférences
   %----------------------------------
@@ -58,15 +60,14 @@ function analyse(varargin)
       hA =CAnalyse.getInstance();
       % comme paramètres, on lui passe le numéro de version en format numérique et en texte
       hA.initial(8.0229, '8.02.29');
-      % lecture du fichier des préférences
+      % lecture du fichier des préférences (Cette fonction est inclus dans ce mfile)
       tmp =LeerParam(FF);
-
-        disp('rendu ici...')
-
       hA.initLesPreferencias(tmp);
+
       % création du GUI principal
       hA.OFig =CDessine();
-    catch tuhermanita
+    catch tuhermanita;
+      warning('on','all');
       parleMoiDe(tuhermanita);
     end
 
@@ -98,6 +99,7 @@ function analyse(varargin)
     delete(OA);
     clear java;
     clear all;
+    warning('on','all');
   end  %case
 end
 
@@ -116,7 +118,7 @@ function sauveLesPref(OAn, leFich)
     diablo.param =OAn.Vg.affiche;
     diablo.param(2:5,1) =la_pos';
     cd(OAn.Fic.basedir);
-    save(leFich, 'diablo', '-v7');
+    save(leFich, 'diablo', '-v6');
   else
     fid =fopen(leFich, 'r');
     if fid ~= -1
@@ -132,19 +134,37 @@ end
 % ré-ouverture.
 % Fonction pour lire le fichier des préférences, S sera le
 % path complet du dit fichier.
+% C'est un fichier au format Matlab (.mat) qui contient une
+% variable, appelé "diablo".
+%
 %-------------------------
 function cur =LeerParam(S)
   cur =[];
+
+  % pour ne pas afficher les warnings inutiles de différences de caractères
+  % nous les dé-sactiverons temporairement.
+  warning off;
+
   try
+
+    % ouverture en lecture du fichier des préférences
     fid =fopen(S, 'r');
+
     if fid ~= -1
+
+      % Le fichier s'est ouvert sans erreur, il existe donc
       fclose(fid);
+      % on load le ficher au complet
       foo =load(S);
+      % on vérifie que la variable diablo existe
       if isfield(foo, 'diablo')
         cur =foo.diablo;
       end
+
     end
-  catch Me
+
+  catch Me;
     parleMoiDe(Me);
   end
+
 end
