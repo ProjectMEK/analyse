@@ -28,7 +28,6 @@
 %                   renommer(tO, Ofich)
 %                   resetAxes(tO, elgca)
 %                   toggleActiveBtous(tO, leBoss, STATUS)
-%                   wkpress(obj,src,evnt)
 %
 % METHODS (Access =protected)
 %                   ecriinfo(obj, Ofich)
@@ -703,88 +702,6 @@ classdef CDessine < handle
     %---------------------------------
     function afflistener(obj,src,evnt)
       obj.affiche();
-    end
-
-    %----------------------------------------
-    % Gestion de certaines touches du clavier
-    % pour changer le canal ou essai ou catégorie
-    % lors du marquage manuel.
-    %-----------------------------
-    function wkpress(obj,src,evnt)
-      OA =CAnalyse.getInstance();
-      Ofich =OA.findcurfich();
-      VG =OA.Vg;
-      vg =Ofich.Vg;
-      if OA.Fic.nf == 0
-        return;
-      end
-      laclef =double(get(obj.fig,'CurrentCharacter'));
-      if isempty(laclef)
-        return
-      end
-      switch laclef
-      %***********
-      case {67,99}        % lettre C, Changer canaux avec flèches haut et bas
-        VG.nextkey =0;
-      %************
-      case {69,101}       % lettre E, Changer essai avec flèches haut et bas
-        VG.nextkey =1;
-        if vg.affniv
-          vg.affniv =0;
-          obj.affiche();
-        end
-      %************
-      case {78,110}       % lettre N, Changer niveau-catégorie avec flèches haut et bas
-        if vg.niveau
-          VG.nextkey =2;
-          if ~vg.affniv
-            vg.affniv =1;
-            obj.affiche();
-          end
-        end
-      %******
-      case {30,45}        % flèches haut et signe -
-        if VG.nextkey == 0
-          guiToul('canal_precedent');
-        elseif VG.nextkey == 1
-          guiToul('essai_precedent');
-        elseif VG.nextkey == 2
-          lalist =OA.OFig.nivo.getValue();
-          letop =length(OA.OFig.nivo.getString());
-          if isempty(lalist)
-            lalist =2;
-          end
-          lalist =lalist-1;
-          if lalist(1) < 1
-            lalist(1) =letop;
-            lalist =sort(lalist);
-          end
-          OA.OFig.nivo.setValue(lalist);
-          vg.cat =lalist;
-          obj.affiche();
-        end
-      %******
-      case {31,43}        % flèches bas et signe +
-        if VG.nextkey == 0
-          guiToul('canal_suivant');
-        elseif VG.nextkey == 1
-          guiToul('essai_suivant');
-        elseif VG.nextkey == 2
-          lalist =OA.OFig.nivo.getValue()
-          letop =length(OA.OFig.nivo.getString());
-          if isempty(lalist)
-            lalist =0;
-          end
-          lalist =lalist+1;
-          if lalist(end) > letop
-            lalist(end) =1;
-            lalist =sort(lalist);
-          end
-          OA.OFig.nivo.setValue(lalist);
-          vg.cat =lalist;
-          obj.affiche();
-        end
-      end
     end
 
   end  %methods

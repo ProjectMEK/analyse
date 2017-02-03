@@ -131,6 +131,7 @@ classdef (Sealed) CAnalyse < handle
     %----------------------------------
     function initLesPreferencias(tO, p)
       try
+
         if ~isempty(p)
           % Le fichier "grame.mat" avait du contenu
           if isfield(p, 'pref')
@@ -156,15 +157,17 @@ classdef (Sealed) CAnalyse < handle
             tO.Fic.pref.setConserver(true);
             tO.finInitLesPreferencias(p);
           end
-        end
-        % else
+        % else   if ~isempty(p)
           %________________________________________________________________
           % Le fichier "grame.mat" n'existait pas ou n'était pas lisible.
           % On garde les valeurs par défaut pour toutes les préférences.
           %----------------------------------------------------------------
+        end
+
       catch Me
         rethrow(Me);
       end
+
     end
 
     %_______________________________________

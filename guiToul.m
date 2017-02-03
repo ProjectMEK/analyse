@@ -296,14 +296,16 @@ function guiToul(varargin)
     end
   %------------------
   case 'outil_marque'
-    fifu =get(findobj('tag','IpFrameMarquerpt'),'enable');
-    if strcmpi(fifu,'on')
+
+    % Si on est en mode marquage manuel on empêche de "reboucler" dans cette fonction
+    fifu =CEOnOff( get(findobj('tag','IpFrameMarquerpt'),'enable') );
+    if fifu
       ffu =findobj('parent',findobj('tag','IpFrame'));
       set(ffu,'enable','off');
     else
       return;
     end
-    vas_y =true;
+
     %
     % Tant que l'on clique dans l'AXE graphique, on peut marquer.
     % On peut changer de canal/essai pendant que l'on marque.
@@ -313,15 +315,17 @@ function guiToul(varargin)
     % Enter ou Esc pour arrêter
     %
     hD =OA.OFig;
-    tpchnl =Ofich.Tpchnl;
-    hdchnl =Ofich.Hdchnl;
-    ptchnl =Ofich.Ptchnl;
-    dtX =CDtchnl();
+    tpchnl =Ofich.Tpchnl;     % handle sur les échelle de temps
+    hdchnl =Ofich.Hdchnl;     % handle sur le "header" du fichier courant
+    ptchnl =Ofich.Ptchnl;     % handle sur les points marqués
+    dtX =CDtchnl();           % création d'un objet pour manipuler les datas des canaux
     dtY =CDtchnl();
-    lalet =OA.Vg.nextkey;
+    lalet =OA.Vg.nextkey;     % lecture du mode {C,E,N} --> {Canal, Essai, Niveau}
     losbtn=0;
+
+    vas_y =true;
     while vas_y
-      [losx,losy,losbtn] =ginput(1); % la valeur retournée est en seconde
+      [losx,losy,losbtn] =ginput(1);    % la valeur retournée est en seconde
       if (losbtn > 0) & (losbtn < 4)
         enx =get(findobj('Type','axes','tag', 'IpAxe'),'xlim');
         eny =get(findobj('Type','axes','tag', 'IpAxe'),'ylim');
@@ -331,7 +335,7 @@ function guiToul(varargin)
         %
         % Lestri --> Matrice d'information sur les courbes affichées
         %            Lestri(1:ess, :)       premier canal
-        %            Lestri(ess+1:2*ess, :) deuxième canal
+        %            Lestri((1:ess)+ess, :)   deuxième canal
         %            etc...
         %************************************************************%
         if (losx >= enx(1)) & (losx <= enx(2)) & (losy <= eny(2)) & (losy >= eny(1))

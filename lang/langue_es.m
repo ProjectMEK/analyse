@@ -2,7 +2,7 @@
 % Fonction langue
 %
 % Créateur: MEK, mars 2009
-% Repris plus sérieusement en avril 2015
+% Reanudado más en serio en abril de 2015.
 %
 % ESPAÑOL
 %

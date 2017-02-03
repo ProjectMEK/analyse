@@ -1,9 +1,13 @@
-function GUIAnalyse(Ppa)
 %
 % fonction pour Dessiner la figure principale
 % 18 déc 2003, On passe en mode Normalized
 % J'ai fait mes conversion avec une fenêtre de 300X250 mm
 %
+% GUIAnalyse(Ppa)
+% En entré on devra donner le handle d'un objet CDessine
+%
+%
+function GUIAnalyse(Ppa)
 
   %_____________________________________________________________________________
   %on lit la structure contenant le texte à afficher selon le choix de la langue
@@ -36,13 +40,9 @@ function GUIAnalyse(Ppa)
     lafig =figure('units','Normalized', 'Resize','on', 'Position',OA.Vg.la_pos);
   end
 
-disp('GUIAnalyse.m : revision rendu ici...');
-
-
   % initialisation des valeurs par défauts de la figure
   set(lafig, 'Name',ML.name, 'tag', 'IpTraitement',...
-            'units','Normalized', 'Resize','on',...
-            'keypressfcn',@Ppa.wkpress, ...
+            'units','Normalized', 'keypressfcn','kbPress', ...
             'DoubleBuffer','on', 'CloseRequestFcn','analyse(''terminus'')',...
             'DefaultUIControlBackgroundColor',[0.8 0.8 0.8],...
             'defaultUIControlunits','Normalized',...

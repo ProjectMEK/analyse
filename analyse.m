@@ -8,13 +8,16 @@
 % Copyrigth 1998 à 2017
 %   Auteur principal: Marcel Étienne Kaszap
 %   ont participé en apportant des idées, du code et/ou de l'argent
-%     Normand Teasdale
-%     Martin Simoneau
-%     Olivier Martin
-%     Caroline 
-%     Thelma 
+%     Normand Teasdale, dépt. Kinésiologie, U. Laval
+%     Martin Simoneau, dépt. Kinésiologie, U. Laval
+%     Olivier Martin, GIPSA-Lab, Grenoble et enseignant à l'UFR STAPS.
+%     Caroline , étudiante en stage.
+%     Thelma Coyle, CNRS, Marseille
 %     Gérald Quaire  (début 1999, ses contributions sur le selspot ne sont plus utilisées)
-%     Jean-Philippe Pialasse
+%     Jean-Philippe Pialasse, étudiant Msc, Phd, post-doc...
+%
+%   Plusieurs autres dont je n'ai pas les noms ont participés à l'élaboration
+%   de la documentation, sur un site "wiki".
 %
 % dtchnl -> tableau des datas (pour un canal)
 %           (i,k): les 'i' sont les samples, les 'k' les essais
@@ -40,9 +43,9 @@ function analyse(varargin)
   %----------------------------------
   FF =fullfile(tempdir(), 'grame.mat');
 
-  if nargin == 0
+  if nargin == 0                 % On ouvre Analyse
     commande ='ouverture';
-  else
+  else                           % Analyse est ddéjà ouvert
     commande =varargin{1};
   end
 
@@ -87,6 +90,7 @@ function analyse(varargin)
       	return;
     	end
     end
+    % avant de quitter, on sauvegarde les préférences tel que demandé.
     sauveLesPref(OA, FF);
     wmfig =findobj('type','figure','tag','WmFig');
     if ~ isempty(wmfig)
