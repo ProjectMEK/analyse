@@ -5,26 +5,20 @@
 %
 % METHODS disponibles
 %   Absolue(thisObj, src, event)
-%   ajouterFichier(thisObj,src,event)
 %   angulo(thisObj,src,event)
 %   thisObj =CGmenu(papa)
 %   CentreDePressionFichier(thisObj,src,event)
 %   CentreDePressionManuel(thisObj,src,event)
-%   corrige(thisObj,src,event)
-%   couper(thisObj,src,event)
 %   decime(thisObj,src,event)
-%   decouper(thisObj,src,event)
 %   derive(thisObj,src,event)
 %   DistParcourueXYZ(thisObj,src,event)
 %   Distrib(thisObj, src, event)
 %   ecef2lla(thisObj,src,event)
 %   echeltmp(thisObj,src,event)
-%   EcritResultat(thisObj,src,event)
 %   EditCategorie(thisObj,src,event)
 %   EditEchelTps(thisObj, src,event)
 %   ellipse(thisObj,src,event)
 %   Emgmoyen(thisObj, src, event)
-%   Exportation(thisObj,src,event)
 %   filtre(thisObj,src,event)
 %   importpt(tO, src, event)
 %   intcum(thisObj,src,event)
@@ -41,7 +35,6 @@
 %   normaltemps(thisObj,src,event)
 %   ProjetGPS(thisObj,src,event)
 %   rebase(thisObj,src,event)
-%   RebatirCategorie(thisObj,src,event)
 %   Rootmeansquare(thisObj, src, event)
 %   rotation(thisObj,src,event)
 %   sptoul(thisObj,src,event)
@@ -73,52 +66,8 @@ classdef CGmenu < handle
 
     %__________________________
     % ------- MENU FICHIER *****
-    function ajouterFichier(thisObj,src,event)
-      ajoutFichAnalyse();
-    end
-    %-------
-    function Exportation(thisObj,src,event)
-      exportacion();                            % --> Exportation (des données d'une courbe ds un fichier texte)
-    end
-    %-------
-    function EcritResultat(thisObj,src,event)
-      resultats();
-    end
-    %------------------------
-    % Gestion des préférences
-    %-------
-    function lesPreferencias(tO, src, evnt)
-      foo =CPreference();
-    end
-    %_______________________
-    % ------- MENU EDIT *****
-    function EditCategorie(thisObj,src,event)
-      hEC =CEditCateg(true);
-    end
-    %-------
-    function RebatirCategorie(thisObj,src,event)
-      hEC =CEditCateg(false);
-      hEC.RebatirCategorie();
-      delete(hEC);
-    end
-    %-------
-    function EditEchelTps(thisObj, src,event)
-      ITpchnl();
-    end
     %___________________________
     % ------- MENU MODIFIER *****
-    function corrige(thisObj,src,event)               % Correction des datas perturbées
-      Otmp =CCorrige();
-    end
-    %-------
-    function couper(thisObj,src,event)
-      couperData();
-    end
-    %-------
-    function decouper(thisObj,src,event)
-      OW =CDecoup();
-    end
-    %-------
     function decime(thisObj,src,event)
       decimage();
     end

@@ -2,7 +2,7 @@
 % Function langue_en
 %
 % Créateur: MEK, mars 2009
-% rigorously resumed in April 2015
+% Rigorously resumed in April 2015
 %
 % English
 %

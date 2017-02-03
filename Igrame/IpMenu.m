@@ -1,7 +1,7 @@
 %
 % CRÉATION DES MENUS DE L'INTERFACE (GUI) PRINCIPALE
 function IpMenu(obj)
-%#function mnouvre, impression, editCan, cpCan, wgroupdata, traitraject, guiToul, aideDoc
+% function mnouvre, impression, editCan, cpCan, wgroupdata, traitraject, guiToul, aideDoc
 % ÉDITION DES MENUS: dlg.mnuip
   OA =CAnalyse.getInstance();
   GM =OA.Gmenu;
@@ -22,24 +22,24 @@ function IpMenu(obj)
   uimenu('Parent',mmnu, 'Callback','mnouvre(CFichEnum.EMG, false)', 'Label',tt.fileouvrirotemg, 'Enable','on');
   uimenu('Parent',mmnu, 'Callback','mnouvre(CFichEnum.Keithley, false)', 'Label',tt.fileouvrirotkeit, 'Enable','on');
   % AJOUTER
-  uimenu('Parent',mnu, 'tag', 'IpmnuAjouter', 'Label',tt.fileajout, 'Callback',@GM.ajouterFichier, 'enable','off');
+  uimenu('Parent',mnu, 'tag', 'IpmnuAjouter', 'Label',tt.fileajout, 'Callback','ajoutFichAnalyse', 'enable','off');
   % BATCH
   uimenu('Parent',mnu, 'tag', 'IpmnuBatch', 'Label',tt.filebatch, ...
          'Callback','batchEditExec', 'Enable','off');
   % FERMER
-  uimenu('Parent',mnu, 'tag', 'IpmnuFermer', 'Callback',@OA.fermerfich, ...
+  uimenu('Parent',mnu, 'tag', 'IpmnuFermer', 'Callback','appel(''fermerfich'')', ...
          'Label',tt.filefermer, 'Enable','off');
   % Sauvegarder
-  uimenu('Parent',mnu, 'tag', 'IpmnuSave', 'Callback',@OA.sauverfich, ...
+  uimenu('Parent',mnu, 'tag', 'IpmnuSave', 'Callback','appel(''sauverfich'')', ...
          'separator','on', 'Label',tt.filesave, 'Enable','off');
   % Sauvegarder sous
-  uimenu('Parent',mnu, 'tag', 'IpmnuSaveas', 'Callback',@OA.sauversousfich, ...
+  uimenu('Parent',mnu, 'tag', 'IpmnuSaveas', 'Callback','appel(''sauversousfich'')', ...
          'Label',tt.filesaveas, 'Enable','off');
-  % Exportation
+  % Exportation  (des données d'une courbe ds un fichier texte)
   uimenu('Parent',mnu, 'tag','IpmnuExportation', 'Label',tt.fileexport,...
-         'Callback',@GM.Exportation, 'enable','off');
+         'Callback','exportacion', 'enable','off');
   % Écriture des résultats
-  uimenu('Parent',mnu, 'tag', 'IpmnuEcritureResultats', 'Callback',@GM.EcritResultat, ...
+  uimenu('Parent',mnu, 'tag', 'IpmnuEcritureResultats', 'Callback','resultats', ...
          'Enable','off', 'Label',tt.fileecritresult);
   % PRINT
   mmnu =uimenu('Parent',mnu, 'separator','on', 'Label',tt.fileprint);
@@ -54,7 +54,7 @@ function IpMenu(obj)
            'tag','FRecent', 'Label',OA.Fic.recent{U});
   end
   % Préférences
-  uimenu('Parent',mnu, 'Callback',@GM.lesPreferencias, 'Label',tt.filepreferences);
+  uimenu('Parent',mnu, 'Callback','appel(''lesPreferencias'')', 'Label',tt.filepreferences);
   % 'ARcommence'
   uimenu('Parent',mnu, 'Callback','analyse(''arcommence'')', 'separator','on', 'Label',tt.fileredemarrer);
   % TERMINUS
@@ -64,14 +64,17 @@ function IpMenu(obj)
   uimenu('Parent',mnu, 'Label',tt.editmajcan, 'Callback','majCan');
   uimenu('Parent',mnu, 'Label',tt.editcanal, 'Callback','editCan');
   uimenu('Parent',mnu, 'Label',tt.editcopiecanal, 'Callback','cpCan');
-  uimenu('Parent',mnu, 'Label',tt.editcatego, 'separator','on', 'Callback',@GM.EditCategorie);
-  uimenu('Parent',mnu, 'Label',tt.editrebatircatego, 'Callback',@GM.RebatirCategorie);
-  uimenu('Parent',mnu, 'Label',tt.editecheltemps, 'separator','on', 'Callback',@GM.EditEchelTps);
+  uimenu('Parent',mnu, 'Label',tt.editcatego, 'separator','on', 'Callback','appel(''EditCategorie'')');
+  uimenu('Parent',mnu, 'Label',tt.editrebatircatego, 'Callback','appel(''RebatirCategorie'')');
+  uimenu('Parent',mnu, 'Label',tt.editecheltemps, 'separator','on', 'Callback','appel(''EditEchelTps'')');
 % MODIFIER
   mnu =uimenu('Parent',elfig, 'tag', 'IpmnuModifier', 'Label',tt.modif, 'Enable','off');
-  uimenu('Parent',mnu, 'Label',tt.modifcorriger, 'Callback',@GM.corrige);
-  uimenu('Parent',mnu, 'Label',tt.modifcouper, 'Callback',@GM.couper);
-  uimenu('Parent',mnu, 'Label',tt.modifdecouper, 'Callback',@GM.decouper);
+  uimenu('Parent',mnu, 'Label',tt.modifcorriger, 'Callback','appel(''corrige'')');
+  uimenu('Parent',mnu, 'Label',tt.modifcouper, 'Callback','appel(''couper'')');
+  uimenu('Parent',mnu, 'Label',tt.modifdecouper, 'Callback','appel(''decouper'')');
+
+disp('IpMenu.m : revision rendu ici...');
+
   uimenu('Parent',mnu, 'Label',tt.modifdecimate, 'Callback',@GM.decime);
   uimenu('Parent',mnu, 'Label',tt.modifrebase, 'Callback',@GM.rebase);
   uimenu('Parent',mnu, 'Label',tt.modifrotation, 'Callback',@GM.rotation);

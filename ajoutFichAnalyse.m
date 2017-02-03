@@ -1,7 +1,10 @@
 %
 % Ajout d'un fichier Analyse dans un fichier déjà ouvert
-% 
-function ajoutFichAnalyse()
+% Comme cette fonction est appellée par le menu, on va lui
+% assigner la variable varargin en entrée pour éviter les
+% messages d'errewur de compatibilité du nombre d'argument.
+%
+function ajoutFichAnalyse(varargin)
   % on lit la structure contenant le texte à afficher selon le choix de la langue
   tt =CMLWilly();
 
