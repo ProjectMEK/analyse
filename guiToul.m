@@ -11,22 +11,27 @@ function guiToul(varargin)
       vg =Ofich.Vg;
       commande = varargin{1};
     end
+
   switch(commande)
 
-  %-------------------------
-  % Toggle la valeur du zoom
-  %---------------
   case 'zoomonoff'
+    %-------------------------
+    % Toggle la valeur du zoom
+    %-------------------------
+
     vg.zoomonoff =CEOnOff(~vg.zoomonoff);
     afficheZoom(vg.zoomonoff);
-  %________________________________
-  % Affichage des points avec texte
-  % vg.pt = 0   pas d'affichage
-  %         1   avec texte
-  %         2   sans texte
-  %         3   pas d'afficahge mais on crée les pts, en réflexion pour le faire disparaître
-  %-----------------
+
   case 'outil_point'
+    %---------------------------------------------------
+    % Affichage des points avec texte
+    % vg.pt = 0   pas d'affichage
+    %         1   avec texte
+    %         2   sans texte
+    %         3   pas d'afficahge mais on crée les pts,
+    %             en réflexion pour le faire disparaître
+    %---------------------------------------------------
+
     hndltxt =findobj('tag', 'IpmnuPointSansTexte');
     set(hndltxt,'checked','off');
     hndl =findobj('tag', 'IpmnuPoint');
@@ -60,14 +65,17 @@ function guiToul(varargin)
         K.dttip.StringFcn =@K.Eltexto;
       end
     end
-  %________________________________
-  % Affichage des points sans texte
-  % vg.pt = 0   pas d'affichage
-  %         1   avec texte
-  %         2   sans texte
-  %         3   pas d'afficahge mais on crée les pts, en réflexion pour le faire disparaître
-  %---------------------------
+
   case 'AffichePointSansTexte'
+    %---------------------------------------------------
+    % Affichage des points sans texte
+    % vg.pt = 0   pas d'affichage
+    %         1   avec texte
+    %         2   sans texte
+    %         3   pas d'afficahge mais on crée les pts,
+    %             en réflexion pour le faire disparaître
+    %---------------------------------------------------
+
     hndl =findobj('tag', 'IpmnuPoint');
     set(hndl,'checked','off');
     hndltxt =findobj('tag', 'IpmnuPointSansTexte');

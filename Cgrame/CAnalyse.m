@@ -47,7 +47,6 @@ classdef (Sealed) CAnalyse < handle
     laPosXY =[];
     Hautaxe =[];          % hauteur initial de l'axe
     OFig =[];             % Handle de l'object CDessine
-    Gmenu =[];            % Gestionnaire des requêtes du menu
   end  %properties
 
   methods (Access =private)
@@ -60,7 +59,6 @@ classdef (Sealed) CAnalyse < handle
         tO.Fic =CFic();
         tO.Fic.pref =CPref();
         tO.Vg =CVgBase();
-        tO.Gmenu =CGmenu(tO);
         tO.couleur{1} =['b-';'k-';'r-';'g-';'c-';'m-';'y-';'b:';'k:';'c:';'r:';'g:';'m:';'y:'];
         tO.couleur{2} =['+b-';'+k-';'+r-';'+g-';'+c-';'+m-';'+y-';'+b:';'+k:';'+c:';'+r:';'+g:';'+m:';'+y:'];
       catch K
@@ -95,9 +93,6 @@ classdef (Sealed) CAnalyse < handle
     function delete(tO)
       delete(tO.Fic);
       delete(tO.Vg);
-      if ~isempty(tO.Gmenu)
-        delete(tO.Gmenu);
-      end
       if ~isempty(tO.OFig)
         delete(tO.OFig);
       end

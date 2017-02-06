@@ -61,9 +61,17 @@ classdef CDessine < handle
     % CONSTRUCTOR
     %-----------------------
     function obj =CDessine()
-      GUIAnalyse(obj);
-      IpMenu(obj);
-      obj.cacherMarquage();
+      try
+        GUIAnalyse(obj);
+        IpMenu(obj);
+
+disp('IpMenu.m : revision rendu ici...');
+
+        obj.cacherMarquage();
+
+      catch bb;
+        parleMoiDe(bb);
+      end
     end
 
     %-----------
