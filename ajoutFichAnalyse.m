@@ -25,7 +25,7 @@ function ajoutFichAnalyse(varargin)
   for U =1:length(fnom)
   	lesaut =lesaut+lestep;
     waitbar(lesaut, hwb, [tt.genlecfich ' ' fnom{U} ', ' tt.genveuillezpat]);
-    F =CLiranalyse(CFichEnum.analyse);
+    F =CLiranalyse(CEFich('analyse'));
     entrada =fullfile(pnom, fnom{U});
     bonformat =F.SondeFichier(entrada);
   	lesaut =lesaut+lestep;

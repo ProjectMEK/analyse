@@ -1,7 +1,7 @@
 %
 % fonction mnouvre2(F, eltypo, T)
 %                   F      --> handle d'un objet CLiranalyse
-%                   eltypo --> handle d'un objet CFichEnum
+%                   eltypo --> handle d'un objet CEFich
 %                   T      --> handle d'un objet CGuiMLLire
 %
 % Laboratoire GRAME
@@ -19,9 +19,15 @@ function mnouvre2(F, eltypo, T)
   TextLocal =[T.txtwbar F.Info.finame];
   WBhnd =laWaitbar(0, TextLocal, 'C', 'C', OA.OFig.fig);
   set(WBhnd, 'tag','WaitBarLecture', 'WindowStyle','modal');
+
+disp('mnouvre2() --> rendu ici...');
+
   waitbar(1/1000,WBhnd);
+
+disp('mnouvre2() --> rendu ici... juss après');
+
   try
-    foo =CFichEnum(eltypo);
+    foo =CEFich(eltypo);
     test =F.lire(eltypo);
   catch tout
     test =false;
@@ -49,7 +55,7 @@ function mnouvre2(F, eltypo, T)
     F.initxy();
     %
     % SI ON A OUVERT UN FICHIER AUTRE, IL FAUT EFFACER LE FICHIER TEMPORAIRE
-    if eltypo ~= CFichEnum.analyse
+    if eltypo ~= CEFich('analyse')
       leFich =fullfile(F.Info.prenom, F.Info.finame);
       delete(leFich);
       cd(Camino);

@@ -62,7 +62,7 @@ classdef CLiranalyse < CFichierAnalyse
           return;
         end
         waitbar(75/100, dd, TextLocal);
-        if Y == CFichEnum.analyse
+        if Y == CEFich('analyse')
           fic.foname =finame;
         else
           fic.foname =[];

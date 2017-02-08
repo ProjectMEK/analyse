@@ -199,7 +199,7 @@ classdef CFichierAnalyse < CFichier
     end
 
     %-------------------------------------------------------------------------
-    % lors d'ajout de ficheir, il faut s'assurer de créer les champs approprié
+    % lors d'ajout de fichier, il faut s'assurer de créer les champs approprié
     % si besoin est, on fait les modif ici lors de l'ouverture de fichier
     %---------------------
     function majchamp(obj)
@@ -215,9 +215,8 @@ classdef CFichierAnalyse < CFichier
       %___________________________________________
       % on s'assure que itype/otype sont valides
       %-------------------------------------------
-      foo =enumeration(CFichEnum(1));
-      if isempty(vg.itype) | vg.itype > length(foo)
-        vg.itype =CFichEnum.analyse;
+      if isempty(vg.itype) | isempty(CEFich(vg.itype))
+        vg.itype =CEFich('analyse');
       end
       if isempty(vg.otype) | vg.otype > 7.3
         vg.otype =7;

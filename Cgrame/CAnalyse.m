@@ -61,7 +61,7 @@ classdef (Sealed) CAnalyse < handle
         tO.Vg =CVgBase();
         tO.couleur{1} =['b-';'k-';'r-';'g-';'c-';'m-';'y-';'b:';'k:';'c:';'r:';'g:';'m:';'y:'];
         tO.couleur{2} =['+b-';'+k-';'+r-';'+g-';'+c-';'+m-';'+y-';'+b:';'+k:';'+c:';'+r:';'+g:';'+m:';'+y:'];
-      catch K
+      catch K;
         rethrow(K);
       end
     end
@@ -246,7 +246,7 @@ classdef (Sealed) CAnalyse < handle
     %------------------------
     function finlect(tO, OFi)
       vg =OFi.Vg;
-      if vg.itype == CFichEnum.analyse
+      if vg.itype == CEFich('analyse')
         if vg.laver < tO.Fic.laver
           vg.sauve =true;
         end

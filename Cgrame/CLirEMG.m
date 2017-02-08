@@ -19,7 +19,7 @@ classdef CLirEMG < CLirOutils & CStrucA21XML
     % CONSTRUCTOR
     %-----------------------
     function tO =CLirEMG(hF)
-      tO.Typo =CFichEnum.EMG;
+      tO.Typo =CEFich('EMG');
       tO.Fich =hF;
       if isdir(tO.Fich.Info.prenom)
         cd(tO.Fich.Info.prenom);

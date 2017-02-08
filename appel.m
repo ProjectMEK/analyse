@@ -16,7 +16,7 @@ function appel(varargin)
   %_____________________________________________________________________________
   %------- MENU FICHIER *****
   case 'ouvrirfich'                     % ouverture de tous les type de fichiers
-    letype =varargin{2};
+    letype =CEFich(varargin{2});
     mnouvre(letype, false);
 
   case 'ajoutfich'                      % Ajoute un fichier Analyse au fichier courant
@@ -45,7 +45,7 @@ function appel(varargin)
     impression(letype);
 
   case 'ouvfichrecent'                  % ouverture d'un fichier récemment ouvert
-    letype =varargin{2};
+    letype =CEFich(varargin{2});
     lequel =varargin{3};
     mnouvre(letype, lequel);
 

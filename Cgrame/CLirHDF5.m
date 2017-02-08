@@ -28,7 +28,7 @@ classdef CLirHDF5 < CLirOutils
     % CONSTRUCTOR
     %------------------------
     function tO =CLirHDF5(hF)
-      tO.Typo =CFichEnum.HDF5;
+      tO.Typo =CEFich('HDF5');
       tO.Fich =hF;
       if isdir(tO.Fich.Info.prenom)
         cd(tO.Fich.Info.prenom);

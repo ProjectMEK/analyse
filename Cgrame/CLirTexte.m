@@ -29,7 +29,7 @@ classdef CLirTexte < CLirOutils
     % CONSTRUCTOR
     %-------------------------
     function tO =CLirTexte(hF)
-      tO.Typo =CFichEnum.Texte;
+      tO.Typo =CEFich('Texte');
       tO.Fich =hF;
       GUILirTexte(tO);
       if isdir(tO.Fich.Info.prenom)

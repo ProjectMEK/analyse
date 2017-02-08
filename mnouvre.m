@@ -2,12 +2,12 @@
 % Laboratoire GRAME
 % MEK, avril 2000, et ça continue...
 %
-% On travaille maintenant avec une Classe Enum: CFichEnum
+% On travaille maintenant avec une Classe Enum: CEFich
 %
 % MNOUVRE est la première fonction appelée lors de l'ouverture de tout
 % type de fichier.
 %
-% entrada est un objet de la classe --> CFichEnum   (une énumération)
+% entrada est un objet de la classe --> CEFich   (une énumération)
 % frecent -->  la valeur du sous-menu des fichiers ouverts récemment
 %              0 si on a pas cliqué dans ces sous-menu
 %
@@ -19,10 +19,10 @@ function mnouvre(entrada, frecent)
   %-----------------------------------------------------------------------------
   % lappel est une fonction "générique" fabriqué à partir du suffixe "CLir"
   % et de la valeur texte du type de fichier que l'on retrouve dans la classe
-  % ENUMERATION: CFichEnum
+  % ENUMERATION: CEFich
   %-----------------------------------------------------------------------------
   lappel =str2func(['CLir' char(entrada)]);
-  FICHANALYSE =CFichEnum.analyse;
+  FICHANALYSE =CEFich('analyse');
   %-----------------------------------------------------------------------------
   % On se fabrique un fichier "Analyse" vide qui sera passé au constructeur
   % du fichier à ouvrir.

@@ -19,15 +19,16 @@ function IpMenu(obj)
 
 % FICHIER
   mnu = uimenu('Parent',elfig, 'tag','IpmnuFichier', 'Label',tt.file, 'enable','on');
+
   % OUVRIR
-  uimenu('Parent',mnu, 'Callback','appel(''ouvrirfich'', CFichEnum.analyse)', 'Label',tt.fileouvrir);
+  uimenu('Parent',mnu, 'Callback','appel(''ouvrirfich'', ''analyse'')', 'Label',tt.fileouvrir);
   % OUVRIR AUTRES
   mmnu = uimenu('Parent',mnu, 'Label',tt.fileouvrirot, 'enable','on');
-  uimenu('Parent',mmnu, 'Callback','appel(''ouvrirfich'', CFichEnum.Texte)', 'Label',tt.fileouvrirottxt);
-  uimenu('Parent',mmnu, 'Callback','appel(''ouvrirfich'', CFichEnum.A21XML)', 'Label',tt.fileouvrirotauto21, 'enable','on');
-  uimenu('Parent',mmnu, 'Callback','appel(''ouvrirfich'', CFichEnum.HDF5)', 'Label',tt.fileouvriroti2m, 'enable','on');
-  uimenu('Parent',mmnu, 'Callback','appel(''ouvrirfich'', CFichEnum.EMG)', 'Label',tt.fileouvrirotemg, 'Enable','on');
-  uimenu('Parent',mmnu, 'Callback','appel(''ouvrirfich'', CFichEnum.Keithley)', 'Label',tt.fileouvrirotkeit, 'Enable','on');
+  uimenu('Parent',mmnu, 'Callback','appel(''ouvrirfich'', ''Texte'')', 'Label',tt.fileouvrirottxt);
+  uimenu('Parent',mmnu, 'Callback','appel(''ouvrirfich'', ''A21XML'')', 'Label',tt.fileouvrirotauto21, 'enable','on');
+  uimenu('Parent',mmnu, 'Callback','appel(''ouvrirfich'', ''HDF5'')', 'Label',tt.fileouvriroti2m, 'enable','on');
+  uimenu('Parent',mmnu, 'Callback','appel(''ouvrirfich'', ''EMG'')', 'Label',tt.fileouvrirotemg, 'Enable','on');
+  uimenu('Parent',mmnu, 'Callback','appel(''ouvrirfich'', ''Keithley'')', 'Label',tt.fileouvrirotkeit, 'Enable','on');
   % AJOUTER
   uimenu('Parent',mnu, 'tag', 'IpmnuAjouter', 'Label',tt.fileajout, 'Callback','appel(''ajoutfich'')', 'enable','off');
   % BATCH
@@ -57,7 +58,7 @@ function IpMenu(obj)
   mmnu =uimenu('Parent',mnu, 'tag','FRmnu','separator','on', 'Label',tt.filedernierouvert);
   for U =1:OA.Fic.como
   	Elfich =num2str(U);
-    uimenu('Parent',mmnu, 'Callback',['appel(''ouvfichrecent'',CFichEnum.analyse,' Elfich ')'],...
+    uimenu('Parent',mmnu, 'Callback',['appel(''ouvfichrecent'',''analyse'',' Elfich ')'],...
            'tag','FRecent', 'Label',OA.Fic.recent{U});
   end
   % Préférences
@@ -165,4 +166,15 @@ function IpMenu(obj)
   uimenu('Parent',mnu, 'Label',tt.hlpdoc, 'Enable','On', 'Callback','appel(''leweb'')');
   uimenu('Parent',mnu, 'Label',tt.hlplog, 'Callback','appel(''histoire'')');
   uimenu('Parent',mnu, 'Label',tt.hlpabout, 'Callback','appel(''aidedoc'')');
+
+  %
+  % Octave 4.2 accepte mal 'DefaultFigureMenuBar','none' par défaut comme Matlab
+  % Il faut au préalable définir un premier menu, puis enlever celui proposé par
+  % la création d'une nouvelle figure.
+  %
+  lapos =get(elfig, 'position');
+  set(elfig, 'menubar','none');
+  pause(0.1);
+  set(elfig, 'position',lapos);
+
 end

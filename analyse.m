@@ -66,7 +66,6 @@ function analyse(varargin)
       % lecture du fichier des préférences (Cette fonction est inclus dans ce mfile)
       tmp =LeerParam(FF);
       hA.initLesPreferencias(tmp);
-
       % création du GUI principal
       hA.OFig =CDessine();
     catch tuhermanita;

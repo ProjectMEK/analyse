@@ -71,7 +71,7 @@ classdef CFic < handle
         tO.recent =tO.recent(1:tO.como);
         for U =1:tO.como
           Elfich =num2str(U);
-          uimenu('Parent',findobj('tag','FRmnu'), 'Callback',['mnouvre(CFichEnum.analyse,' Elfich ')'],...
+          uimenu('Parent',findobj('tag','FRmnu'), 'Callback',['appel(''ouvfichrecent'',''analyse'',' Elfich ')'],...
           'tag','FRecent', 'Label',tO.recent{U});
         end
       end

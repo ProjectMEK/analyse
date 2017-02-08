@@ -62,11 +62,10 @@ classdef CDessine < handle
     %-----------------------
     function obj =CDessine()
       try
+
         GUIAnalyse(obj);
         IpMenu(obj);
-
-disp('IpMenu.m : revision rendu ici...');
-
+        set(obj.fig, 'visible','on')
         obj.cacherMarquage();
 
       catch bb;

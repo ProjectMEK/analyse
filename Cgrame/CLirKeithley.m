@@ -29,7 +29,7 @@ classdef CLirKeithley < CLirOutils
     % CONSTRUCTOR
     %-----------------------------
     function tO = CLirKeithley(hF)
-      tO.Typo =CFichEnum.Keithley;
+      tO.Typo =CEFich('Keithley');
       tO.Fich =hF;
       GUILirKeithley(tO);
       if isdir(tO.Fich.Info.prenom)

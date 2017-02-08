@@ -25,7 +25,7 @@ classdef CLirA21XML < CLirOutils & CStrucA21XML
     % CONSTRUCTOR
     %---------------------------
     function tO = CLirA21XML(hF)
-      tO.Typo =CFichEnum.A21XML;
+      tO.Typo =CEFich('A21XML');
       tO.Fich =hF;
       if isdir(tO.Fich.Info.prenom)
         cd(tO.Fich.Info.prenom);
