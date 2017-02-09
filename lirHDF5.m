@@ -22,7 +22,7 @@ function CoK =lirHDF5(H)
   MOT ={'/Virtual Driver'; 'Corrected'};
   %-------------------------------------
   CoK =false;
-  H.leWb =findobj('tag','WaitBarLecture');
+  H.leWb =findall(0, 'type','figure', 'name','WBarLecture');
   hT =H.txtml;
   TextLocal =hT.h5wbarinfocan;
   delwb =false;

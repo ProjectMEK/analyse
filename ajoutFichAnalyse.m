@@ -19,7 +19,7 @@ function ajoutFichAnalyse(varargin)
   	lestep =1/6;
   end
 	lesaut =0;
-  hwb = waitbar(0,[tt.genlecfich ' ' fnom{1} ', ' tt.genveuillezpat]);
+  hwb = laWaitbar(0,[tt.genlecfich ' ' fnom{1} ', ' tt.genveuillezpat]);
   hA =CAnalyse.getInstance();
   hFi =hA.findcurfich();
   for U =1:length(fnom)

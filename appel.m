@@ -55,7 +55,7 @@ function appel(varargin)
   case 'redemarrer'                     % on ferme et on ré-ouvre Analyse
     analyse('arcommence');
 
-  case 'cfini'                          % on ferme Analyse
+  case 'terminus'                       % on ferme Analyse
     analyse('terminus');
 
   %_____________________________________________________________________________

@@ -29,8 +29,8 @@ function mnouvre(entrada, frecent)
   %-----------------------------------------------------------------------------
   hF =CLiranalyse(FICHANALYSE);
 
-  % On ouvre un fichier au format "Analyse"
   if entrada == FICHANALYSE
+    % On ouvre un fichier au format "Analyse"
     if frecent
     % on l'a choisi à partir du menu "Fichier récent"
       if isempty(dir(OA.Fic.recent{frecent}))
@@ -47,15 +47,19 @@ function mnouvre(entrada, frecent)
     end
     % on finalise l'ouverture
     mnouvre2(hF, entrada);
-    if hF.isvalid()
+
+    if ~isempty(hF)
       if ~isempty(lastfich) && lastfich
         OA.Fic.lastfich =lastfich;
         OA.AuSuivant();
       end
     end
 
-  % On ouvre un fichier au format "Autre"
+disp('mnouvre() --> rendu ici...');
+
+
   else
+    % On ouvre un fichier au format "Autre"
     hF.Info.prenom =pwd();
     hF.Vg.valeur =1;
     hT =lappel(hF);

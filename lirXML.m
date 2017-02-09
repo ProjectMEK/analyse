@@ -84,7 +84,7 @@ function lirtextXML(tO)
   tranche =1;
   transh =1;
   % Appel/création d'une waitbar
-  tO.leWb =findobj('tag','WaitBarLecture');
+  tO.leWb =findall(0, 'type','figure', 'name','WBarLecture');
   hT =tO.txtml;
   TextLocal =[hT.fichier tO.fname{1}];
   delwb =false;

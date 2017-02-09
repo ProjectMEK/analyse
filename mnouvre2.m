@@ -1,5 +1,6 @@
 %
 % fonction mnouvre2(F, eltypo, T)
+%
 %                   F      --> handle d'un objet CLiranalyse
 %                   eltypo --> handle d'un objet CEFich
 %                   T      --> handle d'un objet CGuiMLLire
@@ -18,18 +19,19 @@ function mnouvre2(F, eltypo, T)
   %
   TextLocal =[T.txtwbar F.Info.finame];
   WBhnd =laWaitbar(0, TextLocal, 'C', 'C', OA.OFig.fig);
-  set(WBhnd, 'tag','WaitBarLecture', 'WindowStyle','modal');
-
-disp('mnouvre2() --> rendu ici...');
-
+  set(WBhnd, 'name','WBarLecture', 'WindowStyle','modal');
   waitbar(1/1000,WBhnd);
-
-disp('mnouvre2() --> rendu ici... juss après');
 
   try
     foo =CEFich(eltypo);
-    test =F.lire(eltypo);
-  catch tout
+    test =F.lire(foo);
+
+disp('mnouvre2() --> rendu ici...ça passe!!!');
+
+  catch tout;
+
+disp('mnouvre2() --> rendu ici... )-: ');
+
     test =false;
   end
   figure(WBhnd);
@@ -62,6 +64,7 @@ disp('mnouvre2() --> rendu ici... juss après');
     end
   else
     delete(F);
+    F =[];
   end
   delete(WBhnd);
 end

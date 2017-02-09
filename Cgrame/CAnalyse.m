@@ -288,6 +288,7 @@ classdef (Sealed) CAnalyse < handle
     % (background) le fichier qui était actif.
     %---------------------
     function AuSuivant(tO)
+      % hvF --> handle vieux fichier
       hvF =tO.Fic.hfich{tO.Fic.lastfich};
       hvF.AuSuivant();
     end
@@ -299,7 +300,7 @@ classdef (Sealed) CAnalyse < handle
     %-----------------------
     function copycan(tO, hF)
       % on vérifie si une waitbar est active
-      hwb =findobj('tag','WaitBarLecture');
+      hwb =findall(0, 'type','figure', 'name','WBarLecture');
       TextLocal ='Création du fichier temporaire de travail';
       delwb =false;
       if isempty(hwb)

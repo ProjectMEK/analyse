@@ -30,12 +30,23 @@ classdef CLiranalyse < CFichierAnalyse
       end
       if obj.Vg.valeur
       	hA =CAnalyse.getInstance();
-      	hFonction =@hA.isfichopen;
+
+      	try
+      	  % Matlab accepte cette version
+%      	  hFonction =@hA.isfichopen;
+      	  hFonction ='isfichopen';
+      	catch Moo;
+      	  % Octave celle-ci
+      	  hFonction =@(P) hA.isfichopen(P);
+      	end
       	finame =fullfile(pname,fname);
-        if hFonction(finame)
+        if hA.(hFonction)(finame)
           return;
         end
-        dd =findobj('tag','WaitBarLecture');
+
+disp('CLiranalyse.lire() --> rendu ici...');
+
+        dd =findall(0, 'type','figure', 'name','WBarLecture');
         TextLocal ='Ouverture d''un fichier MAtlab, veuillez patienter';
         delwb =false;
         if isempty(dd)
@@ -53,7 +64,7 @@ classdef CLiranalyse < CFichierAnalyse
           end
           return;
         elseif ~etalors        % c'est à l'ancien format
-          finame =obj.correction(finame, dd, hFonction);
+          finame =obj.correction(finame, dd, hA, hFonction);
         end
         if isempty(finame)
           if delwb

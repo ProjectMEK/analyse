@@ -183,7 +183,7 @@ function lirtextverti(fnom,tO)
   dd1 =waitbar(0.01, [hT.lectfichs hT.vides hT.patience],...
                 'units','pixels','position',lapos);
   lapos(2) =lapos(2)-(lapos(4)*1.25);
-  dd2 =findobj('tag','WaitBarLecture');
+  dd2 =findall(0, 'type','figure', 'name','WBarLecture');
   TextLocal =[hT.fichier fnom(1).name];
   delwb =false;
   if isempty(dd2)

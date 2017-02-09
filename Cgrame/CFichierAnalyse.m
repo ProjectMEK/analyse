@@ -276,7 +276,8 @@ classdef CFichierAnalyse < CFichier
       OA =CAnalyse.getInstance();
       vg =obj.Vg;
       hdchnl =obj.Hdchnl;
-      dd =findobj('tag','WaitBarLecture');
+      % vérification si une Waitbar est déjà active
+      dd =findall(0, 'type','figure', 'name','WBarLecture');
       TextLocal ='Mise à jour de HDCHNL, veuillez patienter';
       delwb =false;
       t_ou =single(0.001);
