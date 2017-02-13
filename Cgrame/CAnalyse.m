@@ -259,9 +259,17 @@ classdef (Sealed) CAnalyse < handle
         %---------------------------------------
         vg.sauve =true;
       end
+try
       tO.copycan(OFi);
+
+disp('CAnalyse.finlect --> rendu ici...');
+
       tO.CompVgPref(vg);
       OFi.majchamp();
+catch moo;
+  parleMoiDe(moo);
+  rethrow(moo);
+end
       tO.Vg.mazero();
       tO.Fic.nf =tO.Fic.nf+1;
       tO.Fic.curfich =tO.Fic.nf;
@@ -314,6 +322,8 @@ classdef (Sealed) CAnalyse < handle
       Fsrc =fullfile(hF.Info.prenom, hF.Info.finame);
       % Fichier destination, fichier temporaire de travail
       Fdst =hF.Info.fitmp;
+
+disp('CAnalyse.copycan --> rendu ici...');
 
       ncan =hF.Vg.nad;
       hdchnl =hF.Hdchnl;

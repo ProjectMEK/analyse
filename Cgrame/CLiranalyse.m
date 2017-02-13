@@ -43,9 +43,6 @@ classdef CLiranalyse < CFichierAnalyse
         if hA.(hFonction)(finame)
           return;
         end
-
-disp('CLiranalyse.lire() --> rendu ici...');
-
         dd =findall(0, 'type','figure', 'name','WBarLecture');
         TextLocal ='Ouverture d''un fichier MAtlab, veuillez patienter';
         delwb =false;
@@ -134,6 +131,7 @@ disp('CLiranalyse.lire() --> rendu ici...');
         end
         obj.Hdchnl.initial(fifich.hdchnl);
         waitbar(85/100,dd);
+
         if isfield(fifich,'autre')
           obj.autre =fifich.autre;
         else

@@ -25,18 +25,14 @@ function mnouvre2(F, eltypo, T)
   try
     foo =CEFich(eltypo);
     test =F.lire(foo);
-
-disp('mnouvre2() --> rendu ici...ça passe!!!');
-
   catch tout;
-
-disp('mnouvre2() --> rendu ici... )-: ');
-
     test =false;
   end
+
   figure(WBhnd);
   waitbar(0.5, WBhnd, TextLocal);
   if test
+try
   	OA.finlect(F);
   	waitbar(0.8, WBhnd, TextLocal);
   	OA.majcurfich(F);
@@ -62,6 +58,10 @@ disp('mnouvre2() --> rendu ici... )-: ');
       delete(leFich);
       cd(Camino);
     end
+catch moo;
+  parleMoiDe(moo);
+  rethrow(moo);
+end
   else
     delete(F);
     F =[];
