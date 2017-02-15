@@ -7,7 +7,7 @@
 classdef CMnuFichier < handle
 
   properties
-    HMnu =[];        % handle du sous-menu de "Quel Fichier"
+    HMnu =[];        % handle du sous-menu --> "Quel Fichier"
     Hfid =[];        % handle du fichier correspondant
   end
 
@@ -19,7 +19,7 @@ classdef CMnuFichier < handle
     function tO =CMnuFichier(fid)
       tO.Hfid =fid;
       Mobj =findobj('tag','QuelFichierMnu');
-      tO.HMnu =uimenu('parent',Mobj, 'label',fid.Info.finame, 'callback',@tO.quelfichier);
+      tO.HMnu =uimenu('parent',Mobj, 'label',fid.Info.finame, 'callback',@ changerFichier, 'userdata',tO);
     end
 
     %-----------
@@ -31,11 +31,11 @@ classdef CMnuFichier < handle
       end
     end
 
-    %--------------------------------------
-    % fonction callback appelé lorsque l'on
-    % sélectionne un fichier dans le menu
-    %---------------------------------
-    function quelfichier(tO,src,event)
+    %-----------------------------------------
+    % fonction appelé par la fonction callback
+    % lorsque l'on sélectionne un fichier dans le menu
+    %-------------------------------------------------
+    function quelfichier(tO)
       OA =CAnalyse.getInstance();
       lastfich =OA.Fic.curfich;
       if tO.Hfid ~= OA.Fic.hfich{lastfich}

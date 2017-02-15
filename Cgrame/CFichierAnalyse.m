@@ -49,6 +49,40 @@ classdef CFichierAnalyse < CFichier
       end
     end
 
+    %_______________________________________________
+    % À la fin du processus d'ouverture d'un fichier
+    % on passe par cette fonction peu importe le type
+    % de fichier à ouvrir
+    %-----------------------
+    function finlect(tO)
+      OA =CAnalyse.getInstance();
+      vg =tO.Vg;
+      if CEFich('analyse') == vg.itype
+        if vg.laver < OA.Fic.laver
+          vg.sauve =true;
+        end
+      else
+        %_______________________________________
+        % Pour tous les autres types de fichiers
+        % on met la variable vg.sauve à true
+        % afin de demander de sauvegarder à la
+        % fermeture du fichier.
+        %---------------------------------------
+        vg.sauve =true;
+      end
+
+      % On fabrique un fichier temporaire de travail avce les datas seulement
+      tO.copycan();
+      OA.CompVgPref(vg);
+      tO.majchamp();
+
+disp('CFichierAnalyse.finlect --> rendu ici...');
+
+      OA.finaliseLect(tO);
+
+      tO.MnuFid =CMnuFichier(tO);
+    end
+
     %----------------------------------------
     % Ici on met en veille les objets propres
     % à ce fichier (avant d'afficher un autre fichier)
@@ -218,7 +252,7 @@ classdef CFichierAnalyse < CFichier
       if isempty(vg.itype) | isempty(CEFich(vg.itype))
         vg.itype =CEFich('analyse');
       end
-      if isempty(vg.otype) | vg.otype > 7.3
+      if isempty(vg.otype) | vg.otype > 7.0
         vg.otype =7;
       end
       %_____________
@@ -243,8 +277,10 @@ classdef CFichierAnalyse < CFichier
         vg.filtpmax = enhaut;
       end
       for i=length(vg.choixy):-1:1
-        if vg.choixy(i)>length(vg.y); vg.choixy(i)=[];
-        else ; break;
+        if vg.choixy(i) > length(vg.y)
+          vg.choixy(i)=[];
+        else
+          break;
         end
       end
       if vg.deroul(1) > 0.99; vg.deroul(1) = 0.01;
@@ -257,15 +293,15 @@ classdef CFichierAnalyse < CFichier
       if length(a)
         hdchnl.nsmpls(a)=0;
       end
-      b = find(hdchnl.rate(:) < 0.0001);
-      if length(b)
-        hdchnl.rate(b)=lerate;
-      end
+      hdchnl.rate(hdchnl.rate < 0.0001) =lerate;
       %-------------------------------------------%
       % Depuis la version 7.04.16: HDCHNL.MAX/MIN %
       %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
       if vg.laver ~= OA.Fic.laver
         obj.majMinMax();
+
+disp('CFichierAnalyse.majchamp --> rendu ici...');
+
       end
     end
 
@@ -293,6 +329,9 @@ classdef CFichierAnalyse < CFichier
       end
       for C =can
       	obj.getcanal(HDt, C);
+
+disp('CFichierAnalyse.majMinMax --> rendu ici...');
+
       	for E =1:vg.ess
       	  t_ou(:) =(single(C-1)*single(vg.ess)+single(E))/(single(vg.nad)*single(vg.ess));
       		waitbar(t_ou, dd);
@@ -411,7 +450,7 @@ classdef CFichierAnalyse < CFichier
       for U =1:totcan
       	lenom =hdchnl.cindx{U};
       	A =load(fic.fitmp, lenom);
-      	save(fichierlocaltmp, '-Struct', 'A', lenom, '-APPEND');
+      	save(fichierlocaltmp, '-struct', 'A', lenom, '-append');
       	A =[];
       	t_ou(:) =0.35+(single(U)/single(totcan)/2.0);
         waitbar(t_ou, hwb);

@@ -33,11 +33,20 @@ function mnouvre2(F, eltypo, T)
   waitbar(0.5, WBhnd, TextLocal);
   if test
 try
-  	OA.finlect(F);
+  	F.finlect();
+
+
+
   	waitbar(0.8, WBhnd, TextLocal);
   	OA.majcurfich(F);
+
+disp('mnouvre2 --> rendu ici...');
+
   	OA.OFig.chfichpref(F);
   	waitbar(0.85, WBhnd, TextLocal);
+
+
+
     OA.fichrecent();
     OA.OFig.chonpan();
     if F.Vg.xy == 0
@@ -53,7 +62,7 @@ try
     F.initxy();
     %
     % SI ON A OUVERT UN FICHIER AUTRE, IL FAUT EFFACER LE FICHIER TEMPORAIRE
-    if eltypo ~= CEFich('analyse')
+    if CEFich('analyse') ~= eltypo
       leFich =fullfile(F.Info.prenom, F.Info.finame);
       delete(leFich);
       cd(Camino);

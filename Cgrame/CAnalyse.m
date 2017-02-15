@@ -222,6 +222,9 @@ classdef (Sealed) CAnalyse < handle
       		break;
       	end
       end
+
+disp('CAnalyse.majcurfich --> rendu ici...');
+
       if test
         tO.Fic.curfich =test;
       else
@@ -243,38 +246,12 @@ classdef (Sealed) CAnalyse < handle
     % on passe par cette fonction peu importe le type
     % de fichier à ouvrir
     % EN ENTRÉE on a  OFi --> un objet de la classe CLiranalyse
-    %------------------------
-    function finlect(tO, OFi)
-      vg =OFi.Vg;
-      if vg.itype == CEFich('analyse')
-        if vg.laver < tO.Fic.laver
-          vg.sauve =true;
-        end
-      else
-        %_______________________________________
-        % Pour tous les autres types de fichiers
-        % on met la variable vg.sauve à true
-        % afin de demander de sauvegarder à la
-        % fermeture du fichier.
-        %---------------------------------------
-        vg.sauve =true;
-      end
-try
-      tO.copycan(OFi);
-
-disp('CAnalyse.finlect --> rendu ici...');
-
-      tO.CompVgPref(vg);
-      OFi.majchamp();
-catch moo;
-  parleMoiDe(moo);
-  rethrow(moo);
-end
+    %-----------------------------
+    function finaliseLect(tO, OFi)
       tO.Vg.mazero();
       tO.Fic.nf =tO.Fic.nf+1;
       tO.Fic.curfich =tO.Fic.nf;
       tO.Fic.hfich{tO.Fic.nf} =OFi;
-      OFi.MnuFid =CMnuFichier(OFi);
     end
 
     %___________________________________
@@ -299,57 +276,6 @@ end
       % hvF --> handle vieux fichier
       hvF =tO.Fic.hfich{tO.Fic.lastfich};
       hvF.AuSuivant();
-    end
-
-    %-------------------------------
-    % On copie les canaux du fichier
-    % vers un fichier temporaire
-    % EN ENTRÉE on a  hF --> un objet de la classe CLiranalyse
-    %-----------------------
-    function copycan(tO, hF)
-      % on vérifie si une waitbar est active
-      hwb =findall(0, 'type','figure', 'name','WBarLecture');
-      TextLocal ='Création du fichier temporaire de travail';
-      delwb =false;
-      if isempty(hwb)
-        delwb =true;
-        hwb =waitbar(0.001, TextLocal);
-      else
-        waitbar(0.001, hwb, TextLocal);
-      end
-
-      % Fichier source, vrai fichier
-      Fsrc =fullfile(hF.Info.prenom, hF.Info.finame);
-      % Fichier destination, fichier temporaire de travail
-      Fdst =hF.Info.fitmp;
-
-disp('CAnalyse.copycan --> rendu ici...');
-
-      ncan =hF.Vg.nad;
-      hdchnl =hF.Hdchnl;
-      laver ='-V7.3';
-
-    	% nom de la variable du premier canal
-    	lenom =hdchnl.cindx{1};
-    	% on load le premier canal
-    	A =load(Fsrc, lenom);
-    	% on le sauve dans le fichier temporaire
-    	save(Fdst, '-Struct', 'A', laver);
-
-      % puis on fait la même chose pour les autres canaux
-      for U =2:ncan
-      	waitbar(0.95*single(U)/single(ncan), hwb);
-      	A =[];
-      	lenom =hdchnl.cindx{U};
-      	A =load(Fsrc, lenom);
-      	save(Fdst, '-Struct', 'A', lenom, '-APPEND');
-      end
-
-      % Si on a créé un waitbar, on le delete
-      if delwb
-        delete(hwb);
-      end
-
     end
 
     %-------------------------------------------
