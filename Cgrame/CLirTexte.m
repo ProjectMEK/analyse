@@ -139,8 +139,12 @@ classdef CLirTexte < CLirOutils
     % callback pour partir la lecture
     %-------------------------------
     function Lecture(tO, src, event)
-      lirtext(tO);
-      mnouvre2(tO.Fich, tO.Typo, tO.txtml);
+      try
+        lirtext(tO);
+        mnouvre2(tO.Fich, tO.Typo, tO.txtml);
+      catch moo;
+        rethrow(moo);
+      end
     end
 
   end % methods

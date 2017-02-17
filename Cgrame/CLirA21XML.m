@@ -41,8 +41,12 @@ classdef CLirA21XML < CLirOutils & CStrucA21XML
     % lecture et assimilation des datas
     %-------------------------------
     function Lecture(tO, src, event)
-      lirXML(tO);
-      mnouvre2(tO.Fich, tO.Typo, tO.txtml);
+      try
+        lirXML(tO);
+        mnouvre2(tO.Fich, tO.Typo, tO.txtml);
+      catch moo;
+        rethrow(moo);
+      end
     end
 
     %------------------------------------

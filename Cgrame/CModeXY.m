@@ -20,7 +20,12 @@ classdef CModeXY < handle
     % CONSTRUCTOR
     %--------------------------
     function obj = CModeXY(Ppa)
-      obj.Initialise(Ppa);
+      try
+        obj.Initialise(Ppa);
+      catch mmoo;
+        CQueEsEsteError.dispOct(mmoo);
+        rethrow(mmoo);
+      end
     end
 
     %
@@ -32,27 +37,32 @@ classdef CModeXY < handle
 
     %---------------------------
     function Initialise(obj, hF)
-      obj.Fid =hF;
-      obj.IpmnuXy =findobj('tag', 'IpmnuXy');
-      obj.XX =hF.Vg.x;
-      obj.YY =hF.Vg.y;
-      obj.VerifieListXY();
-      IModeXY(obj);
-      vg =hF.Vg;
-      lenom =obj.listcanxy();
-      if isempty(obj.XX)      % aucun choix de fait
-        vg.choixy=1;
-      else                    % ici on a au moins un XX de choisi
-        if isempty(vg.choixy) | vg.choixy == 0 | vg.choixy > length(obj.YY)
-          vg.choixy =1;
+      try
+        obj.Fid =hF;
+        vg =hF.Vg;
+        obj.IpmnuXy =findobj('tag', 'IpmnuXy');
+        obj.XX =vg.x;
+        obj.YY =vg.y;
+        obj.VerifieListXY();
+        IModeXY(obj);
+        lenom =obj.listcanxy();
+        if isempty(obj.XX)      % aucun choix de fait
+          vg.choixy=1;
+        else                    % ici on a au moins un XX de choisi
+          if isempty(vg.choixy) | vg.choixy == 0 | vg.choixy > length(obj.YY)
+            vg.choixy =1;
+          end
+          vg.x =vg.x(vg.choixy);
+          if length(obj.YY)
+            vg.y =vg.y(vg.choixy);
+          end
         end
-        vg.x =vg.x(vg.choixy);
-        if length(obj.YY)
-          vg.y =vg.y(vg.choixy);
-        end
+        obj.canoXY.setString(lenom);
+        obj.canoXY.setValue(vg.choixy);
+      catch moo;
+        CQueEsEsteError.dispOct(moo);
+        rethrow(moo);
       end
-      obj.canoXY.setString(lenom);
-      obj.canoXY.setValue(vg.choixy);
     end
 
     %--------------------------------

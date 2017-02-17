@@ -214,23 +214,26 @@ classdef (Sealed) CAnalyse < handle
     % EN ENTRÉE on a  OFi --> un objet de la classe CLiranalyse
     %--------------------------
     function majcurfich(tO,OFi)
-      % Mise à jour de curfich
-      test =0;
-      for U =1:tO.Fic.nf
-      	if find(tO.Fic.hfich{U}, OFi)
-      		test =U;
-      		break;
-      	end
-      end
+      try
+        % Mise à jour de curfich
+        test =0;
+        for U =1:tO.Fic.nf
+        	if find(tO.Fic.hfich{U}, OFi)
+        		test =U;
+        		break;
+        	end
+        end
+        if test
+          tO.Fic.curfich =test;
+        else
+        	tO.Fic.nf =tO.Fic.nf+1;
+          tO.Fic.curfich =tO.Fic.nf;
+          tO.Fic.hfich{tO.Fic.curfich} =OFi;
+        end
 
-disp('CAnalyse.majcurfich --> rendu ici...');
-
-      if test
-        tO.Fic.curfich =test;
-      else
-      	tO.Fic.nf =tO.Fic.nf+1;
-        tO.Fic.curfich =tO.Fic.nf;
-        tO.Fic.hfich{tO.Fic.curfich} =OFi;
+      catch moo;
+        CQueEsEsteError.dispOct(moo);
+        rethrow(moo);
       end
     end
 
@@ -248,10 +251,15 @@ disp('CAnalyse.majcurfich --> rendu ici...');
     % EN ENTRÉE on a  OFi --> un objet de la classe CLiranalyse
     %-----------------------------
     function finaliseLect(tO, OFi)
-      tO.Vg.mazero();
-      tO.Fic.nf =tO.Fic.nf+1;
-      tO.Fic.curfich =tO.Fic.nf;
-      tO.Fic.hfich{tO.Fic.nf} =OFi;
+      try
+        tO.Vg.mazero();
+        tO.Fic.nf =tO.Fic.nf+1;
+        tO.Fic.curfich =tO.Fic.nf;
+        tO.Fic.hfich{tO.Fic.nf} =OFi;
+      catch moo;
+        CQueEsEsteError.dispOct(moo);
+        rethrow(moo);
+      end
     end
 
     %___________________________________

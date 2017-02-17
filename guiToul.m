@@ -6,6 +6,7 @@ function guiToul(varargin)
     if nargin == 0
       return;
     else
+      % Instance principale d'Analyse
       OA =CAnalyse.getInstance();
       Ofich =OA.findcurfich();
       vg =Ofich.Vg;

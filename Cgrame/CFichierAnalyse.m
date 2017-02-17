@@ -24,11 +24,7 @@ classdef CFichierAnalyse < CFichier
     %  CONSTRUCTOR
     %------------------------------------
     function obj =CFichierAnalyse(letype)
-      obj =obj@CFichier();
-      obj.Vg =CVgAnalyse();
-      obj.Vg.itype =letype;
-      obj.Tpchnl =CTpchnlAnalyse(obj);
-      obj.Gr =CGrVar();
+    % rien pour l'instant
     end
 
     %-----------
@@ -49,38 +45,59 @@ classdef CFichierAnalyse < CFichier
       end
     end
 
+    %--------------------------------------
+    % Initialisation de départ de cet objet
+    %--------------------------------------
+    function initFA(obj, typo)
+      try
+        obj.initCFichier();
+        obj.Vg =CVgAnalyse();
+        obj.Vg.itype =typo;
+        obj.Tpchnl =CTpchnlAnalyse(obj);
+        obj.Gr =CGrVar();
+      catch moo;
+        CQueEsEsteError.dispOct(moo);
+        rethrow(moo);
+      end
+    end
+
     %_______________________________________________
     % À la fin du processus d'ouverture d'un fichier
     % on passe par cette fonction peu importe le type
     % de fichier à ouvrir
     %-----------------------
     function finlect(tO)
-      OA =CAnalyse.getInstance();
-      vg =tO.Vg;
-      if CEFich('analyse') == vg.itype
-        if vg.laver < OA.Fic.laver
+      try
+        OA =CAnalyse.getInstance();
+        vg =tO.Vg;
+        if CEFich('analyse') == vg.itype
+          if vg.laver < OA.Fic.laver
+            vg.sauve =true;
+          end
+        else
+          %_______________________________________
+          % Pour tous les autres types de fichiers
+          % on met la variable vg.sauve à true
+          % afin de demander de sauvegarder à la
+          % fermeture du fichier.
+          %---------------------------------------
           vg.sauve =true;
         end
-      else
-        %_______________________________________
-        % Pour tous les autres types de fichiers
-        % on met la variable vg.sauve à true
-        % afin de demander de sauvegarder à la
-        % fermeture du fichier.
-        %---------------------------------------
-        vg.sauve =true;
+
+        % On fabrique un fichier temporaire de travail avce les datas seulement
+        tO.copycan();
+        OA.CompVgPref(vg);
+        tO.majchamp();
+        OA.finaliseLect(tO);
+
+        % création de la ligne de menu pour "caller ce fichier"
+        tO.MnuFid =CMnuFichier(tO);
+
+      catch moo;
+        CQueEsEsteError.dispOct(moo);
+        rethrow(moo);
       end
 
-      % On fabrique un fichier temporaire de travail avce les datas seulement
-      tO.copycan();
-      OA.CompVgPref(vg);
-      tO.majchamp();
-
-disp('CFichierAnalyse.finlect --> rendu ici...');
-
-      OA.finaliseLect(tO);
-
-      tO.MnuFid =CMnuFichier(tO);
     end
 
     %----------------------------------------
@@ -226,10 +243,15 @@ disp('CFichierAnalyse.finlect --> rendu ici...');
     % Passage au mode XY
     %-------------------
     function initxy(obj)
-      if isempty(obj.ModeXY)
-        obj.ModeXY =CModeXY(obj);
+      try
+        if isempty(obj.ModeXY)
+          obj.ModeXY =CModeXY(obj);
+        end
+        obj.ModeXY.YetiLa();
+      catch moo;
+        CQueEsEsteError.dispOct(moo);
+        rethrow(moo);
       end
-      obj.ModeXY.YetiLa();
     end
 
     %-------------------------------------------------------------------------
@@ -237,72 +259,76 @@ disp('CFichierAnalyse.finlect --> rendu ici...');
     % si besoin est, on fait les modif ici lors de l'ouverture de fichier
     %---------------------
     function majchamp(obj)
-      OA =CAnalyse.getInstance();
-      vg =obj.Vg;
-      hdchnl =obj.Hdchnl;
-      hdchnl.VerifSize(vg.nad, vg.ess);
-      obj.initpoint();
-      vg.can =1;
-      vg.tri =1;
-      vg.valeur =0;
-      obj.couleur =OA.couleur{vg.ligne+1};
-      %___________________________________________
-      % on s'assure que itype/otype sont valides
-      %-------------------------------------------
-      if isempty(vg.itype) | isempty(CEFich(vg.itype))
-        vg.itype =CEFich('analyse');
-      end
-      if isempty(vg.otype) | vg.otype > 7.0
-        vg.otype =7;
-      end
-      %_____________
-      % Affichage XY
-      %-------------
-      if length(vg.x) > length(vg.y)+1
-        vg.x(length(vg.y)+1:end) =[];
-      end
-      for ii =length(vg.y):-1:1
-        if vg.y(ii) == 0 || vg.x(ii) == 0 || vg.y(ii) > vg.nad ||...
-           vg.x(ii) > vg.nad || hdchnl.rate(vg.x(ii),1) < hdchnl.rate(vg.y(ii),1)
-          vg.y(ii) =[];
-          vg.x(ii) =[];
+      try
+        OA =CAnalyse.getInstance();
+        vg =obj.Vg;
+        hdchnl =obj.Hdchnl;
+        hdchnl.VerifSize(vg.nad, vg.ess);
+        obj.initpoint();
+        vg.can =1;
+        vg.tri =1;
+        vg.valeur =0;
+        obj.couleur =OA.couleur{vg.ligne+1};
+        %___________________________________________
+        % on s'assure que itype/otype sont valides
+        %-------------------------------------------
+        if isempty(vg.itype) | isempty(CEFich(vg.itype))
+          vg.itype =CEFich('analyse');
         end
-      end
-      enbas =min(hdchnl.frontcut(:));
-      enhaut =max(hdchnl.sweeptime(:));
-      if vg.filtpmin < enbas || vg.filtpmin > enhaut
-        vg.filtpmin = enbas;
-      end
-      if vg.filtpmax < enbas || vg.filtpmax > enhaut
-        vg.filtpmax = enhaut;
-      end
-      for i=length(vg.choixy):-1:1
-        if vg.choixy(i) > length(vg.y)
-          vg.choixy(i)=[];
-        else
-          break;
+        if isempty(vg.otype) | vg.otype > 7.0
+          vg.otype =7;
         end
-      end
-      if vg.deroul(1) > 0.99; vg.deroul(1) = 0.01;
-      elseif vg.deroul(2) > 0.99; vg.deroul(2) = 0.1; end
-      %-------------------------------------------%
-      % Il faut que: SWEEPTIME = NBSAMPLES / RATE %
-      %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-      lerate =max(hdchnl.rate(:));
-      a =find(hdchnl.nsmpls(:) < 1);
-      if length(a)
-        hdchnl.nsmpls(a)=0;
-      end
-      hdchnl.rate(hdchnl.rate < 0.0001) =lerate;
-      %-------------------------------------------%
-      % Depuis la version 7.04.16: HDCHNL.MAX/MIN %
-      %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-      if vg.laver ~= OA.Fic.laver
-        obj.majMinMax();
+        %_____________
+        % Affichage XY
+        %-------------
+        if length(vg.x) > length(vg.y)+1
+          vg.x(length(vg.y)+1:end) =[];
+        end
+        for ii =length(vg.y):-1:1
+          if vg.y(ii) == 0 || vg.x(ii) == 0 || vg.y(ii) > vg.nad ||...
+             vg.x(ii) > vg.nad || hdchnl.rate(vg.x(ii),1) < hdchnl.rate(vg.y(ii),1)
+            vg.y(ii) =[];
+            vg.x(ii) =[];
+          end
+        end
+        enbas =min(hdchnl.frontcut(:));
+        enhaut =max(hdchnl.sweeptime(:));
+        if vg.filtpmin < enbas || vg.filtpmin > enhaut
+          vg.filtpmin = enbas;
+        end
+        if vg.filtpmax < enbas || vg.filtpmax > enhaut
+          vg.filtpmax = enhaut;
+        end
+        for i=length(vg.choixy):-1:1
+          if vg.choixy(i) > length(vg.y)
+            vg.choixy(i)=[];
+          else
+            break;
+          end
+        end
+        if vg.deroul(1) > 0.99; vg.deroul(1) = 0.01;
+        elseif vg.deroul(2) > 0.99; vg.deroul(2) = 0.1; end
+        %-------------------------------------------%
+        % Il faut que: SWEEPTIME = NBSAMPLES / RATE %
+        %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+        lerate =max(hdchnl.rate(:));
+        a =find(hdchnl.nsmpls(:) < 1);
+        if length(a)
+          hdchnl.nsmpls(a)=0;
+        end
+        hdchnl.rate(hdchnl.rate < 0.0001) =lerate;
+        %-------------------------------------------%
+        % Depuis la version 7.04.16: HDCHNL.MAX/MIN %
+        %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+        if vg.laver ~= OA.Fic.laver
+          obj.majMinMax();
+        end
 
-disp('CFichierAnalyse.majchamp --> rendu ici...');
-
+      catch moo;
+        CQueEsEsteError.dispOct(moo);
+        rethrow(moo);
       end
+
     end
 
     %------------------------------------
@@ -329,9 +355,6 @@ disp('CFichierAnalyse.majchamp --> rendu ici...');
       end
       for C =can
       	obj.getcanal(HDt, C);
-
-disp('CFichierAnalyse.majMinMax --> rendu ici...');
-
       	for E =1:vg.ess
       	  t_ou(:) =(single(C-1)*single(vg.ess)+single(E))/(single(vg.nad)*single(vg.ess));
       		waitbar(t_ou, dd);

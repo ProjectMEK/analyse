@@ -25,15 +25,7 @@ function startAnalyse(varargin)
 
   % Comme on va travailler avec les paths, il faut savoir dans quel OS on travaille
   % le caractère pour Séparer les Dossiers sera
-  if ispc
-    SD ='\';
-  elseif isunix
-    SD ='/';
-  else
-    lesmots =sprintf('Vous utilisez un autre OS non inclus dans la commande ispc ou isunix,/nSVP nous faire parvenir les informations.');
-    disp(lesmots);
-    return;
-  end
+  SD =filesep();
 
   % On va récupérer le path complet du fichier "setAnalyse.m"
   moi =which('startAnalyse');

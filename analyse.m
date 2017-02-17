@@ -57,6 +57,7 @@ function analyse(varargin)
     % CAnalyse.initial(version(num), version(texte))
     %
     try
+tic;
       % initialise les valeurs par défaut global pour l'application
       CValet.valdefaut();
       % création de l'instance unique de l'application
