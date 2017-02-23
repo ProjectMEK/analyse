@@ -57,7 +57,6 @@ function analyse(varargin)
     % CAnalyse.initial(version(num), version(texte))
     %
     try
-tic;
       % initialise les valeurs par défaut global pour l'application
       CValet.valdefaut();
       % création de l'instance unique de l'application
@@ -83,27 +82,31 @@ tic;
 
   %--------------
   case 'terminus'
-    OA =CAnalyse.getInstance();
-    while OA.Fic.nf
-    	b =OA.fermecur();
-    	if ~b
-      	return;
-    	end
+    try
+      OA =CAnalyse.getInstance();
+      while OA.Fic.nf
+      	b =OA.fermecur();
+      	if ~b
+        	return;
+      	end
+      end
+      % avant de quitter, on sauvegarde les préférences tel que demandé.
+      sauveLesPref(OA, FF);
+      wmfig =findobj('type','figure','tag','WmFig');
+      if ~ isempty(wmfig)
+        delete(wmfig);
+      end
+      wmfig =findobj('tag','IpChoiXY');
+      if ~ isempty(wmfig)
+        delete(wmfig);
+      end
+      delete(OA);
+      clear java;
+      clear all;
+      warning('on','all');
+    catch moo;
+      CQueEsEsteError.dispOct(moo);
     end
-    % avant de quitter, on sauvegarde les préférences tel que demandé.
-    sauveLesPref(OA, FF);
-    wmfig =findobj('type','figure','tag','WmFig');
-    if ~ isempty(wmfig)
-      delete(wmfig);
-    end
-    wmfig =findobj('tag','IpChoiXY');
-    if ~ isempty(wmfig)
-      delete(wmfig);
-    end
-    delete(OA);
-    clear java;
-    clear all;
-    warning('on','all');
   end  %case
 end
 

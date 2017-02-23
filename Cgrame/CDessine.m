@@ -153,11 +153,16 @@ classdef CDessine < handle
     % fenêtre principale, invisible.
     %--------------------
     function choffpan(obj)
-      % on reset le nom de la fenêtre
-      set(findobj('tag', 'IpTraitement'),'Name','En attente de traitement');
-      % on reset aussi la barre de status
-      obj.commentaire([]);
-      set(obj.Lepan,'visible','off');
+      try
+        % on reset le nom de la fenêtre
+        set(findobj('tag', 'IpTraitement'),'Name','En attente de traitement');
+        % on reset aussi la barre de status
+        obj.commentaire();
+        set(obj.Lepan,'visible','off');
+      catch moo;
+        CQueEsEsteError.dispOct(moo);
+        rethrow(moo);
+      end
     end
 
     %-----------------------------------------------------
@@ -304,12 +309,17 @@ classdef CDessine < handle
     % affichage du texte TEXTE dans la barre de status
     %-------------------------------------------------
     function commentaire(tO, TEXTE)
-      if nargin < 2
-        TEXTE ='Vous devez ouvrir un fichier pour commencer.';
+      try
+        if nargin < 2
+          TEXTE ='Vous devez ouvrir un fichier pour commencer.';
+        end
+        set(tO.curstatusbar, 'string',TEXTE);
+        % on s'assure que le display se fera à la suite
+        pause(0.005);
+      catch moo;
+        CQueEsEsteError.dispOct(moo);
+        rethrow(moo);
       end
-      set(tO.curstatusbar, 'String',TEXTE);
-      % on s'assure que le display se fera à la suite
-      pause(0.005);
     end
 
     %--------------------------------------------
@@ -762,7 +772,9 @@ classdef CDessine < handle
         end
         a =[];
         if ~isempty(gr.leshdls)
-          [a,b,c,d] =legend(gr.leshdls,gr.lalegend);
+          [a,b,c,d] =legend(obj.Lax, gr.leshdls, gr.lalegend);
+          % Octave n'affichait pas la légende tel quel, j'ai dû ajouter
+          set(a, 'parent',obj.Lax);
         end
         if  vg.legende
           set(a,'box','on','visible','on','box','off');

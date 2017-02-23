@@ -264,8 +264,11 @@ function guiToul(varargin)
     end
   %------------------
   case 'choix_canaux'
+    %
+    % On doit s'assurer que le mode XY n'est pas actif, car dans ce cas
+    % on a pas à réagir si l'usager a cliqué un canal.
     if strncmpi(get(findobj('tag', 'IpmnuXy'),'checked'),'of',2)
-    	 set(findobj('Type','uicontrol','tag', 'IpCanTous'),'Value',0)
+      set(findobj('Type','uicontrol','tag', 'IpCanTous'),'Value',0)
       lescan =OA.OFig.cano.getValue();
       if isempty(lescan)
         lescan =1;

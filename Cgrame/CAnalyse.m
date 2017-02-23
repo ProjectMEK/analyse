@@ -334,30 +334,35 @@ classdef (Sealed) CAnalyse < handle
     % Fermer le fichier courant
     %-------------------------
     function Cok =fermecur(tO)
-      Cok =false;
-    	fid =tO.findcurfich();
-    	vg =fid.Vg;
-      a =fid.fermer();
-      if ~ a
-        return;
+      try
+        Cok =false;
+      	fid =tO.findcurfich();
+      	vg =fid.Vg;
+        a =fid.fermer();
+        if ~ a
+          return;
+        end
+        if tO.Fic.nf == 1
+          tO.Vg.affiche =tO.Fic.pref.prepareVarAffiche(fid.Vg);
+        end
+        tO.OFig.choffpan();
+        delete(fid);
+        tO.Fic.hfich(tO.Fic.curfich) =[];
+        tO.Fic.nf =tO.Fic.nf-1;
+        tO.Fic.curfich =min(tO.Fic.nf, tO.Fic.curfich);
+        if tO.Fic.nf
+        	F =tO.Fic.hfich{tO.Fic.curfich};
+          tO.OFig.chfichpref(F);
+          tO.OFig.chonpan();
+          tO.OFig.affiche();
+        else
+        	tO.OFig.choffmenu();
+        end
+        Cok =true;
+      catch moo;
+        CQueEsEsteError.dispOct(moo);
+        rethrow(moo);
       end
-      if tO.Fic.nf == 1
-        tO.Vg.affiche =tO.Fic.pref.prepareVarAffiche(fid.Vg);
-      end
-      tO.OFig.choffpan();
-      delete(fid);
-      tO.Fic.hfich(tO.Fic.curfich) =[];
-      tO.Fic.nf =tO.Fic.nf-1;
-      tO.Fic.curfich =min(tO.Fic.nf, tO.Fic.curfich);
-      if tO.Fic.nf
-      	F =tO.Fic.hfich{tO.Fic.curfich};
-        tO.OFig.chfichpref(F);
-        tO.OFig.chonpan();
-        tO.OFig.affiche();
-      else
-      	tO.OFig.choffmenu();
-      end
-      Cok =true;
     end
 
     %--------------------------

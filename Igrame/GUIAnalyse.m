@@ -166,8 +166,8 @@ function GUIAnalyse(Ppa)
             'SliderStep', [0.05 0.15],...
             'Visible','Off');
 
-  %********************************************************************
-  % FABRICATION DES FENÊTRE DE SÉLECTION CANAUX/ESSAIS ET LEURS BOUTONS
+  %**********************************************************************
+  % FABRICATION DES UICONTROL DE SÉLECTION CANAUX/ESSAIS ET LEURS BOUTONS
   posx=bordurx; posy=laxe(2)+laxe(4);
   largeur=lpfs; hauteur=epay;
   uicontrol('Parent',pp, ...

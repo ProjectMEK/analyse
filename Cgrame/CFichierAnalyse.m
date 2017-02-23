@@ -241,7 +241,8 @@ classdef CFichierAnalyse < CFichier
  
     %-------------------
     % Passage au mode XY
-    %-------------------
+    % Chaque fichier aura son propre gestionnaire de l'affichage XY
+    %--------------------------------------------------------------
     function initxy(obj)
       try
         if isempty(obj.ModeXY)
