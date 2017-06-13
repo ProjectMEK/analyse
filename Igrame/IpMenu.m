@@ -99,6 +99,7 @@ function IpMenu(obj)
   uimenu('Parent',mnu, 'Label',tt.mathellipsconf, 'Callback','appel(''ellipse'')');
   uimenu('Parent',mnu, 'Label',tt.mathmoyectyp, 'Callback','appel(''moyectype'')');
   uimenu('Parent',mnu, 'Label',tt.mathmoyptmarq, 'Callback','appel(''moypoint'')');
+  uimenu('Parent',mnu, 'Label',tt.mathpentedrtregr, 'Callback','appel(''droiteregress'')');
   uimenu('Parent',mnu, 'Label',tt.mathcalcang, 'Callback','appel(''angulo'')');
   uimenu('Parent',mnu, 'Label',tt.mathtraitcan, 'Callback','appel(''tretcanal'')');
 % EMG
@@ -137,6 +138,7 @@ function IpMenu(obj)
   uimenu('Parent',mmnu, 'callback','appel(''echeltmp'')', ...
          'tag','IpmnutempsNormal', 'checked','on', 'Label',tt.ouechtempodefaut);
   uimenu('Parent',mnu, 'Callback','appel(''importpt'')', 'Separator','on', 'Label',tt.ouimportpoint);
+  uimenu('Parent',mnu, 'Callback','appel(''trierpt'')', 'Label',tt.outrierpt);
   uimenu('Parent',mnu, 'Callback','appel(''marquage'')', 'Label',tt.oumark);
   uimenu('parent',mnu,'tag','IpmnuZoom','Separator','on', 'Label',tt.ouzoom,'callback','appel(''zoomonoff'')');
   uimenu('parent',mnu,'tag','IpmnuCoord', 'Label',tt.ouaffichercoord,'callback','appel(''affichecoord'')');

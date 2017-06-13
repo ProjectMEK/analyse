@@ -75,6 +75,8 @@ function startAnalyse(varargin)
     path(pdef);
     % maintenant on va ajouter les path pour Analyse
     addpath(An_path);
+    % on va changer la valeur par défaut pour la sauvegarde des fichiers
+    save_default_options ('-v7');
 
   end
 

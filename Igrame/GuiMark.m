@@ -107,7 +107,7 @@ function tt = GuiMark(Ppa)
   % AXE
   posx =0.5;large =1-posx-3*ligne;foo =0.04; posy =0.4+foo; haut =0.55-foo;
   Ppa.Axe =axes('Parent',lafig, 'CameraUpVector',[0 1 0], 'CameraUpVectorMode','manual', ...
-          'DrawMode','fast', 'Position',[posx posy large haut], 'XColor',[0 0 0], 'YColor',[0 0 0]);
+                'Position',[posx posy large haut], 'XColor',[0 0 0], 'YColor',[0 0 0]);
   %_______________________________________________
   % AFFICHE LES ESSAIS
   haut=posy-2.5*epais1-epais2-foo;posy=posy-1.5*epais1-haut;large=(large-3*ligne)/2;

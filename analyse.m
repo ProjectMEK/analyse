@@ -8,8 +8,8 @@
 % Copyrigth 1998 à 2017
 %   Auteur principal: Marcel Étienne Kaszap
 %   ont participé en apportant des idées, du code et/ou de l'argent
-%     Normand Teasdale, dépt. Kinésiologie, U. Laval
-%     Martin Simoneau, dépt. Kinésiologie, U. Laval
+%     Normand Teasdale, Laboratoire GRAME, dépt. Kinésiologie, U. Laval
+%     Martin Simoneau, Laboratoire GRAME, dépt. Kinésiologie, U. Laval
 %     Olivier Martin, GIPSA-Lab, Grenoble et enseignant à l'UFR STAPS.
 %     Caroline , étudiante en stage.
 %     Thelma Coyle, CNRS, Marseille

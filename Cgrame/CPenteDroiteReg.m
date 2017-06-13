@@ -1,10 +1,10 @@
 %
-% Classe CMoyAutourPt
+% Classe CPenteDroiteReg
 %
-% On fait la moyenne autour des points marqués puis on écris
+% On trouve la droite de régression à partir des échantillons déterminés puis on écrit
 % le résultat dans un fichier texte.
 %
-classdef CMoyAutourPt < handle
+classdef CPenteDroiteReg < handle
 
   %---------
   properties
@@ -28,10 +28,10 @@ classdef CMoyAutourPt < handle
     sep =[];                      % caractère pour séparer les champs dans le fichier de sortie texte
     debfentrav =[];               % début du range de travail
     finfentrav =[];               % fin du range de travail
-    autour =[];                   % si = 0: on fait la moyenne entre "debfentrav et finfentrav"
-                                  % si = 1: on fait la moyenne autour des points marqués
-                                  %         entre [point marqué - av_ap] et [point marqué + av_ap]
-    av_ap =[];                    % détermine le range pour la moyenne autour des points
+    pairage =1;                   % si = 1 --> [1er pt avec 2ième] [3ième avec 4ième] ...
+                                  % si = 2 --> [1er pt avec 2ième] [2ième avec 3ième] ...
+                                  % si = 3 --> Calculer une seule pente à partir de la fenêtre de travail
+    av_ap =[];                    % détermine de quelle portion on réduit le range
     unit =[];                     % 1 --> échantillons, 2 --> secondes
   end
 
@@ -43,7 +43,7 @@ classdef CMoyAutourPt < handle
     %
     % tO --> thisObject, le handle de l'objet créé.
     %---------------------------
-    function tO = CMoyAutourPt()
+    function tO = CPenteDroiteReg()
 
       % initialisation des propriétés
       OA =CAnalyse.getInstance();
@@ -53,7 +53,7 @@ classdef CMoyAutourPt < handle
       tO.ptchnl =tO.ofich.Ptchnl;
 
       % création du GUI
-      tO.fig =GuiMoyAutourPt(tO);
+      tO.fig =GuiPenteDroiteReg(tO);
 
     end
 
@@ -91,32 +91,19 @@ classdef CMoyAutourPt < handle
       set(src, 'Value',0);
     end
 
-    %---------------------------------------
-    % ici on toggle les cases pour les infos
-    % sur le nombres d'échantillon avant ou
-    % après le point marqué.
-    %---------------------------------------
-    function moyenneAutour(tO, src, evt)
-      % on lit la value du checkbox
-      foo =CEOnOff(get(src, 'Value'));
-      % on affiche les infos ou on les cache
-      set(findobj('Tag','EDnombreAvantApres'), 'Visible',char(foo));
-      set(findobj('Tag','PMchoixUnit'), 'Visible',char(foo));
-    end
-
     %--------------------------------------------
     % C'est ici que l'on va faire le travail pour
-    % sortir les moyennes voulues.
+    % sortir les pentes voulues.
     %-----------------------------
     function travail(tO, varargin)
 
       % On ouvre une waitbar "modal" pour montrer où on est rendu et en plus on
       % barre l'accès au GUI pour ne pas le modifier pendant le traitement.
-      tO.wb =laWaitbarModal(0,'Moyennage en cours', 'G', 'C');
+      tO.wb =laWaitbarModal(0,'Calcul en cours', 'G', 'C');
   
-      % choisi le fichier pour l'écriture des moyennes
+      % choisi le fichier pour l'écriture des pentes
       try
-        [fichtxt,lieu] =uiputfile('*.*','Résultat des Moyennes');
+        [fichtxt,lieu] =uiputfile('*.*','Résultat des Pentes');
         pcourant =pwd;
         cd(lieu);
       catch
@@ -133,7 +120,7 @@ classdef CMoyAutourPt < handle
       tO.fid =fopen(fichtxt,'w');
   
       % appel de la fonction qui va faire le vrai travail
-      tO.faireMoyenne();
+      tO.calculerPente();
 
       % on ajoute un saut de ligne au fichier
       fprintf(tO.fid, '\n');
@@ -147,11 +134,9 @@ classdef CMoyAutourPt < handle
       cd(pcourant);
     end
 
-    %---------------------------------------
+    %------------------------------
     % Lecture des paramètres du GUI
-    % on retournera "K", une structure avec
-    % un champ par élément du GUI
-    %---------------------------------------
+    %------------------------------
     function lireLeGUI(tO);
       % lecture du choix des canaux
       tO.can =get(findobj('Tag','LBchoixCan'),'Value')';
@@ -166,16 +151,14 @@ classdef CMoyAutourPt < handle
       % Début et fin de la fenêtre de travail
       tO.debfentrav =get(findobj('Tag','EDfenTravDebut'), 'String');
       tO.finfentrav =get(findobj('Tag','EDfenTravFin'), 'String');
-      % checkbox pour travailler autour des points
-      tO.autour =get(findobj('Tag','CBchoixAutour'), 'Value');
-      if tO.autour
-        tO.av_ap =str2num(get(findobj('Tag','EDnombreAvantApres'), 'String'));
-        tO.unit =get(findobj('Tag','PMchoixUnit'), 'Value');
-        % si on a choisi "échantillon" alors le nombre pour
-        % Avant/Après doit être entier.
-        if tO.unit == 1
-          tO.av_ap =round(tO.av_ap);
-        end
+      % popupmenu pour déterminer le type de pairage des points
+      tO.pairage =get(findobj('Tag','PMpairagePoints'), 'Value');
+      tO.av_ap =str2num(get(findobj('Tag','EDnombreAvantApres'), 'String'));
+      tO.unit =get(findobj('Tag','PMchoixUnit'), 'Value');
+      % si on a choisi "échantillon" alors le nombre pour
+      % Avant/Après doit être entier.
+      if tO.unit == 1
+        tO.av_ap =round(tO.av_ap);
       end
     end
 
@@ -183,39 +166,35 @@ classdef CMoyAutourPt < handle
     % Tous les paramètres sont maintenant connus, on procède au travail
     % en fonction des choix fait dans le GUI.
     %------------------------------------------------------------------
-    function faireMoyenne(tO)
-      % Pour écrire dans le fichier, on va faire toutes les moyennes, puis,
-      % on va procéder dans un ordre établi.
+    function calculerPente(tO)
+      % Pour écrire dans le fichier, on va faire tous les calculs de pente,
+      %  puis, on va procéder dans un ordre établi.
 
       % Ligne d'entête générale
-      fprintf(tO.fid, 'Fichier d''origine: %s\nLégende des canaux\n', tO.ofich.Info.finame);
-
+      fprintf(tO.fid, 'Fichier d''origine: %s\n\nLégende des canaux\n', tO.ofich.Info.finame);
       % on écrit la "légende des noms de canaux"
       for U =1:tO.Ncan
-        fprintf(tO.fid, '\n  C%i --> %s', tO.can(U), tO.hdchnl.adname{tO.can(U)});
+        fprintf(tO.fid, '  C%i --> %s\n', tO.can(U), tO.hdchnl.adname{tO.can(U)});
       end
-
     	% on écrit les bornes dans le fichier
-    	fprintf(tO.fid, '\n\nFenêtre de travail, entre %s et %s\n\n', tO.debfentrav, tO.finfentrav);
-
-      % on prépare la ligne de titre qui va contenir le numéro de canal et de point
+    	lesU ={'échantillons','secondes'};
+    	fprintf(tO.fid, '\nFenêtre de travail: [ %s --- %s ]\nValeur à négliger: %0.2f %s\n\n', ...
+    	        tO.debfentrav, tO.finfentrav, tO.av_ap, lesU{tO.unit});
+      % on prépare la ligne de titre qui va contenir le numéro d'essai, (canal et point)
       letitre ='Essai';
-
-      %
-      % Dans les deux cas, on va bâtir une matrice contenant les moyennes calculées
-      %
-      % MOY(i, j, k) = moyenne du [(point i) (canal j) (essais k)]
-      %
-      % Dans le cas ou on fait une moyenne entre deux points, on aura max(i) = 1
+      % Dans tous les cas, on va bâtir une matrice contenant les pentes calculées
+      % PENT(i, j, k) = pente du [(point i à i+1) (canal j) (essais k)]
+      % puis, on va écrire les résultats dans le fichier.
+      % Dans le cas ou on cherche la pente entre deux points, on aura max(i) = 1
       % On va écrire les résultats dans le fichhier de sortie de la même manière.
-      % On a toujours écrit dans les fichiers texte de façon èa pouvoir lire et
+      % On a toujours écrit dans les fichiers texte de façon à pouvoir lire et
       % traiter dans "STATISTICA", cad: chaque ligne contient les infos pour un essai.
       % Pour ceux qui utilisent Excel, on peut transposer une ligne en colonne lorsque
       % on fait un copie et coller spécial.
       %
       % ex. pour la moyenne entre deux bornes
       % Essai,C1P1,C2P1,...,CNP1   --> C suivi du numéro du canal, P suivi du numéro du point
-      %     1, xx , xx ,..., xx    --> xx seraient les valeurs de moyenne
+      %     1, xx , xx ,..., xx    --> xx seraient les valeurs de pente
       %     2,...
       %
       % ex. pour la moyenne autour des points
@@ -223,38 +202,51 @@ classdef CMoyAutourPt < handle
       %     1, xx , xx ,...  xx , xx , xx ,...
       %     2,...
       %
-      if tO.autour
-        % on a choisi le moyennage autour des points marqués
 
-      	% on écrit les paramètres "delta-T" pour le calcul autour des points
-      	typ_unit ={'échantillons', 'secondes'};
-      	fprintf(tO.fid, 'La moyenne a été faite sur +/- %g %s autour du point\n\n', tO.av_ap, typ_unit{tO.unit});
+      % objet de la classe CDtchnl pour manipuler les datas des canaux/essais
+      Dt =CDtchnl();
 
+      switch tO.pairage
+      case {1,2}
+        % on a choisi (1): Pairage des points --> [1er pt avec 2ième] [3ième avec 4ième] ...
+        % ou
+        % on a choisi (2): Pairage des points --> [1er pt avec 2ième] [2ième avec 3ième] ...
+        % croiser sera l'incrément à ajouter pour sauter à la prochaine paire de points
+        croiser =~(tO.pairage-1)+1;
+
+      	% VALEUR À NÉGLIGER
       	% si on a choisi "échantillons", ça ne varie pas
       	delta =ones(tO.Ncan, tO.Ness)*tO.av_ap;
       	% si on a choisi "secondes", on peut avoir une valeur différente
       	if tO.unit == 2
           delta =delta.*tO.hdchnl.rate(tO.can, tO.ess);
         end
-
-        % nombre de moyenne max à calculer pour tous
-        Npt =max(max(tO.hdchnl.npoints(tO.can, tO.ess)));
-        MOY =zeros(Npt, tO.Ncan, tO.Ness);    % matrice des moyennes
-        Dt =CDtchnl();                        % objet de la classe CDtchnl pour manipuler les datas
-
+        % nombre de pente max à calculer pour tous
+        [PT,Npt] =tO.quelPoint();
+        if croiser == 1
+          Npt =Npt-PT;
+        else
+          Npt =floor((Npt-PT+1)/2);
+        end
+        % création de la matrice des pentes
+        PENT =NaN(Npt, tO.Ncan, tO.Ness);
+        % on passe tous les canaux sélectionnés
         for U =1:tO.Ncan
 
           % ligne de titre
+          cur =PT;
           for K =1:Npt
-            letitre =sprintf('%s%sC%iP%i', letitre, tO.sep, tO.can(U), K);
+            letitre =sprintf('%s%sC%i(P%i-P%i)', letitre, tO.sep, tO.can(U), cur, cur+1);
+            cur =cur+croiser;
           end
 
           % on lit le canal U
           tO.ofich.getcanal(Dt, tO.can(U));
 
           for V =1:tO.Ness
-
-            % on détermine les bornes entre lesquelles il faut moyenner
+            % point de travail courant: [cur  cur+1]
+            cur =PT;
+            % on détermine les bornes entre lesquelles on veut la pente
             debut =tO.ptchnl.valeurDePoint(tO.debfentrav, tO.can(U), tO.ess(V));
             fin =tO.ptchnl.valeurDePoint(tO.finfentrav, tO.can(U), tO.ess(V));
             % vérification de l'ordre croissant entre debut et fin
@@ -263,52 +255,66 @@ classdef CMoyAutourPt < handle
             	debut =fin;
             	fin =foo;
             end
-
             % on fait le tour de tous les points
             for P =1:Npt
-
+              % est-ce que l'on est à l'extérieur des points disponibles?
+              if cur+1 > tO.hdchnl.npoints(tO.can(U), tO.ess(V))
+                break;
+              end
+              curpi =tO.ptchnl.valeurDePoint(['P' num2str(cur)], tO.can(U), tO.ess(V));
+              curpf =tO.ptchnl.valeurDePoint(['P' num2str(cur+1)], tO.can(U), tO.ess(V));
               % il faut vérifier que les points existent
               % et sont dans la fenêtre de travail [debut:fin]
-              if isempty(debut) || isempty(fin) || P > tO.hdchnl.npoints(tO.can(U), tO.ess(V))
-                MOY(P, U, V) =nan;
+              if isempty(debut) || isempty(fin) || curpi < debut || curpf > fin
+                cur =cur+croiser;
                 continue;
               end
               foo=tO.hdchnl.point(tO.can(U), tO.ess(V));
               % on fait la moyenne sur quels échantillons?
-              Ti =tO.ptchnl.Dato(P, foo, 1) - delta(U,V);
-              Tf =tO.ptchnl.Dato(P, foo, 1) + delta(U,V);
-
+              Ti =curpi+delta(U,V);
+              Tf =curpf-delta(U,V);
               % vérificatin de ces bornes
-              if Ti < debut || Tf > fin
-                MOY(P, U, V) =nan;
+              if Ti >= Tf
+                cur =cur+croiser;
                 continue;
               end
-
-              % on calcule la moyenne entre ces bornes
-              MOY(P, U, V) =mean(Dt.Dato.(Dt.Nom)(Ti:Tf, tO.ess(V)));
+              % on fabrique la matrice du temps
+              temps =[Ti:Tf]' /tO.hdchnl.rate(tO.can(U),tO.ess(V));
+              % on calcule la pente entre ces bornes
+              if ~isempty(temps)
+                poo =polyfit(temps, Dt.Dato.(Dt.Nom)(Ti:Tf, tO.ess(V)), 1);
+                PENT(P, U, V) =poo(1);
+              end
+              cur =cur+croiser;
             end
           end
         end
 
-      else
-      	% on a choisi le moyennage entre deux bornes
-        fprintf(tO.fid, 'La moyenne est faite sur l''espace défini ci-haut\n\n');
+      case 3
+        % on a choisi: Calculer une seule pente à partir de la fenêtre de travail
 
-        Npt =1;                               % nombre de moyenne à calculer par canal/essai
-        MOY =zeros(Npt, tO.Ncan, tO.Ness);    % matrice des moyennes
-        Dt =CDtchnl();                        % objet de la classe CDtchnl pour manipuler les datas
-
+        fprintf(tO.fid, 'La pente est calculée sur l''espace défini ci-haut\n\n');
+        % nombre de pente à calculer par canal/essai
+        Npt =1;
+        % matrice des pentes
+        PENT =NaN(Npt, tO.Ncan, tO.Ness);
+        % on passe tous les canaux
         for U =1:tO.Ncan
-
           % ligne de titre
-          letitre =sprintf('%s%sC%iP1', letitre, tO.sep, tO.can(U));
-
+          letitre =sprintf('%s%sC%i(%s-%s)', letitre, tO.sep, tO.can(U),tO.debfentrav,tO.finfentrav);
           % on lit le canal U
           tO.ofich.getcanal(Dt, tO.can(U));
-
+          % on passe tous les essais
           for V =1:tO.Ness
-
-            % on détermine les bornes entre lesquelles il faut moyenner
+            % valeur à retrancher des calculs
+            if tO.unit == 1
+              % on travaille en échantillon
+              enleve =round(tO.av_ap);
+            else
+              % on travaille en seconde
+              enleve =round(tO.av_ap*tO.hdchnl.rate(tO.can(U),tO.ess(V)));
+            end
+            % on détermine les bornes entre lesquelles il faut calculer la pente
             debut =tO.ptchnl.valeurDePoint(tO.debfentrav, tO.can(U), tO.ess(V));
             fin =tO.ptchnl.valeurDePoint(tO.finfentrav, tO.can(U), tO.ess(V));
             % vérification de l'ordre croissant entre debut et fin
@@ -317,39 +323,76 @@ classdef CMoyAutourPt < handle
             	debut =fin;
             	fin =foo;
             end
+            % on tient compte de la valeur à retrancher
+            debut =debut+enleve;
+            fin =fin-enleve;
+            % on fabrique la matrice du temps
+            temps =[debut:fin]' /tO.hdchnl.rate(tO.can(U),tO.ess(V));
+            % on calcule la pente entre ces bornes
+            if ~isempty(temps)
+              poo =polyfit(temps, Dt.Dato.(Dt.Nom)(debut:fin, tO.ess(V)), 1);
+              PENT(1, U, V) =poo(1);
+            end
+          end  % essais
+        end  % canaux
 
-            % on calcule la moyenne entre ces bornes
-            MOY(1, U, V) =mean(Dt.Dato.(Dt.Nom)(debut:fin, tO.ess(V)));
-          end
-        end
+      end  % switch tO.pairage
 
-        % on fait le ménage
-        delete(Dt);
-      end
-
+      % on fait le ménage
+      delete(Dt);
       % on écrit la ligne de titre des canaux
       fprintf(tO.fid, '%s', letitre);
-
-      % les moyennes étant calculées on écrit les résultats
-      N =size(MOY,1);   % Nombre de moyenne
+      % les pentes étant calculées on écrit les résultats
+      N =size(PENT,1);   % Nombre de moyenne
 
       % on passe tous les essais
       for U =1:tO.Ness
-
         % écriture du numéro de l'essai
         fprintf(tO.fid, '\n%i', tO.ess(U));
-
         % on passe tous les canaux
         for V =1:tO.Ncan
-
-          % on passe toutes les moyennes
+          % on passe toutes les pentes
           for W =1:N
-            % écriture de la moyenne
-            fprintf(tO.fid, '%s%g', tO.sep, MOY(W, V, U));
+            % écriture de la pente
+            fprintf(tO.fid, '%s%g', tO.sep, PENT(W, V, U));
           end
         end
       end
 
+    end
+
+    %-------------------------------------------------------------------
+    % vérification pour savoir à quel point on commence et le nombre max
+    % de points déterminé par la fenêtre de travail.
+    %-------------------------------------------------------------------
+    function [P,NP] = quelPoint(tO)
+      P =0;
+      refdbt =tO.ptchnl.valeurDePoint(tO.debfentrav, tO.can(1), tO.ess(1));
+      for U =1:tO.hdchnl.npoints
+        refpt =tO.ptchnl.valeurDePoint(['P' num2str(U)], tO.can(1), tO.ess(1));
+        if refpt >= refdbt & P == 0
+          P =U;
+          break;
+        end
+      end
+      % le nombre max de point sera:
+      ztmp =tO.hdchnl.npoints(tO.can, tO.ess);
+      NP =max(ztmp(:));
+      % on vérifie la borne supérieure de la fenêtre de travail
+      letxt =strtrim(lower(tO.finfentrav));
+      if ~strncmp(letxt,'p',1) || ~isempty(strfind(letxt,'pf'))
+        return;
+      end
+      % on doit savoir si c'est un point ou si une opération '+ - / *' a été faite
+      foo ={'+','-','/','*'};
+      for U =1:length(foo)
+        if ~isempty(strfind(letxt,foo{U}))
+          return;
+        end
+      end
+      if ~isempty(str2num(letxt(2:end)))
+        NP =str2num(letxt(2:end));
+      end
     end
 
     %-------------------------------------------
@@ -359,7 +402,6 @@ classdef CMoyAutourPt < handle
       delete(tO.fig);
       tO.fig =[];
     end
-
 
   end
 end

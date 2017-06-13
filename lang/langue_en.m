@@ -80,6 +80,7 @@ function varargout =langue_en(varargin)
     S.mnuip.mathellipsconf ='Confidence ellipse';
     S.mnuip.mathmoyectyp ='Mean and Standard Deviation';
     S.mnuip.mathmoyptmarq ='Mean around points scored';
+    S.mnuip.mathpentedrtregr ='Slope of the regression line';
     S.mnuip.mathcalcang ='Calculates angles';
     S.mnuip.mathtraitcan ='Channel treatment...';
 
@@ -115,6 +116,7 @@ function varargout =langue_en(varargin)
     S.mnuip.ouechtempo ='Time scale';
     S.mnuip.ouechtempodefaut ='Return to the default scale';
     S.mnuip.ouimportpoint ='&Import point (Y vs X)';
+    S.mnuip.outrierpt ='Sort points scored';
     S.mnuip.oumark ='&Mark';
     S.mnuip.ouzoom ='Zoom';
     S.mnuip.ouaffichercoord ='Show coordinates';

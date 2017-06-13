@@ -48,7 +48,6 @@ function mnouvre(entrada, frecent)
       end
       % on finalise l'ouverture
       mnouvre2(hF, entrada);
-  
       if ~isempty(hF)
         if ~isempty(lastfich) && lastfich
           OA.Fic.lastfich =lastfich;

@@ -81,6 +81,7 @@ function varargout =langue_es(varargin)
     S.mnuip.mathmoyectyp ='Media y desviación estándar';
     S.mnuip.mathmoyectyp ='Moy./Ecart-type par catégorie';
     S.mnuip.mathmoyptmarq ='Media alrededor de los puntos marcados';
+    S.mnuip.mathpentedrtregr ='Pendiente de la línea de regresión';
     S.mnuip.mathcalcang ='Calcula el ángulo';
     S.mnuip.mathtraitcan ='Tratamiento de canal';
 
@@ -116,6 +117,7 @@ function varargout =langue_es(varargin)
     S.mnuip.ouechtempo ='Escala de tiempo';
     S.mnuip.ouechtempodefaut ='Retorno a la escala predeterminada';
     S.mnuip.ouimportpoint ='Importar puntos (Y vs X)';
+    S.mnuip.outrierpt ='Ordenar puntos anotados';
     S.mnuip.oumark ='Marcar';
     S.mnuip.ouzoom ='Zoom';
     S.mnuip.ouaffichercoord ='Mostrar coordenadas';

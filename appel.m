@@ -112,38 +112,41 @@ function appel(varargin)
     %_____________________________________________________________________________
     %------- MENU MATH *****
 
-    case 'filtre'                         % ButterWorth
+    case 'filtre'                        % ButterWorth
       filtreBW();
 
-    case 'sptoul'                         % Complément à SPTOOL
+    case 'sptoul'                        % Complément à SPTOOL
       fiFilt();
 
-    case 'derive'                         % Le même DIFFER que dans DATAC.DOS
+    case 'derive'                        % Le même DIFFER que dans DATAC.DOS
       fncDiffer();
 
-    case 'moindre'                        % Menu Polynomial-Fit
-      moindreCarre();                     % dérivé par la méthode des moindres carrés
+    case 'moindre'                       % Menu Polynomial-Fit
+      moindreCarre();                    % dérivé par la méthode des moindres carrés
 
-    case 'integr'                         % Intégrale définie
+    case 'integr'                        % Intégrale définie
       inteSuc(0,1);
 
-    case 'intcum'                         % Intégrale Cumulative
+    case 'intcum'                        % Intégrale Cumulative
       integCum();
 
-    case 'normalise'                      % Normalisation
+    case 'normalise'                     % Normalisation
       normalise();
 
-    case 'normaltemps'                    % Normalisation Temporelle
+    case 'normaltemps'                   % Normalisation Temporelle
       normTemporel();
 
-    case 'ellipse'                        % Ellipse de confiance
+    case 'ellipse'                       % Ellipse de confiance
       ellipse();
 
-    case 'moyectype'                      % Moyenne et Ecart-type par catégorie
+    case 'moyectype'                     % Moyenne et Ecart-type par catégorie
       essmoy();
 
     case 'moypoint'                      % Moyenne autour des points marqués
       hMoy =CMoyAutourPt();
+
+    case 'droiteregress'                 % Moyenne autour des points marqués
+      hMoy =CPenteDroiteReg();
 
     case 'angulo'                        % Calcul d'angle
   	  angulo();
@@ -225,6 +228,9 @@ function appel(varargin)
 
     case 'importpt'                    % importer des points
       V =CImportPoint();
+
+    case 'trierpt'                     % trier les points marqués
+      V =CTrierPt();
 
     case 'marquage'                    % Interface pour marquer automatiquement
       OM =CMark.getInstance();

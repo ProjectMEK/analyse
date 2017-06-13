@@ -103,7 +103,7 @@ classdef CModeXY < handle
     %--------------------
     function montrer(obj)
       hA =CAnalyse.getInstance();
-      obj.Fid.Vg.xy =1;
+      obj.Fid.Vg.xy =true;
       obj.cano.setString(obj.Fid.Hdchnl.Listadname);
       set(obj.Fig, 'Units','pixels', 'Position',hA.laPosXY, 'Units','normalized' , 'Visible','on');
       set(obj.IpmnuXy, 'checked','on');
@@ -116,7 +116,7 @@ classdef CModeXY < handle
     function cacher(obj)
       obj.AuRepos();
       hA =CAnalyse.getInstance();
-      obj.Fid.Vg.xy =0;
+      obj.Fid.Vg.xy =false;
       hA.OFig.affiche();
     end
 
@@ -126,7 +126,7 @@ classdef CModeXY < handle
     %--------------------
     function AuRepos(obj)
       hA =CAnalyse.getInstance();
-      set(obj.Fig, 'Units','pixels', 'Visible','off');
+      set(obj.Fig, 'units','pixels', 'visible','off');
       hA.laPosXY =get(obj.Fig, 'Position');
       set(obj.IpmnuXy, 'checked','off');
     end
@@ -397,10 +397,10 @@ classdef CModeXY < handle
       action =get(findobj('Tag','IpMarkX'),'value');
       if action
         set(findobj('Tag','IpMarkY'),'value',0);
-        obj.Fid.Vg.xymarkx =1;
+        obj.Fid.Vg.xymarkx =true;
       else
         set(findobj('Tag','IpMarkY'),'value',1);
-        obj.Fid.Vg.xymarkx =0;
+        obj.Fid.Vg.xymarkx =false;
       end
     end
 
@@ -414,10 +414,10 @@ classdef CModeXY < handle
       action =get(findobj('Tag','IpMarkY'),'value');
       if action
         set(findobj('Tag','IpMarkX'),'value',0);
-        obj.Fid.Vg.xymarkx=0;
+        obj.Fid.Vg.xymarkx=false;
       else
         set(findobj('Tag','IpMarkX'),'value',1);
-        obj.Fid.Vg.xymarkx=1;
+        obj.Fid.Vg.xymarkx=true;
       end
     end
 

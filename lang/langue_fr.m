@@ -80,6 +80,7 @@ function varargout =langue_fr(varargin)
     S.mnuip.mathellipsconf ='Ellipse de confiance';
     S.mnuip.mathmoyectyp ='Moy./Ecart-type par catégorie';
     S.mnuip.mathmoyptmarq ='Moyenne autour des points marqués';
+    S.mnuip.mathpentedrtregr ='Pente de la droite de régression';
     S.mnuip.mathcalcang ='Calcul d''angle';
     S.mnuip.mathtraitcan ='Traitement de canal';
 
@@ -115,6 +116,7 @@ function varargout =langue_fr(varargin)
     S.mnuip.ouechtempo ='Échelle &temporelle';
     S.mnuip.ouechtempodefaut ='Retour à la normale';
     S.mnuip.ouimportpoint ='&Importer point (Y vs X)';
+    S.mnuip.outrierpt ='Trier les points marqués';
     S.mnuip.oumark ='&Marquer';
     S.mnuip.ouzoom ='Zoom';
     S.mnuip.ouaffichercoord ='Afficher les Coordonnées';

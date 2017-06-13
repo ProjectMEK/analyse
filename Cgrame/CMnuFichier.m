@@ -13,9 +13,10 @@ classdef CMnuFichier < handle
 
   methods
 
-    %------------
+    %-----------------------------------------------------
     % CONSTRUCTOR
-    %----------------------------
+    % En entrée, hF --> on attend un objet CFichierAnalyse
+    %-----------------------------------------------------
     function tO =CMnuFichier(hF)
       try
 
@@ -51,7 +52,9 @@ classdef CMnuFichier < handle
       try
         OA =CAnalyse.getInstance();
         lastfich =OA.Fic.curfich;
-        if tO.Hfid ~= OA.Fic.hfich{lastfich}
+
+        N =length(tO.Hfid.Info.finame);
+        if ~strncmp(tO.Hfid.Info.finame, OA.Fic.hfich{lastfich}.Info.finame, N)
           OA.Fic.lastfich =lastfich;
           OA.AuSuivant();
         end

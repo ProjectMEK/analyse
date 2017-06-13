@@ -19,9 +19,14 @@ function guiToul(varargin)
     %-------------------------
     % Toggle la valeur du zoom
     %-------------------------
-
-    vg.zoomonoff =CEOnOff(~vg.zoomonoff);
-    afficheZoom(vg.zoomonoff);
+    try
+      OZoom =CEOnOff(~vg.zoomonoff);
+      vg.zoomonoff =(OZoom == true);
+      afficheZoom(vg.zoomonoff, OA);
+    catch moo;
+      CQueEsEsteError.dispOct(moo);
+      rethrow(moo);
+    end
 
   case 'outil_point'
     %---------------------------------------------------
@@ -568,14 +573,15 @@ function guiToul(varargin)
     end
     delete(dtX);
     delete(dtY);
-    afficheZoom(vg.zoomonoff);
+    afficheZoom(vg.zoomonoff, OA);
     OA.OFig.affiche();
   %----------------------------
   % Affiche un "cursorbar" pour
   % voir les coordonnées X-Y
   %------------------
   case 'affichecoord'
-    vg.affcoord =CEOnOff(~vg.affcoord);
+    foo =CEOnOff(~vg.affcoord);
+    vg.affcoord =(foo==false);
     afficheCoord(OA, vg.affcoord);
   %-----------------
   case 'permutation'
@@ -659,33 +665,60 @@ end
 %
 % Applique la valeur "valZoom" à la propriété zoom de la fenêtre courante.
 %
-function afficheZoom(valZoom)
+function afficheZoom(valZoom, Oa)
+  try
     pp =CEOnOff(valZoom);
-    ss =zoom(gcf);
-    set(ss,'enable',char(pp));
-    set(findobj('tag','IpmnuZoom'),'checked',char(pp));
+    pptxt =char(pp);
+
+    % on va rechercher le handle de la figure à partir de celui de l'axe courant
+    mafig =get(Oa.OFig.Lax, 'parent');
+    while ~strncmpi(get(mafig,'type'), 'figure', 6)
+      mafig =get(mafig, 'parent');
+    end
+
+    if Oa.OPG.matlab
+      % on travaille sous Matlab
+      ss =zoom(mafig);
+      set(ss,'enable',pptxt);
+    else
+      % on travaille sous Octave
+
+      zoom(mafig, pptxt);
+    end
+    set(findobj('tag','IpmnuZoom'),'checked',pptxt);
+
+  catch moo;
+    CQueEsEsteError.dispOct(moo);
+    throw(moo);
+  end
 end
 
 %
 % Affiche un "cursorbar" pour voir les coordonnées X-Y
 %
 function afficheCoord(hDess, V)
-  f =hDess.OFig.haffcoord;
-  pp =CEOnOff(V);
-  set(findobj('tag','IpmnuCoord'),'checked',char(V));
-  % si le cursorbar existe ou n'a pas été détruit
-  % CDessine le supprimera. En attendant on le cache.
-  if isa(f, 'CAfficheCoord')
-    f.cache();
-  end
-  if V 
+  try
+    f =hDess.OFig.haffcoord;
+    pp =CEOnOff(V);
+    set(findobj('tag','IpmnuCoord'),'checked',char(pp));
+    % si le cursorbar existe ou n'a pas été détruit
+    % CDessine le supprimera. En attendant on le cache.
     if isa(f, 'CAfficheCoord')
-      if f.montre()
+      f.cache();
+    end
+    if V 
+      if isa(f, 'CAfficheCoord')
+        if f.montre()
+          hDess.OFig.haffcoord =CAfficheCoord();
+        end
+      else
         hDess.OFig.haffcoord =CAfficheCoord();
       end
-    else
-      hDess.OFig.haffcoord =CAfficheCoord();
     end
+
+  catch moo;
+    CQueEsEsteError.dispOct(moo);
+    throw(moo);
   end
 end
 

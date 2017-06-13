@@ -9,9 +9,9 @@
 %
 function GUIAnalyse(Ppa)
 
-  %_____________________________________________________________________________
-  %on lit la structure contenant le texte à afficher selon le choix de la langue
-  %-----------------------------------------------------------------------------
+  %______________________________________________________________________________
+  % on lit la structure contenant le texte à afficher selon le choix de la langue
+  %------------------------------------------------------------------------------
   ML =CGuiMLAnalyse();
 
   % handle de l'objet principal de l'application
@@ -141,6 +141,13 @@ function GUIAnalyse(Ppa)
             'Position',[posx posy largeur hauteur], ...
             'Style','popupmenu',...
             'String','autom.|barrer|manuel');
+
+  % bouton pour l'activation/désactivation du zoom
+  largeur=0.02; posx=1-largeur-espd;
+  lesMOTS =sprintf('Sert à montrer si l''affichage est en travail:\n\tVert\t--> l''affichage est terminée\n\tRouge\t--> patientez, affichage en cours');
+  fui =uicontrol('Parent',lepan, 'tag','IpFrameEnAffichage', 'TooltipString',lesMOTS,...
+                 'Position',[posx posy largeur hauteur], 'string','!');
+  Ppa.statusaff =fui;
 
   %**********************************
   % FENÊTRE POUR AFFICHER LES COURBES

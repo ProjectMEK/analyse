@@ -41,12 +41,13 @@
 classdef (Sealed) CAnalyse < handle
 
   properties
-    couleur =[];
-    Fic =[];
-    Vg =[];
+    couleur =[];          % cellule contenant l'ordre des couleurs pour l'affichage de courbes
+    Fic =[];              % handle sur un objet CFic()
+    Vg =[];               % handle sur un objet CVgBase()
     laPosXY =[];
     Hautaxe =[];          % hauteur initial de l'axe
     OFig =[];             % Handle de l'object CDessine
+    OPG =[];              % handle sur l'objet CParamGlobal()
   end  %properties
 
   methods (Access =private)
@@ -56,12 +57,14 @@ classdef (Sealed) CAnalyse < handle
     %--------------------
     function tO =CAnalyse
       try
+        tO.OPG =CParamGlobal.getInstance();
         tO.Fic =CFic();
         tO.Fic.pref =CPref();
         tO.Vg =CVgBase();
         tO.couleur{1} =['b-';'k-';'r-';'g-';'c-';'m-';'y-';'b:';'k:';'c:';'r:';'g:';'m:';'y:'];
         tO.couleur{2} =['+b-';'+k-';'+r-';'+g-';'+c-';'+m-';'+y-';'+b:';'+k:';'+c:';'+r:';'+g:';'+m:';'+y:'];
       catch K;
+        CQueEsEsteError.dispOct(K);
         rethrow(K);
       end
     end
