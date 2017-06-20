@@ -6,10 +6,13 @@
 %
 function varargout = GuiPenteDroiteReg(Ppa)
 
+    % appel les menus multi-lingues
+    hL =CGuiMLMoyPenteTrie();
+
     % création de la figure
     Lfen=450; Hfen=500;
     lapos =positionfen('G', 'H', Lfen, Hfen);
-    fig =figure('Name', 'MENU PENTE ENTRE DEUX POINTS', ...
+    fig =figure('Name', hL.name2, ...
             'Position',lapos, 'CloseRequestFcn',@Ppa.fermer,...
             'DefaultUIControlBackgroundColor',[0.8 0.8 0.8],...
             'DefaultUIControlunits','pixels',...
@@ -21,13 +24,13 @@ function varargout = GuiPenteDroiteReg(Ppa)
     ddy=10; dy=2*ddy; posy=Hfen-45; Htext=22; haut=Htext;
     uicontrol('Parent',fig, 'FontWeight','bold',...
             'Position',[posx posy large haut], ...
-            'String','Choix du/des canal/aux', ...
+            'String',hL.selcan, ...
             'Style','text');
 
     % titre pour le choix des essais
     uicontrol('Parent',fig, 'FontWeight','bold',...
             'Position',[posx+large posy large haut], ...
-            'String','Choix du/des essais:', ...
+            'String',hL.seless, ...
             'Style','text');
 
     % listbox pour le choix des canaux
@@ -51,41 +54,39 @@ function varargout = GuiPenteDroiteReg(Ppa)
     haut=Htext; posy=posy-haut;
     uicontrol('Parent',fig, 'Tag','CBchoixEss', ...
             'Position',[posx+large posy large haut], ...
-            'String','tous les essais', 'Style','checkbox', ...
+            'String',hL.toutess, 'Style','checkbox', ...
             'Value',0, 'Callback',@Ppa.tous);
 
     % titre fenêtre de travail
     large=largstd+2*mx; posy =posy-haut-dy; retoury=posy;
     uicontrol('Parent',fig, 'FontWeight','bold', 'Style','text', ...
-            'Position',[posx posy large haut], 'String','Fenêtre de travail');
+            'Position',[posx posy large haut], 'String',hL.fentrav);
 
     % fenêtre de travail (début)
     posx=posx+round(large/2); large=round(large/3); posx=posx-large; posy=posy-haut; retourx=posx;
-    quoi=sprintf('p0 ou pi --> premier échantillon\npf --> dernier échantillon\np1 p2 p... --> point marqué');
     uicontrol('Parent',fig, 'Tag','EDfenTravDebut', 'FontSize',11, 'Style','edit', ...
-            'Position',[posx posy-corry large haut+corry], 'String','p0', 'TooltipString',quoi);
+            'Position',[posx posy-corry large haut+corry], 'String','p0', 'TooltipString',hL.fentravtip2);
 
     % fenêtre de travail (fin)
     uicontrol('Parent',fig, 'Tag','EDfenTravFin', 'FontSize',11, 'Style','edit', ...
-            'Position',[posx+large posy-corry large haut+corry], 'String','pf', 'TooltipString',quoi);
+            'Position',[posx+large posy-corry large haut+corry], 'String','pf', 'TooltipString',hL.fentravtip2);
 
     % titre valeur à négliger
     posx=posx+2*large+2*mx; large=largstd-50; posy=retoury;
     uicontrol('Parent',fig, 'FontWeight','bold', 'Style','text', ...
-            'Position',[posx posy 2*large haut], 'String','Valeur à négliger');
+            'Position',[posx posy 2*large haut], 'String',hL.valneg);
 
     % nombre d'échantillon ou de secondes à garder avant et après
-    quoi=sprintf('Valeur numérique pour modifier la plage utile --> [(1er point + Valeur) jusqu''à (2ième point - Valeur)]');
     posy=posy-haut;
     uicontrol('Parent',fig, 'Tag','EDnombreAvantApres', 'FontSize',11,...
             'Position',[posx posy-corry large haut+corry], 'String','0', 'Style','edit', ...
-            'TooltipString',quoi);
+            'TooltipString',hL.valnegtip);
 
     % type d'unité, échantillon ou seconde
     posx =posx+large; large=large+50;
     uicontrol('Parent',fig, 'Tag','PMchoixUnit', 'FontSize',11, ...
             'Position',[posx posy large haut], 'Style','popupmenu', ...
-            'String',{'échantillons','secondes'}, 'Value',1);
+            'String',hL.tipunit, 'Value',1);
 
     % popupmenu pour le type de pairage des points
     posy=posy-haut-ddy; posx=retourx; large=largstd+25;
@@ -98,17 +99,16 @@ function varargout = GuiPenteDroiteReg(Ppa)
     % titre "séparateurs"
     large=largstd; posx=round((Lfen-large)/2); posy =posy-haut-2*dy;
     uicontrol('Parent',fig, 'FontWeight','bold', 'Position',[posx posy large haut], ...
-            'String','Séparateur:', 'Style','text');
+            'String',hL.lesep, 'Style','text');
 
     % popupmenu pour le choix du "séparateur"
-    separa ={'virgule','point virgule','Tab'};
     uicontrol('Parent',fig, 'Tag','PMchoixSep', 'FontSize',11, 'Style','popupmenu', ...
-            'Position',[posx posy-haut large haut], 'String',separa, 'Value',1);
+            'Position',[posx posy-haut large haut], 'String',hL.selsep, 'Value',1);
 
     % bouton au travail
     large=85; posx=round((Lfen-large)/2); haut=Htext; posy=posy-haut-5*ddy;
     uicontrol('Parent',fig, 'Callback',@Ppa.travail, ...
-            'Position',[posx posy large haut], 'String','Au travail');
+            'Position',[posx posy large haut], 'String',hL.maw);
 
     % info sommaire au bas de la fenêtre
     posy=posy-haut-dy;
@@ -116,7 +116,7 @@ function varargout = GuiPenteDroiteReg(Ppa)
             'String','-------------------------------------------------------------------------------------');
     posx=mx; large=Lfen-2*posx; haut=2*Htext; posy=posy-haut-5;
     uicontrol('Parent',fig, 'FontSize',9, 'Position',[posx posy large haut], 'Style','text', ...
-            'String','Le calcul de la pente sera effectué selon la fenêtre de travail fournie et le "pairage de point" demandé. La valeur à négliger réduira la plage de travail à droite du premier point et à gauche du second.');
+              'String',hL.info2);
 
     set(fig,'WindowStyle','modal');
 

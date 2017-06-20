@@ -94,8 +94,12 @@ classdef (Sealed) CAnalyse < handle
     % DESTRUCTOR
     %------------------
     function delete(tO)
+      delete(tO.OPG);
+      tO.OPG =[];
       delete(tO.Fic);
+      tO.Fic =[];
       delete(tO.Vg);
+      tO.Vg =[];
       if ~isempty(tO.OFig)
         delete(tO.OFig);
       end

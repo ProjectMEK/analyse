@@ -87,15 +87,18 @@ classdef CTrierPt < handle
     %-------------------------------------------
     function travail(tO, varargin)
 
+      % appel les menus multi-lingues
+      hL =CGuiMLMoyPenteTrie();
       % On ouvre une waitbar "modal" pour montrer où on est rendu et en plus on
       % barre l'accès au GUI pour ne pas le modifier pendant le traitement.
-      tO.wb =laWaitbarModal(0,'Moyennage en cours', 'G', 'C');
+      tO.wb =laWaitbarModal(0,hL.wbar3, 'G', 'C');
   
       % Lecture des paramètres du GUI
       tO.lireLeGUI();
+      waitbar(0.1,tO.wb);
   
       % appel de la fonction qui va faire le vrai travail
-      oK =tO.faireLeTrie();
+      oK =tO.faireLeTrie(hL);
 
       if oK
         % on ferme proprement la figure.
@@ -105,6 +108,9 @@ classdef CTrierPt < handle
       % on ferme proprement le waitbar.
       close(tO.wb);
       tO.wb =[];
+      % on ré-affiche
+      OA =CAnalyse.getInstance();
+      OA.OFig.affiche();
     end
 
     %---------------------------------------
@@ -124,29 +130,56 @@ classdef CTrierPt < handle
       tO.finfentrav =get(findobj('Tag','EDfenTravFin'), 'String');
     end
 
-    %------------------------------------------------------------------
-    % Tous les paramètres sont maintenant connus, on procède au travail
+    %---------------------------------------------------------------
+    % Tous les paramètres doivent être connus, on procède au travail
     % en fonction des choix fait dans le GUI.
-    %------------------------------------------------------------------
-    function fini = faireLeTrie(tO)
+    % En entrée, hL est le handle d'un objet CGuiMLMoyPenteTrie pour
+    % l'affichage multi-lingue.
+    %---------------------------------------------------------------
+    function fini = faireLeTrie(tO,hL)
 
       % si il n'y a pas d'erreur, on retourne true
       fini =true;
+      % calcul de l'incrément pour la waitbar
+      incr =0.9/(tO.Ncan*tO.Ness);
+      cur =0.1;
 
       for U =1:tO.Ncan
 
         for V =1:tO.Ness
 
           % on détermine les bornes entre lesquelles il faut moyenner
-          [debut,fin] =tO.quelPoints(tO.can(U), tO.ess(V));
-          fin =tO.ptchnl.valeurDePoint(tO.finfentrav, tO.can(U), tO.ess(V));
-          % vérification de l'ordre croissant entre debut et fin
-          if fin < debut
-          	foo =debut;
-          	debut =fin;
-          	fin =foo;
+          PF =tO.hdchnl.npoints(tO.can(U), tO.ess(V));
+          if PF < 2
+            pasbon =sprintf('%s %s(%i) %s(%i)' ,hL.m2pt,hL.lecan,tO.can(U),hL.less,tO.ess(V));
+            disp(pasbon);
+            continue;
           end
-          tO.ptchnl.OnTrie(tO.can(U), tO.ess(V));
+          debut =numeroPoint(tO.debfentrav,PF);
+          if isempty(debut)
+            pasbon =sprintf(['%s (%s) %s(%i) %s(%i)'], hL.errsyn, ...
+                    tO.debfentrav,hL.lecan,tO.can(U),hL.less,tO.ess(V));
+            disp(pasbon);
+            fini =false;
+            continue;
+          end
+          fin =numeroPoint(tO.finfentrav,PF);
+          if isempty(fin)
+            pasbon =sprintf(['%s (%s) %s(%i) %s(%i)'], hL.errsyn,...
+                    tO.finfentrav,hL.lecan,tO.can(U),hL.less,tO.ess(V));
+            disp(pasbon);
+            fini =false;
+            continue;
+          end
+          % vérification de l'ordre croissant entre debut et fin
+          lemode ='ascend';
+          if fin < debut
+            lemode ='descend';
+          end
+          tO.ptchnl.trierPoints(tO.can(U),tO.ess(V), debut,fin,lemode);
+          % affichage dans la waitbar
+          waitbar(cur,tO.wb);
+          cur =cur+incr;
 
         end
       end

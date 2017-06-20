@@ -7,7 +7,7 @@
 %
 % Copyrigth 1998 à 2017
 %   Auteur principal: Marcel Étienne Kaszap
-%   ont participé en apportant des idées, du code et/ou de l'argent
+%   ont participé en apportant des idées, du code et/ou du financement (pour la main d'oeuvre)
 %     Normand Teasdale, Laboratoire GRAME, dépt. Kinésiologie, U. Laval
 %     Martin Simoneau, Laboratoire GRAME, dépt. Kinésiologie, U. Laval
 %     Olivier Martin, GIPSA-Lab, Grenoble et enseignant à l'UFR STAPS.
@@ -62,7 +62,7 @@ function analyse(varargin)
       % création de l'instance unique de l'application
       hA =CAnalyse.getInstance();
       % comme paramètres, on lui passe le numéro de version en format numérique et en texte
-      hA.initial(8.0229, '8.02.29');
+      hA.initial(8.0230, '8.02.30');
       % lecture du fichier des préférences (Cette fonction est inclus dans ce mfile)
       tmp =LeerParam(FF);
       hA.initLesPreferencias(tmp);
@@ -77,8 +77,12 @@ function analyse(varargin)
   % Fonctionne bien, ferme et redémarre Analyse
   %-----------------------------------------------
   case 'arcommence'
-  	analyse('terminus');
-  	analyse();
+  	try
+      analyse('terminus');
+  	  analyse();
+  	catch fuu
+  	  parleMoiDe(fuu);
+  	end
 
   %--------------
   case 'terminus'
@@ -101,6 +105,7 @@ function analyse(varargin)
         delete(wmfig);
       end
       delete(OA);
+      pause(0.25);
       clear java;
       clear all;
       warning('on','all');
@@ -124,7 +129,7 @@ function sauveLesPref(OAn, leFich)
     la_pos =get(OAn.OFig.fig,'position');
     diablo.param =OAn.Vg.affiche;
     diablo.param(2:5,1) =la_pos';
-    cd(OAn.Fic.basedir);
+%    cd(OAn.Fic.basedir);
     save(leFich, 'diablo', '-v6');
   else
     fid =fopen(leFich, 'r');

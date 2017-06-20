@@ -97,17 +97,19 @@ classdef CPenteDroiteReg < handle
     %-----------------------------
     function travail(tO, varargin)
 
+      % appel les menus multi-lingues
+      hL =CGuiMLMoyPenteTrie();
       % On ouvre une waitbar "modal" pour montrer où on est rendu et en plus on
       % barre l'accès au GUI pour ne pas le modifier pendant le traitement.
-      tO.wb =laWaitbarModal(0,'Calcul en cours', 'G', 'C');
+      tO.wb =laWaitbarModal(0,hL.wbar2, 'G', 'C');
   
       % choisi le fichier pour l'écriture des pentes
       try
-        [fichtxt,lieu] =uiputfile('*.*','Résultat des Pentes');
+        [fichtxt,lieu] =uiputfile('*.*',hL.putfich2);
         pcourant =pwd;
         cd(lieu);
       catch
-        disp('Erreur dans le fichier de sortie.');
+        disp(hL.errfich);
         close(tO.wb);
         tO.wb =[];
         return;
@@ -115,12 +117,13 @@ classdef CPenteDroiteReg < handle
   
       % Lecture des paramètres du GUI
       tO.lireLeGUI();
-  
+
       % ouverture du fichier en écriture
       tO.fid =fopen(fichtxt,'w');
+      waitbar(0.1,tO.wb);
   
       % appel de la fonction qui va faire le vrai travail
-      tO.calculerPente();
+      tO.calculerPente(hL);
 
       % on ajoute un saut de ligne au fichier
       fprintf(tO.fid, '\n');
@@ -165,23 +168,25 @@ classdef CPenteDroiteReg < handle
     %------------------------------------------------------------------
     % Tous les paramètres sont maintenant connus, on procède au travail
     % en fonction des choix fait dans le GUI.
+    % En entrée, hL est le handle d'un objet CGuiMLMoyPenteTrie pour
+    % l'affichage multi-lingue.
     %------------------------------------------------------------------
-    function calculerPente(tO)
+    function calculerPente(tO,hL)
       % Pour écrire dans le fichier, on va faire tous les calculs de pente,
       %  puis, on va procéder dans un ordre établi.
 
       % Ligne d'entête générale
-      fprintf(tO.fid, 'Fichier d''origine: %s\n\nLégende des canaux\n', tO.ofich.Info.finame);
+      fprintf(tO.fid, '%s: %s\n%s\n', hL.fichori,tO.ofich.Info.finame,hL.legcan);
       % on écrit la "légende des noms de canaux"
       for U =1:tO.Ncan
         fprintf(tO.fid, '  C%i --> %s\n', tO.can(U), tO.hdchnl.adname{tO.can(U)});
       end
     	% on écrit les bornes dans le fichier
-    	lesU ={'échantillons','secondes'};
-    	fprintf(tO.fid, '\nFenêtre de travail: [ %s --- %s ]\nValeur à négliger: %0.2f %s\n\n', ...
-    	        tO.debfentrav, tO.finfentrav, tO.av_ap, lesU{tO.unit});
+    	lesU =hL.tipunit;
+    	fprintf(tO.fid, '\n%s: [ %s --- %s ]\n%s: %0.2f %s\n\n', ...
+    	        hL.fentrav,tO.debfentrav,tO.finfentrav,hL.vnegli,tO.av_ap, lesU{tO.unit});
       % on prépare la ligne de titre qui va contenir le numéro d'essai, (canal et point)
-      letitre ='Essai';
+      letitre =hL.titess;
       % Dans tous les cas, on va bâtir une matrice contenant les pentes calculées
       % PENT(i, j, k) = pente du [(point i à i+1) (canal j) (essais k)]
       % puis, on va écrire les résultats dans le fichier.
@@ -203,6 +208,9 @@ classdef CPenteDroiteReg < handle
       %     2,...
       %
 
+      % calcul de l'incrément pour la waitbar
+      incr =0.9/(tO.Ncan*tO.Ness);
+      curwb =0.1;
       % objet de la classe CDtchnl pour manipuler les datas des canaux/essais
       Dt =CDtchnl();
 
@@ -287,13 +295,16 @@ classdef CPenteDroiteReg < handle
               end
               cur =cur+croiser;
             end
+            % affichage dans la waitbar
+            waitbar(curwb,tO.wb);
+            curwb =curwb+incr;
           end
         end
 
       case 3
         % on a choisi: Calculer une seule pente à partir de la fenêtre de travail
 
-        fprintf(tO.fid, 'La pente est calculée sur l''espace défini ci-haut\n\n');
+        fprintf(tO.fid, '%s\n\n', hL.penfait);
         % nombre de pente à calculer par canal/essai
         Npt =1;
         % matrice des pentes
@@ -333,6 +344,9 @@ classdef CPenteDroiteReg < handle
               poo =polyfit(temps, Dt.Dato.(Dt.Nom)(debut:fin, tO.ess(V)), 1);
               PENT(1, U, V) =poo(1);
             end
+            % affichage dans la waitbar
+            waitbar(curwb,tO.wb);
+            curwb =curwb+incr;
           end  % essais
         end  % canaux
 

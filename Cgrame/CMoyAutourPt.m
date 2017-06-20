@@ -110,17 +110,19 @@ classdef CMoyAutourPt < handle
     %-----------------------------
     function travail(tO, varargin)
 
+      % appel les menus multi-lingues
+      hL =CGuiMLMoyPenteTrie();
       % On ouvre une waitbar "modal" pour montrer où on est rendu et en plus on
       % barre l'accès au GUI pour ne pas le modifier pendant le traitement.
-      tO.wb =laWaitbarModal(0,'Moyennage en cours', 'G', 'C');
+      tO.wb =laWaitbarModal(0,hL.wbar1, 'G', 'C');
   
       % choisi le fichier pour l'écriture des moyennes
       try
-        [fichtxt,lieu] =uiputfile('*.*','Résultat des Moyennes');
+        [fichtxt,lieu] =uiputfile('*.*',hL.putfich1);
         pcourant =pwd;
         cd(lieu);
       catch
-        disp('Erreur dans le fichier de sortie.');
+        disp(hL.errfich);
         close(tO.wb);
         tO.wb =[];
         return;
@@ -131,9 +133,10 @@ classdef CMoyAutourPt < handle
   
       % ouverture du fichier en écriture
       tO.fid =fopen(fichtxt,'w');
+      waitbar(0.1,tO.wb);
   
       % appel de la fonction qui va faire le vrai travail
-      tO.faireMoyenne();
+      tO.faireMoyenne(hL);
 
       % on ajoute un saut de ligne au fichier
       fprintf(tO.fid, '\n');
@@ -182,13 +185,15 @@ classdef CMoyAutourPt < handle
     %------------------------------------------------------------------
     % Tous les paramètres sont maintenant connus, on procède au travail
     % en fonction des choix fait dans le GUI.
+    % En entrée, hL est le handle d'un objet CGuiMLMoyPenteTrie pour
+    % l'affichage multi-lingue.
     %------------------------------------------------------------------
-    function faireMoyenne(tO)
+    function faireMoyenne(tO,hL)
       % Pour écrire dans le fichier, on va faire toutes les moyennes, puis,
       % on va procéder dans un ordre établi.
 
       % Ligne d'entête générale
-      fprintf(tO.fid, 'Fichier d''origine: %s\nLégende des canaux\n', tO.ofich.Info.finame);
+      fprintf(tO.fid, '%s: %s\n%s\n', hL.fichori,tO.ofich.Info.finame,hL.legcan);
 
       % on écrit la "légende des noms de canaux"
       for U =1:tO.Ncan
@@ -196,10 +201,13 @@ classdef CMoyAutourPt < handle
       end
 
     	% on écrit les bornes dans le fichier
-    	fprintf(tO.fid, '\n\nFenêtre de travail, entre %s et %s\n\n', tO.debfentrav, tO.finfentrav);
+    	fprintf(tO.fid, '\n\n%s, [%s --- %s]\n\n', hL.fentrav,tO.debfentrav,tO.finfentrav);
 
       % on prépare la ligne de titre qui va contenir le numéro de canal et de point
-      letitre ='Essai';
+      letitre =hL.titess;
+      % calcul de l'incrément pour la waitbar
+      incr =0.9/(tO.Ncan*tO.Ness);
+      curwb =0.1;
 
       %
       % Dans les deux cas, on va bâtir une matrice contenant les moyennes calculées
@@ -227,8 +235,7 @@ classdef CMoyAutourPt < handle
         % on a choisi le moyennage autour des points marqués
 
       	% on écrit les paramètres "delta-T" pour le calcul autour des points
-      	typ_unit ={'échantillons', 'secondes'};
-      	fprintf(tO.fid, 'La moyenne a été faite sur +/- %g %s autour du point\n\n', tO.av_ap, typ_unit{tO.unit});
+      	fprintf(tO.fid, '%s +/- %g %s %s\n\n', hL.moyfait1,tO.av_ap, hL.tipunit{tO.unit},hL.autpt);
 
       	% si on a choisi "échantillons", ça ne varie pas
       	delta =ones(tO.Ncan, tO.Ness)*tO.av_ap;
@@ -287,12 +294,15 @@ classdef CMoyAutourPt < handle
               % on calcule la moyenne entre ces bornes
               MOY(P, U, V) =mean(Dt.Dato.(Dt.Nom)(Ti:Tf, tO.ess(V)));
             end
+            % affichage dans la waitbar
+            waitbar(curwb,tO.wb);
+            curwb =curwb+incr;
           end
         end
 
       else
       	% on a choisi le moyennage entre deux bornes
-        fprintf(tO.fid, 'La moyenne est faite sur l''espace défini ci-haut\n\n');
+        fprintf(tO.fid, '%s\n\n', hL.moyfait2);
 
         Npt =1;                               % nombre de moyenne à calculer par canal/essai
         MOY =zeros(Npt, tO.Ncan, tO.Ness);    % matrice des moyennes
@@ -320,6 +330,9 @@ classdef CMoyAutourPt < handle
 
             % on calcule la moyenne entre ces bornes
             MOY(1, U, V) =mean(Dt.Dato.(Dt.Nom)(debut:fin, tO.ess(V)));
+            % affichage dans la waitbar
+            waitbar(curwb,tO.wb);
+            curwb =curwb+incr;
           end
         end
 

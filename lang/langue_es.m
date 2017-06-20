@@ -80,7 +80,7 @@ function varargout =langue_es(varargin)
     S.mnuip.mathellipsconf ='Confianza elipse';
     S.mnuip.mathmoyectyp ='Media y desviación estándar';
     S.mnuip.mathmoyectyp ='Moy./Ecart-type par catégorie';
-    S.mnuip.mathmoyptmarq ='Media alrededor de los puntos marcados';
+    S.mnuip.mathmoyptmarq ='Promedio alrededor de los puntos marcados';
     S.mnuip.mathpentedrtregr ='Pendiente de la línea de regresión';
     S.mnuip.mathcalcang ='Calcula el ángulo';
     S.mnuip.mathtraitcan ='Tratamiento de canal';
@@ -244,6 +244,61 @@ function varargout =langue_es(varargin)
     S.guipref.onstat ='Introduzca sus preferencias por fin de mejorar su sesión de trabajo';
 
     S.guipref.btapplic ='Aplicar';
+
+    %___________________________________________________________________________
+    % Variable guimoypentri
+    % GUI POUR MOYENNE/PENTE/TRIER POINTS
+    %---------------------------------------------------------------------------
+    S.guimoypentri.name1 ='MENÚ PROMEDIO DE ALREDEDOR DE ...';
+    S.guimoypentri.name2 ='MENÚ DE PENDIENTE ENTRE DOS PUNTOS';
+    S.guimoypentri.name3 ='MENÚ DE ORDENAR PUNTOS ...';
+
+    S.guimoypentri.selcan ='Selección canales';
+    S.guimoypentri.seless ='Selección ensayos';
+    S.guimoypentri.toutess ='Todos los ensayos';
+
+    S.guimoypentri.lesep ='Separador:';
+    S.guimoypentri.selsep ={'coma','punto y coma','Tab'};
+
+    S.guimoypentri.fentrav ='ventana de trabajo';
+    S.guimoypentri.rangtrav ='Gama de puntos a ordenar';
+    S.guimoypentri.fentravtip1 =sprintf('valor numérico -> Tiempo\n\nP0 o Pi -> primera muestra\nPF -> última muestra\np1 p2 p3 ... -> punto marcado');
+    S.guimoypentri.fentravtip2 =sprintf('p0 o pi --> primera muestra\npf --> última muestra\np1 p2 p3 ... --> punto marcado');
+    S.guimoypentri.rangtravtip =sprintf('P0, Pi, P1 --> primero punto\nPf o end --> último punto\nP1 P2 P3 ... --> punto marcado');
+
+    S.guimoypentri.autpts ='Alrededor de los puntos';
+    S.guimoypentri.autpttip =sprintf('valor numérico para indicar la medida antes y después\ndel punto a tener en cuenta a la media');
+    S.guimoypentri.valneg ='Valor por ignorar';
+    S.guimoypentri.valnegtip =sprintf('Valor numérico para cambiar el rango útil -> [(Primero punto + Valor) hasta (segundo punto - Valor)]');
+    S.guimoypentri.tipunit ={'Muestras','segundos'};
+    S.guimoypentri.maw =auTravail;
+
+    S.guimoypentri.info1 ='Por defecto, si no la marca "Alrededor de los puntos", el promedio será de unos valores entre los dos terminales de la ventana de trabajo / si es marcado / haremos el promedio de alrededor de los puntos anotados.';
+    S.guimoypentri.info2 ='El cálculo de la pendiente se llevará a cabo de acuerdo con la ventana de trabajo proporcionado y el "punto de emparejamiento" solicitada. El valor por ignorar reducirá el margen de trabajo: a la derecha del primer punto y a la izquierda del segundo.';
+    S.guimoypentri.info3 ='Para ordenar en orden ascendente, se escribe: [P1 Pf]. Y en orden descendente: [Pf P1]. Del mismo modo, para ordenar el último 5: [end-4 end]';
+
+    % Partie Au Travail
+    S.guimoypentri.wbar1 ='Promediando';
+    S.guimoypentri.wbar2 ='Cálculando';
+    S.guimoypentri.wbar3 ='Ordenando puntos';
+
+    S.guimoypentri.putfich1 ='Resultado de los promedios';
+    S.guimoypentri.putfich2 ='Resultado de las Pendientes';
+    S.guimoypentri.errfich ='Error en el archivo de salida.';
+
+    S.guimoypentri.fichori ='Archivo original';
+    S.guimoypentri.legcan ='Leyenda canales';
+    S.guimoypentri.vnegli =S.guimoypentri.valneg;
+    S.guimoypentri.moyfait1 ='El promedio fue hecha de';
+    S.guimoypentri.moyfait2 ='El promedio se hace del espacio definido por arriba';
+    S.guimoypentri.autpt ='alrededor del punto';
+    S.guimoypentri.penfait ='La pendiente se hace del espacio definido por arriba';
+    S.guimoypentri.titess ='Ensayo';
+
+    S.guimoypentri.m2pt ='A menos de 2 puntos, no clasificación';
+    S.guimoypentri.errsyn ='Error en la sintaxis de "Gama de puntos a ordenar"';
+    S.guimoypentri.lecan ='para el canal';
+    S.guimoypentri.less ='y el ensayo';
 
     %___________________________________________________________________________
     % Variable guitretcan
