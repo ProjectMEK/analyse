@@ -89,10 +89,10 @@ classdef CMenuMLIp < CBaseStringGUI
 
     %fplt
     fplt ='&FPlt';
-    fpltcop ='Centre de Pression(COP) AMTI';
+    fpltcop ='Centre de Pression(COP) et COG AMTI';
     fpltcopparammanuel ='Entrée des param manuelle';
     fpltcopparamfichier ='Entrée des param par fichier';
-    fpltcopoptima ='Centre de Pression(COP) OPTIMA';
+    fpltcopoptima ='COP et COG OPTIMA';
     fpltstat4cop ='Stat-4-COP';
 
     %trajectoire

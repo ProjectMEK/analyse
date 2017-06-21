@@ -96,10 +96,10 @@ function varargout =langue_en(varargin)
     S.mnuip.emgdistprbampl ='&Amplitude probability distribution';
 
     S.mnuip.fplt ='&FPlt';
-    S.mnuip.fpltcop ='Center of Pressure (COP)';
+    S.mnuip.fpltcop ='Center of Pressure (COP) and COG AMTI';
     S.mnuip.fpltcopparammanuel ='Manual entering settings';
     S.mnuip.fpltcopparamfichier ='entering settings from a file';
-    S.mnuip.fpltcopoptima ='Center of Pressure (COP) Optima';
+    S.mnuip.fpltcopoptima ='COP and COG Optima';
     S.mnuip.fpltstat4cop ='Stat-4-COP';
 
     S.mnuip.trajet ='T&rajectory';

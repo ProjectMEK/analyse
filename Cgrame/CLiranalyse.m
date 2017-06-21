@@ -21,9 +21,10 @@ classdef CLiranalyse < CFichierAnalyse
       end
     end
 
-    %----------------------------------
+    %--------------------------------------
     % lecture du fichier format Analyse
-    %-------------------------
+    % En entrée  -->  Y = CEFich('analyse')
+    %--------------------------------------
     function Cok =lire(obj, Y)
       try
         Cok =false;
@@ -38,16 +39,8 @@ classdef CLiranalyse < CFichierAnalyse
         if obj.Vg.valeur
         	hA =CAnalyse.getInstance();
 
-        	try
-        	  % Matlab accepte cette version
-%        	  hFonction =@hA.isfichopen;
-        	  hFonction ='isfichopen';
-        	catch Moo;
-        	  % Octave celle-ci
-        	  hFonction =@(P) hA.isfichopen(P);
-        	end
         	finame =fullfile(pname,fname);
-          if hA.(hFonction)(finame)
+          if hA.isfichopen(finame)
             return;
           end
           dd =findall(0, 'type','figure', 'name','WBarLecture');
@@ -68,7 +61,7 @@ classdef CLiranalyse < CFichierAnalyse
             end
             return;
           elseif ~etalors        % c'est à l'ancien format
-            finame =obj.correction(finame, dd, hA, hFonction);
+            finame =obj.correction(finame, dd);
           end
           if isempty(finame)
             if delwb

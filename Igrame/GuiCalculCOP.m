@@ -8,7 +8,7 @@ function fig =GuiCalculCOP(Ppa)
   vg =Ofich.Vg;
   largeur =525; hauteur =560;
   posfig =positionfen('G','C',largeur,hauteur,hA.OFig.fig);
-  fig =figure('Name', 'Calcul du COP', 'Position',posfig, 'Resize', 'off', ...				
+  fig =figure('Name', 'Calcul  COP-COG', 'Position',posfig, 'Resize', 'off', ...				
           'CloseRequestFcn',@Ppa.terminus, 'DefaultUIControlBackgroundColor',Ppa.couleurRef, ...
           'DefaultUIPanelBackgroundColor',Ppa.couleurRef, 'DefaultUIControlUnits','pixels', ...
           'DefaultUIPanelUnits','pixels', 'DefaultUIControlFontUnits','pixels', ...
@@ -24,15 +24,20 @@ function fig =GuiCalculCOP(Ppa)
       letit ='Canaux'; posx =0; posy =0; large =length(letit')*6+30; haut =hpan-2;
       o1 =uicontrol('Parent',pan, 'Tag','BoutonOnglet', 'Position',[posx posy large haut], 'String',letit, ...
                     'Callback',@Ppa.showPanel);
+      %------------------
+      % onglet Calcul COG
+      letit ='Calcul COG'; posx =posx+large-1; large =length(letit')*6+30;
+      o2 =uicontrol('Parent',pan, 'Tag','BoutonOnglet', 'Position',[posx posy large haut], 'String',letit, ...
+                    'Callback',@Ppa.showPanel);
       %-------------------
       % onglet Calibration
       letit ='Calibration'; posx =posx+large-1; large =length(letit')*6+30;
-      o2 =uicontrol('Parent',pan, 'Tag','BoutonOnglet', 'Position',[posx posy large haut], 'String',letit, ...
+      o3 =uicontrol('Parent',pan, 'Tag','BoutonOnglet', 'Position',[posx posy large haut], 'String',letit, ...
                     'Callback',@Ppa.showPanel, 'BackgroundColor',Ppa.couleurPan);
       %-------------
       % onglet Autre
       letit ='Un poco mas lejos'; posx =posx+large-1; large =length(letit')*6+30;
-      o3 =uicontrol('Parent',pan, 'Tag','BoutonOnglet', 'Position',[posx posy large haut], 'String',letit, ...
+      o4 =uicontrol('Parent',pan, 'Tag','BoutonOnglet', 'Position',[posx posy large haut], 'String',letit, ...
                     'TooltipString','Un peu plus loin...', 'Callback',@Ppa.showPanel);
   posx =2; lpan =largeur-2*posx+1; posy =2*bordure; hpan =hauteur-posy-ppan(4); posPan =[posx posy lpan hpan];
   %-------------
@@ -108,11 +113,26 @@ function fig =GuiCalculCOP(Ppa)
     uicontrol('Parent',pan, 'Position',[posx posy large haut], 'Callback',@Ppa.exportParam, ...
               'ToolTipString',lesInfos, 'String','Exporter param.');
 
+  %-----------------
+  % Panel Calcul COG
+  pan =uipanel('Parent',fig, 'Tag','PanelCalculCOG', 'title','Calcul COG', 'Position',posPan, ...
+               'TitlePosition','rightbottom', 'BorderType','beveledin');
+    set(o2, 'Userdata',pan);
+
+    % Titre "Facultatif"
+    posx =dx; large =lpan-2*posx; haut =hbout; posy =hpan-haut-2*dy;
+    uicontrol('parent',pan, 'style','text', 'position',[posx posy large haut], ...
+              'HorizontalAlignment','center', 'string','Facultatif');
+    % Calculer le COG aussi?
+    posy=posy-haut-dy;
+    uicontrol('parent',pan, 'tag','calculerCOGaussi', 'style','radiobutton', 'value',false, ...
+              'position',[posx posy large haut], 'string','Calculer le COG en plus du COP');
+
   %------------------
   % Panel Calibration
   pan =uipanel('Parent',fig, 'Tag','PanelCalibration', 'title','Calibration', 'Position',posPan, ...
                'TitlePosition','rightbottom', 'BorderType','beveledin');
-    Ppa.setCurPan(pan); set(o2, 'Userdata',pan);
+    Ppa.setCurPan(pan); set(o3, 'Userdata',pan);
     %----------------------------
     % MATRICE DE CALIBRATION AMTI
     % OU: MATRICE DES FACTEURS DE CONVERSION
@@ -182,7 +202,7 @@ function fig =GuiCalculCOP(Ppa)
   % Panel un poco mas
   pan =uipanel('Parent',fig, 'Tag','PanelUnPocoMas', 'title','Un poco mas lejos', 'Position',posPan, ...
                'TitlePosition','rightbottom', 'BorderType','beveledin', 'Visible','off');
-  set(o3, 'Userdata',pan);
+  set(o4, 'Userdata',pan);
     %-----
     % Aide
     leTexte =lireLeHelp(Ppa.getNewplt());
