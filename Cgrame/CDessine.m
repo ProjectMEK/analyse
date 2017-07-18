@@ -856,7 +856,7 @@ classdef CDessine < handle
         end
 
         obj.ecriinfo(Ofich);
-        guiToul('zoomonoff');
+        guiToul('zoomset');
         guiToul('affichecoord');
 
       catch moo;

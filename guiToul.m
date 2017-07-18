@@ -28,6 +28,19 @@ function guiToul(varargin)
       rethrow(moo);
     end
 
+  case 'zoomset'
+    %----------------------
+    % set la valeur du zoom
+    %----------------------
+    try
+      OZoom =CEOnOff(vg.zoomonoff);
+      vg.zoomonoff =(OZoom == true);
+      afficheZoom(vg.zoomonoff, OA);
+    catch moo;
+      CQueEsEsteError.dispOct(moo);
+      rethrow(moo);
+    end
+
   case 'outil_point'
     %---------------------------------------------------
     % Affichage des points avec texte
@@ -621,8 +634,8 @@ function guiToul(varargin)
   case 'ligne_type'
     gr =Ofich.Gr;
     hndl =findobj('tag','IpmnuSmpl');
-    bidon =CEOnOff.(get(hndl,'checked'));
-    vg.ligne =CEOnOff(abs(bidon-1));
+    bidon =CEOnOff(get(hndl,'checked'));
+    vg.ligne =CEOnOff(~bidon);
     set(hndl,'checked',char(vg.ligne));
     if vg.ligne
       letyp ='+';

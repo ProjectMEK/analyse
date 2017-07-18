@@ -62,7 +62,7 @@ function analyse(varargin)
       % création de l'instance unique de l'application
       hA =CAnalyse.getInstance();
       % comme paramètres, on lui passe le numéro de version en format numérique et en texte
-      hA.initial(8.0230, '8.02.30');
+      hA.initial(8.0231, '8.02.31');
       % lecture du fichier des préférences (Cette fonction est inclus dans ce mfile)
       tmp =LeerParam(FF);
       hA.initLesPreferencias(tmp);

@@ -20,10 +20,8 @@ classdef CCalculCOPoptima < CGuiCalculCOP
       tO.newplt =true;
       if ~conGUI
         tO.lireParam();
-        tO.auTravail();
-      else
-        tO.initGui();
       end
+      tO.initGui();
     end
 
     %---------------------------------------------------------------------------
@@ -39,22 +37,28 @@ classdef CCalculCOPoptima < CGuiCalculCOP
       if ~isempty(tO.fig)
         tO.syncObjetConGui();
       end
-      con6Can =tO.canFx*tO.canFy*tO.canFz*tO.canMx*tO.canMy*tO.canMz;
-      con3Can =tO.canFz*tO.canMx*tO.canMy;
-      if con6Can > 0
-        lesCan =[tO.canFx tO.canFy tO.canFz tO.canMx tO.canMy tO.canMz];
-      elseif con3Can > 0
-        lesCan =[tO.canFz tO.canMx tO.canMy];
-      else
-        if isempty(tO.fig)
-          tO.initGui();
-        end
+      R =tO.verifNbCan();
+      if isempty(R.lesCan)
         tO.afficheStatus('Il faut sélectionner 3 ou 6 canaux!!!');
         return;
       end
-      fpltOptima(tO, lesCan);
+      if ~tO.COPseul & ~R.COG
+        tO.afficheStatus('Il faut sélectionner un canal pour Fx et/ou Fy');
+        return;
+      end
+      fpltOptima(tO, R);
       gaglobal('editnom');
       tO.terminus();
+    end
+
+    %---------------------------------------------------------
+    % La fonction "cogline" a besoin en entrée de
+    % - un vecteur temps (sec)
+    % - un vecteur de force (Fx ou Fy)
+    % - un vecteur du CPx ou CPy qui fit avec la force ci-haut
+    % - la masse du sujet
+    %---------------------------------------------------------
+    function prepareCalculCOG(tO,REP)
     end
 
     %--------------------------------------
