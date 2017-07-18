@@ -34,7 +34,6 @@ function ExportCalculCOP(hObj)
     matCal =hObj.getOptimaFC();
     fprintf(fid, '    FC =%s\n', num2str(matCal(1,:)));
     fprintf(fid, '  [\\CALIBRATION]\n');
-    fprintf(fid, '[\\OPTIMA]\n');
   else
     matCal =hObj.getAmtiMC();
     for U =1:length(matCal(:,1))
@@ -61,6 +60,14 @@ function ExportCalculCOP(hObj)
     fprintf(fid, '  [ZOFFSET]\n');
     fprintf(fid, '    Z =%s\n', num2str(hObj.getZOff));
     fprintf(fid, '  [\\ZOFFSET]\n');
+  end
+  % est-ce que l'on calcule COP et COG?
+  fprintf(fid, '  [COPCOG]\n');
+  fprintf(fid, '    COPseul =%s\n', num2str(hObj.getCOPseul));
+  fprintf(fid, '  [\\COPCOG]\n');
+  if optima
+    fprintf(fid, '[\\OPTIMA]\n');
+  else
     fprintf(fid, '[\\AMTI]\n');
   end
   fclose(fid);

@@ -7,3 +7,21 @@ C'est maintenant le temps de passer le flambeau. Comme plusieurs utilisent encor
 
 MEK
 2016-11-17
+
+
+
+PS: Installation sous Linux/Matlab (Jean-Philippe Pialasse)
+
+$ cd /home/userId/Documents/MATLAB
+(n'oubliez pas de changer "userId" pour votre nom d'usager)
+
+$ git clone https://github.com/ProjectMEK/analyse.git
+
+$ git clone https://github.com/ProjectMEK/communs.git
+
+lancer Matlab
+
+naviguer vers /home/userId/Documents/MATLAB/analyse/install/
+
+lancer startAnalyse.m
+

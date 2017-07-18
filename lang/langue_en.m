@@ -80,6 +80,7 @@ function varargout =langue_en(varargin)
     S.mnuip.mathellipsconf ='Confidence ellipse';
     S.mnuip.mathmoyectyp ='Mean and Standard Deviation';
     S.mnuip.mathmoyptmarq ='Mean around points scored';
+    S.mnuip.mathpentedrtregr ='Slope of the regression line';
     S.mnuip.mathcalcang ='Calculates angles';
     S.mnuip.mathtraitcan ='Channel treatment...';
 
@@ -95,10 +96,10 @@ function varargout =langue_en(varargin)
     S.mnuip.emgdistprbampl ='&Amplitude probability distribution';
 
     S.mnuip.fplt ='&FPlt';
-    S.mnuip.fpltcop ='Center of Pressure (COP)';
+    S.mnuip.fpltcop ='Center of Pressure (COP) and COG AMTI';
     S.mnuip.fpltcopparammanuel ='Manual entering settings';
     S.mnuip.fpltcopparamfichier ='entering settings from a file';
-    S.mnuip.fpltcopoptima ='Center of Pressure (COP) Optima';
+    S.mnuip.fpltcopoptima ='COP and COG Optima';
     S.mnuip.fpltstat4cop ='Stat-4-COP';
 
     S.mnuip.trajet ='T&rajectory';
@@ -115,6 +116,7 @@ function varargout =langue_en(varargin)
     S.mnuip.ouechtempo ='Time scale';
     S.mnuip.ouechtempodefaut ='Return to the default scale';
     S.mnuip.ouimportpoint ='&Import point (Y vs X)';
+    S.mnuip.outrierpt ='Sort points scored';
     S.mnuip.oumark ='&Mark';
     S.mnuip.ouzoom ='Zoom';
     S.mnuip.ouaffichercoord ='Show coordinates';
@@ -248,6 +250,61 @@ function varargout =langue_en(varargin)
     S.guipref.onstat ='Enter your preferences in order to improve your work session';
 
     S.guipref.btapplic ='Apply';
+
+    %___________________________________________________________________________
+    % Variable guimoypentri
+    % GUI POUR MOYENNE/PENTE/TRIER POINTS
+    %---------------------------------------------------------------------------
+    S.guimoypentri.name1 ='MENU OF AVERAGES AROUND ...';
+    S.guimoypentri.name2 ='MENU SLOPE BETWEEN TWO POINTS';
+    S.guimoypentri.name3 ='MENU SORT POINTS...';
+
+    S.guimoypentri.selcan ='Channels selection';
+    S.guimoypentri.seless ='Trials selection';
+    S.guimoypentri.toutess ='All trials';
+
+    S.guimoypentri.lesep ='Separator:';
+    S.guimoypentri.selsep ={'comma','semicolon','tab'};
+
+    S.guimoypentri.fentrav ='Working window';
+    S.guimoypentri.rangtrav ='Range of points to sort';
+    S.guimoypentri.fentravtip1 =sprintf('Numerical value --> time\n\np0 ou pi --> first sample\npf --> last sample\np1 p2 p3 ... --> point scored');
+    S.guimoypentri.fentravtip2 =sprintf('p0 ou pi --> first sample\npf --> last sample\np1 p2 p3 ... --> point scored');
+    S.guimoypentri.rangtravtip =sprintf('P0, Pi, P1 --> premier point\nPf ou end --> dernier point\nP1 P2 P3 ... --> point scored');
+
+    S.guimoypentri.autpts ='Around points';
+    S.guimoypentri.autpttip =sprintf('Numeric value to indicate the extent before and\nafter the point to be considered for averaging');
+    S.guimoypentri.valneg ='Value to be neglected';
+    S.guimoypentri.valnegtip =sprintf('Numeric value to change the useful range -> [(1st point + Value) to (2nd point - Value)]');
+    S.guimoypentri.tipunit ={'sample','second'};
+    S.guimoypentri.maw =auTravail;
+
+    S.guimoypentri.info1 ='By default, if "Around points" is not checked, the average will be between the two values of the working window / if checked / averaged around every marked points in the working window.';
+    S.guimoypentri.info2 ='The calculation of the slope will be carried out according to the working window supplied and the "point pairing" requested. The value to be neglected will reduce the working range to the right of the first point and to the left of the second point.';
+    S.guimoypentri.info3 ='To sort in ascending order, we write: [P1 Pf]. In descending order it will be: [Pf P1]. Similarly, to sort the last 5: [end-4 end]';
+
+    % Partie Au Travail
+    S.guimoypentri.wbar1 ='Averaging';
+    S.guimoypentri.wbar2 ='Calculing';
+    S.guimoypentri.wbar3 ='Sorting points';
+
+    S.guimoypentri.putfich1 ='Average Result';
+    S.guimoypentri.putfich2 ='Slope Result';
+    S.guimoypentri.errfich ='Error in the output file.';
+
+    S.guimoypentri.fichori ='Original file';
+    S.guimoypentri.legcan ='Legend of the channels';
+    S.guimoypentri.vnegli =S.guimoypentri.valneg;
+    S.guimoypentri.moyfait1 ='The average was made on';
+    S.guimoypentri.moyfait2 ='The average is done on the space defined above';
+    S.guimoypentri.autpt ='around point';
+    S.guimoypentri.penfait ='The slope is done on the space defined above';
+    S.guimoypentri.titess ='Trial';
+
+    S.guimoypentri.m2pt ='Less than 2 points, no sorting';
+    S.guimoypentri.errsyn ='Error in the syntax of "Range of points to sort"';
+    S.guimoypentri.lecan ='for the channel';
+    S.guimoypentri.less ='and trial';
 
     %___________________________________________________________________________
     % Variable guitretcan

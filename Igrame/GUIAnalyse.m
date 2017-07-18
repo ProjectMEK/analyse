@@ -9,9 +9,9 @@
 %
 function GUIAnalyse(Ppa)
 
-  %_____________________________________________________________________________
-  %on lit la structure contenant le texte à afficher selon le choix de la langue
-  %-----------------------------------------------------------------------------
+  %______________________________________________________________________________
+  % on lit la structure contenant le texte à afficher selon le choix de la langue
+  %------------------------------------------------------------------------------
   ML =CGuiMLAnalyse();
 
   % handle de l'objet principal de l'application
@@ -47,7 +47,7 @@ function GUIAnalyse(Ppa)
             'DefaultUIControlBackgroundColor',[0.8 0.8 0.8],...
             'defaultUIControlunits','Normalized',...
             'DefaultUIPanelBackgroundColor',[0.8 0.8 0.8],...
-            'defaultUIPanelunits','Normalized');
+            'defaultUIPanelunits','Normalized', 'visible','off');
   Ppa.fig =lafig;
 
   % Ajout d'une barre de status au bas de la FIG
@@ -142,6 +142,13 @@ function GUIAnalyse(Ppa)
             'Style','popupmenu',...
             'String','autom.|barrer|manuel');
 
+  % bouton pour l'activation/désactivation du zoom
+  largeur=0.02; posx=1-largeur-espd;
+  lesMOTS =sprintf('Sert à montrer si l''affichage est en travail:\n\tVert\t--> l''affichage est terminée\n\tRouge\t--> patientez, affichage en cours');
+  fui =uicontrol('Parent',lepan, 'tag','IpFrameEnAffichage', 'TooltipString',lesMOTS,...
+                 'Position',[posx posy largeur hauteur], 'string','!');
+  Ppa.statusaff =fui;
+
   %**********************************
   % FENÊTRE POUR AFFICHER LES COURBES
   % Axe Principale
@@ -166,8 +173,8 @@ function GUIAnalyse(Ppa)
             'SliderStep', [0.05 0.15],...
             'Visible','Off');
 
-  %********************************************************************
-  % FABRICATION DES FENÊTRE DE SÉLECTION CANAUX/ESSAIS ET LEURS BOUTONS
+  %**********************************************************************
+  % FABRICATION DES UICONTROL DE SÉLECTION CANAUX/ESSAIS ET LEURS BOUTONS
   posx=bordurx; posy=laxe(2)+laxe(4);
   largeur=lpfs; hauteur=epay;
   uicontrol('Parent',pp, ...

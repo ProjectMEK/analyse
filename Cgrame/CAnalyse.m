@@ -41,13 +41,13 @@
 classdef (Sealed) CAnalyse < handle
 
   properties
-    couleur =[];
-    Fic =[];
-    Vg =[];
+    couleur =[];          % cellule contenant l'ordre des couleurs pour l'affichage de courbes
+    Fic =[];              % handle sur un objet CFic()
+    Vg =[];               % handle sur un objet CVgBase()
     laPosXY =[];
     Hautaxe =[];          % hauteur initial de l'axe
     OFig =[];             % Handle de l'object CDessine
-    Gmenu =[];            % Gestionnaire des requêtes du menu
+    OPG =[];              % handle sur l'objet CParamGlobal()
   end  %properties
 
   methods (Access =private)
@@ -57,13 +57,14 @@ classdef (Sealed) CAnalyse < handle
     %--------------------
     function tO =CAnalyse
       try
+        tO.OPG =CParamGlobal.getInstance();
         tO.Fic =CFic();
         tO.Fic.pref =CPref();
         tO.Vg =CVgBase();
-        tO.Gmenu =CGmenu(tO);
         tO.couleur{1} =['b-';'k-';'r-';'g-';'c-';'m-';'y-';'b:';'k:';'c:';'r:';'g:';'m:';'y:'];
         tO.couleur{2} =['+b-';'+k-';'+r-';'+g-';'+c-';'+m-';'+y-';'+b:';'+k:';'+c:';'+r:';'+g:';'+m:';'+y:'];
-      catch K
+      catch K;
+        CQueEsEsteError.dispOct(K);
         rethrow(K);
       end
     end
@@ -93,11 +94,12 @@ classdef (Sealed) CAnalyse < handle
     % DESTRUCTOR
     %------------------
     function delete(tO)
+      delete(tO.OPG);
+      tO.OPG =[];
       delete(tO.Fic);
+      tO.Fic =[];
       delete(tO.Vg);
-      if ~isempty(tO.Gmenu)
-        delete(tO.Gmenu);
-      end
+      tO.Vg =[];
       if ~isempty(tO.OFig)
         delete(tO.OFig);
       end
@@ -219,20 +221,26 @@ classdef (Sealed) CAnalyse < handle
     % EN ENTRÉE on a  OFi --> un objet de la classe CLiranalyse
     %--------------------------
     function majcurfich(tO,OFi)
-      % Mise à jour de curfich
-      test =0;
-      for U =1:tO.Fic.nf
-      	if find(tO.Fic.hfich{U}, OFi)
-      		test =U;
-      		break;
-      	end
-      end
-      if test
-        tO.Fic.curfich =test;
-      else
-      	tO.Fic.nf =tO.Fic.nf+1;
-        tO.Fic.curfich =tO.Fic.nf;
-        tO.Fic.hfich{tO.Fic.curfich} =OFi;
+      try
+        % Mise à jour de curfich
+        test =0;
+        for U =1:tO.Fic.nf
+        	if find(tO.Fic.hfich{U}, OFi)
+        		test =U;
+        		break;
+        	end
+        end
+        if test
+          tO.Fic.curfich =test;
+        else
+        	tO.Fic.nf =tO.Fic.nf+1;
+          tO.Fic.curfich =tO.Fic.nf;
+          tO.Fic.hfich{tO.Fic.curfich} =OFi;
+        end
+
+      catch moo;
+        CQueEsEsteError.dispOct(moo);
+        rethrow(moo);
       end
     end
 
@@ -248,30 +256,17 @@ classdef (Sealed) CAnalyse < handle
     % on passe par cette fonction peu importe le type
     % de fichier à ouvrir
     % EN ENTRÉE on a  OFi --> un objet de la classe CLiranalyse
-    %------------------------
-    function finlect(tO, OFi)
-      vg =OFi.Vg;
-      if vg.itype == CFichEnum.analyse
-        if vg.laver < tO.Fic.laver
-          vg.sauve =true;
-        end
-      else
-        %_______________________________________
-        % Pour tous les autres types de fichiers
-        % on met la variable vg.sauve à true
-        % afin de demander de sauvegarder à la
-        % fermeture du fichier.
-        %---------------------------------------
-        vg.sauve =true;
+    %-----------------------------
+    function finaliseLect(tO, OFi)
+      try
+        tO.Vg.mazero();
+        tO.Fic.nf =tO.Fic.nf+1;
+        tO.Fic.curfich =tO.Fic.nf;
+        tO.Fic.hfich{tO.Fic.nf} =OFi;
+      catch moo;
+        CQueEsEsteError.dispOct(moo);
+        rethrow(moo);
       end
-      tO.copycan(OFi);
-      tO.CompVgPref(vg);
-      OFi.majchamp();
-      tO.Vg.mazero();
-      tO.Fic.nf =tO.Fic.nf+1;
-      tO.Fic.curfich =tO.Fic.nf;
-      tO.Fic.hfich{tO.Fic.nf} =OFi;
-      OFi.MnuFid =CMnuFichier(OFi);
     end
 
     %___________________________________
@@ -293,57 +288,9 @@ classdef (Sealed) CAnalyse < handle
     % (background) le fichier qui était actif.
     %---------------------
     function AuSuivant(tO)
+      % hvF --> handle vieux fichier
       hvF =tO.Fic.hfich{tO.Fic.lastfich};
       hvF.AuSuivant();
-    end
-
-    %-------------------------------
-    % On copie les canaux du fichier
-    % vers un fichier temporaire
-    % EN ENTRÉE on a  hF --> un objet de la classe CLiranalyse
-    %-----------------------
-    function copycan(tO, hF)
-      % on vérifie si une waitbar est active
-      hwb =findobj('tag','WaitBarLecture');
-      TextLocal ='Création du fichier temporaire de travail';
-      delwb =false;
-      if isempty(hwb)
-        delwb =true;
-        hwb =waitbar(0.001, TextLocal);
-      else
-        waitbar(0.001, hwb, TextLocal);
-      end
-
-      % Fichier source, vrai fichier
-      Fsrc =fullfile(hF.Info.prenom, hF.Info.finame);
-      % Fichier destination, fichier temporaire de travail
-      Fdst =hF.Info.fitmp;
-
-      ncan =hF.Vg.nad;
-      hdchnl =hF.Hdchnl;
-      laver ='-V7.3';
-
-    	% nom de la variable du premier canal
-    	lenom =hdchnl.cindx{1};
-    	% on load le premier canal
-    	A =load(Fsrc, lenom);
-    	% on le sauve dans le fichier temporaire
-    	save(Fdst, '-Struct', 'A', laver);
-
-      % puis on fait la même chose pour les autres canaux
-      for U =2:ncan
-      	waitbar(0.95*single(U)/single(ncan), hwb);
-      	A =[];
-      	lenom =hdchnl.cindx{U};
-      	A =load(Fsrc, lenom);
-      	save(Fdst, '-Struct', 'A', lenom, '-APPEND');
-      end
-
-      % Si on a créé un waitbar, on le delete
-      if delwb
-        delete(hwb);
-      end
-
     end
 
     %-------------------------------------------
@@ -394,30 +341,35 @@ classdef (Sealed) CAnalyse < handle
     % Fermer le fichier courant
     %-------------------------
     function Cok =fermecur(tO)
-      Cok =false;
-    	fid =tO.findcurfich();
-    	vg =fid.Vg;
-      a =fid.fermer();
-      if ~ a
-        return;
+      try
+        Cok =false;
+      	fid =tO.findcurfich();
+      	vg =fid.Vg;
+        a =fid.fermer();
+        if ~ a
+          return;
+        end
+        if tO.Fic.nf == 1
+          tO.Vg.affiche =tO.Fic.pref.prepareVarAffiche(fid.Vg);
+        end
+        tO.OFig.choffpan();
+        delete(fid);
+        tO.Fic.hfich(tO.Fic.curfich) =[];
+        tO.Fic.nf =tO.Fic.nf-1;
+        tO.Fic.curfich =min(tO.Fic.nf, tO.Fic.curfich);
+        if tO.Fic.nf
+        	F =tO.Fic.hfich{tO.Fic.curfich};
+          tO.OFig.chfichpref(F);
+          tO.OFig.chonpan();
+          tO.OFig.affiche();
+        else
+        	tO.OFig.choffmenu();
+        end
+        Cok =true;
+      catch moo;
+        CQueEsEsteError.dispOct(moo);
+        rethrow(moo);
       end
-      if tO.Fic.nf == 1
-        tO.Vg.affiche =tO.Fic.pref.prepareVarAffiche(fid.Vg);
-      end
-      tO.OFig.choffpan();
-      delete(fid);
-      tO.Fic.hfich(tO.Fic.curfich) =[];
-      tO.Fic.nf =tO.Fic.nf-1;
-      tO.Fic.curfich =min(tO.Fic.nf, tO.Fic.curfich);
-      if tO.Fic.nf
-      	F =tO.Fic.hfich{tO.Fic.curfich};
-        tO.OFig.chfichpref(F);
-        tO.OFig.chonpan();
-        tO.OFig.affiche();
-      else
-      	tO.OFig.choffmenu();
-      end
-      Cok =true;
     end
 
     %--------------------------

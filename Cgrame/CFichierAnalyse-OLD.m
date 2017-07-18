@@ -239,7 +239,7 @@ classdef CFichierAnalyse < CFichier
       set(findobj('Type','figure','tag', 'IpTraitement'),'Pointer','arrow')
     end
  
-    %--------------------------------------------------------------
+    %-------------------
     % Passage au mode XY
     % Chaque fichier aura son propre gestionnaire de l'affichage XY
     %--------------------------------------------------------------
@@ -258,7 +258,7 @@ classdef CFichierAnalyse < CFichier
     %-------------------------------------------------------------------------
     % lors d'ajout de fichier, il faut s'assurer de créer les champs approprié
     % si besoin est, on fait les modif ici lors de l'ouverture de fichier
-    %-------------------------------------------------------------------------
+    %---------------------
     function majchamp(obj)
       try
         OA =CAnalyse.getInstance();
@@ -503,13 +503,8 @@ classdef CFichierAnalyse < CFichier
       Cok =false;
       vg =tO.Vg;
       if vg.sauve
-        OA =CAnalyse.getInstance();
-        if OA.OPG.matlab
-          lesmots ={'Le fichier a été Modifié';'Est-ce que vous voulez sauvegarder?'};
-        else
-          lesmots ={'Le fichier a ete Modifie';'Est-ce que vous voulez sauvegarder?'};
-        end
-     	  bouton =CValet.fen3bton('RSVP', lesmots, 'Oui', 'Non');
+     	  bouton =CValet.fen3bton('RSVP', {'Le fichier a été Modifié';'Est-ce que vous voulez sauvegarder?'},...
+      	                   'Oui', 'Non');
         if isempty(bouton)
           return;
         elseif bouton

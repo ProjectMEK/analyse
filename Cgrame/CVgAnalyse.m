@@ -43,7 +43,14 @@ classdef CVgAnalyse < CVgFichier
     %--------------------
     function majVgWmh(tO)
       v =CParamMark();
-      p =properties(v);
+      K =CParamGlobal.getInstance();
+      if K.matlab
+        % Matlab permet l'utilisation de la commande "properties"
+        p =getProp(v);
+      else
+        % Octave ne le permet pas
+        p =fieldnames(v);
+      end
       delete(v);
       vg =tO.databrut();
       for u =1:length(p)

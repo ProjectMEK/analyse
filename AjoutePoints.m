@@ -41,7 +41,7 @@ function AjoutePoints(H)
       end
     end
     if H.OnTrie
-      ptchnl.OnTrie(H.cPt, E);
+      ptchnl.OnTrie(H.cPt, E, 'ascend');
     end
   end
   delete(Wbar);

@@ -25,7 +25,7 @@ classdef CLirA21XML < CLirOutils & CStrucA21XML
     % CONSTRUCTOR
     %---------------------------
     function tO = CLirA21XML(hF)
-      tO.Typo =CFichEnum.A21XML;
+      tO.Typo =CEFich('A21XML');
       tO.Fich =hF;
       if isdir(tO.Fich.Info.prenom)
         cd(tO.Fich.Info.prenom);
@@ -41,8 +41,12 @@ classdef CLirA21XML < CLirOutils & CStrucA21XML
     % lecture et assimilation des datas
     %-------------------------------
     function Lecture(tO, src, event)
-      lirXML(tO);
-      mnouvre2(tO.Fich, tO.Typo, tO.txtml);
+      try
+        lirXML(tO);
+        mnouvre2(tO.Fich, tO.Typo, tO.txtml);
+      catch moo;
+        rethrow(moo);
+      end
     end
 
     %------------------------------------

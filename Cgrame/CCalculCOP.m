@@ -30,18 +30,16 @@ classdef CCalculCOP < CGuiCalculCOP
       if ~isempty(tO.fig)
         tO.syncObjetConGui();
       end
-      con6Can =tO.canFx*tO.canFy*tO.canFz*tO.canMx*tO.canMy*tO.canMz;
-      con3Can =tO.canFz*tO.canMx*tO.canMy;
-      if con6Can > 0
-        lesCan =[tO.canFx tO.canFy tO.canFz tO.canMx tO.canMy tO.canMz];
-        fpltAmti(tO, lesCan);
-      elseif con3Can > 0
-        lesCan =[tO.canFz tO.canMx tO.canMy];
-        fpltAmti(tO, lesCan);
-      elseif ~isempty(tO.fig)
+      R =tO.verifNbCan();
+      if isempty(R.lesCan)
         tO.afficheStatus('Il faut sélectionner 3 ou 6 canaux!!!');
         return;
       end
+      if ~tO.COPseul & length(R.lesCan) < 6
+        tO.afficheStatus('Pour le calcul du COG, il faut sélectionner les six canaux.');
+        return;
+      end
+      fpltAmti(tO, R);
       gaglobal('editnom');
       tO.terminus();
     end

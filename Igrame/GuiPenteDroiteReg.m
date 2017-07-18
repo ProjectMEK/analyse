@@ -1,19 +1,18 @@
 %
-% Interface graphique pour la classe CMoyAutourPt
+% Interface graphique pour la classe CPenteDroiteReg
 %
-% dont le but est de faire la moyenne entre deux échantillons
-% ou autour d'un échantillon (point marqué) et d'inscrire le
-% résultat dans un fichier texte.
+% dont le but est de trouver la pente de la droite de régression des échantillons
+% entre deux points marqués et d'inscrire le résultat dans un fichier texte.
 %
-function varargout = GuiMoyAutourPt(Ppa)
+function varargout = GuiPenteDroiteReg(Ppa)
 
     % appel les menus multi-lingues
     hL =CGuiMLMoyPenteTrie();
 
     % création de la figure
-    Lfen=450; Hfen=450;
+    Lfen=450; Hfen=500;
     lapos =positionfen('G', 'H', Lfen, Hfen);
-    fig =figure('Name', hL.name1, ...
+    fig =figure('Name', hL.name2, ...
             'Position',lapos, 'CloseRequestFcn',@Ppa.fermer,...
             'DefaultUIControlBackgroundColor',[0.8 0.8 0.8],...
             'DefaultUIControlunits','pixels',...
@@ -21,7 +20,8 @@ function varargout = GuiMoyAutourPt(Ppa)
             'Resize', 'off');
 
     % titre pour le choix des canaux
-    mx=25; mxtext=mx; posx=mxtext; large=round((Lfen-2*mxtext)/2); largstd=125; ddy=10; dy=2*ddy; posy=Hfen-45; Htext=22; haut=Htext;
+    mx=25; mxtext=mx; posx=mxtext; large=round((Lfen-2*mxtext)/2); largstd=125; corry=5;
+    ddy=10; dy=2*ddy; posy=Hfen-45; Htext=22; haut=Htext;
     uicontrol('Parent',fig, 'FontWeight','bold',...
             'Position',[posx posy large haut], ...
             'String',hL.selcan, ...
@@ -57,54 +57,56 @@ function varargout = GuiMoyAutourPt(Ppa)
             'String',hL.toutess, 'Style','checkbox', ...
             'Value',0, 'Callback',@Ppa.tous);
 
-    % titre "séparateurs"
-    large=largstd; posy =posy-haut-dy;
-    uicontrol('Parent',fig, 'FontWeight','bold',...
-            'Position',[posx posy large haut], ...
-            'String',hL.lesep, 'Style','text');
-
-    % popupmenu pour le choix du "séparateur"
-    uicontrol('Parent',fig, 'Tag','PMchoixSep', 'FontSize',11, ...
-            'Position',[posx posy-haut large haut], ...
-            'String',hL.selsep, 'Style','popupmenu', 'Value',1);
-
     % titre fenêtre de travail
-    large=largstd+2*mx; posx=posx+large;
-    uicontrol('Parent',fig, 'FontWeight','bold',...
-            'Position',[posx posy large haut], ...
-            'String',hL.fentrav, 'Style','text');
+    large=largstd+2*mx; posy =posy-haut-dy; retoury=posy;
+    uicontrol('Parent',fig, 'FontWeight','bold', 'Style','text', ...
+            'Position',[posx posy large haut], 'String',hL.fentrav);
 
     % fenêtre de travail (début)
-    posx=posx+round(large/2); large=round(large/3); posx=posx-large; posy=posy-haut;
-    uicontrol('Parent',fig, 'Tag','EDfenTravDebut', 'FontSize',11,...
-            'Position',[posx posy large haut], 'String','p0', 'Style','edit', ...
-            'TooltipString',hL.fentravtip1);
+    posx=posx+round(large/2); large=round(large/3); posx=posx-large; posy=posy-haut; retourx=posx;
+    uicontrol('Parent',fig, 'Tag','EDfenTravDebut', 'FontSize',11, 'Style','edit', ...
+            'Position',[posx posy-corry large haut+corry], 'String','p0', 'TooltipString',hL.fentravtip2);
 
     % fenêtre de travail (fin)
-    uicontrol('Parent',fig, 'Tag','EDfenTravFin', 'FontSize',11,...
-            'Position',[posx+large posy large haut], 'String','pf', 'Style','edit', ...
-            'TooltipString',hL.fentravtip1);
+    uicontrol('Parent',fig, 'Tag','EDfenTravFin', 'FontSize',11, 'Style','edit', ...
+            'Position',[posx+large posy-corry large haut+corry], 'String','pf', 'TooltipString',hL.fentravtip2);
 
-    % checkbox pour le choix "Autour des points"
-    posy=posy-haut-dy-ddy; posx=mx; large=largstd;
-    uicontrol('Parent',fig, 'Tag','CBchoixAutour', 'Style','checkbox', ...
-            'Position',[posx posy large haut], 'String',hL.autpts, ...
-            'Value',0, 'Callback',@Ppa.moyenneAutour);
+    % titre valeur à négliger
+    posx=posx+2*large+2*mx; large=largstd-50; posy=retoury;
+    uicontrol('Parent',fig, 'FontWeight','bold', 'Style','text', ...
+            'Position',[posx posy 2*large haut], 'String',hL.valneg);
 
     % nombre d'échantillon ou de secondes à garder avant et après
-    posx=mx+large+2*mx; large=large-50;
+    posy=posy-haut;
     uicontrol('Parent',fig, 'Tag','EDnombreAvantApres', 'FontSize',11,...
-            'Position',[posx posy large haut], 'String','10', 'Style','edit', ...
-            'TooltipString',hL.autpttip, 'Visible','off');
+            'Position',[posx posy-corry large haut+corry], 'String','0', 'Style','edit', ...
+            'TooltipString',hL.valnegtip);
 
     % type d'unité, échantillon ou seconde
     posx =posx+large; large=large+50;
     uicontrol('Parent',fig, 'Tag','PMchoixUnit', 'FontSize',11, ...
             'Position',[posx posy large haut], 'Style','popupmenu', ...
-            'String',hL.tipunit, 'Value',1, 'Visible','off');
+            'String',hL.tipunit, 'Value',1);
+
+    % popupmenu pour le type de pairage des points
+    posy=posy-haut-ddy; posx=retourx; large=largstd+25;
+    leschoix ={'Pairage des points --> [1er pt avec 2ième] [3ième avec 4ième] ...', ...
+               'Pairage des points --> [1er pt avec 2ième] [2ième avec 3ième] ...', ...
+               'Calculer une seule pente à partir de la fenêtre de travail'};
+    uicontrol('Parent',fig, 'Tag','PMpairagePoints', 'style','popupmenu', ...
+            'Position',[posx posy large haut-corry], 'string',leschoix, 'Value',1);
+
+    % titre "séparateurs"
+    large=largstd; posx=round((Lfen-large)/2); posy =posy-haut-2*dy;
+    uicontrol('Parent',fig, 'FontWeight','bold', 'Position',[posx posy large haut], ...
+            'String',hL.lesep, 'Style','text');
+
+    % popupmenu pour le choix du "séparateur"
+    uicontrol('Parent',fig, 'Tag','PMchoixSep', 'FontSize',11, 'Style','popupmenu', ...
+            'Position',[posx posy-haut large haut], 'String',hL.selsep, 'Value',1);
 
     % bouton au travail
-    large=85; posx=round((Lfen-large)/2); haut=Htext; posy=posy-haut-2*dy;
+    large=85; posx=round((Lfen-large)/2); haut=Htext; posy=posy-haut-5*ddy;
     uicontrol('Parent',fig, 'Callback',@Ppa.travail, ...
             'Position',[posx posy large haut], 'String',hL.maw);
 
@@ -114,7 +116,7 @@ function varargout = GuiMoyAutourPt(Ppa)
             'String','-------------------------------------------------------------------------------------');
     posx=mx; large=Lfen-2*posx; haut=2*Htext; posy=posy-haut-5;
     uicontrol('Parent',fig, 'FontSize',9, 'Position',[posx posy large haut], 'Style','text', ...
-              'String',hL.info1);
+              'String',hL.info2);
 
     set(fig,'WindowStyle','modal');
 

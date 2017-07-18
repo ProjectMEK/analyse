@@ -29,7 +29,7 @@ classdef CLirKeithley < CLirOutils
     % CONSTRUCTOR
     %-----------------------------
     function tO = CLirKeithley(hF)
-      tO.Typo =CFichEnum.Keithley;
+      tO.Typo =CEFich('Keithley');
       tO.Fich =hF;
       GUILirKeithley(tO);
       if isdir(tO.Fich.Info.prenom)
@@ -64,10 +64,14 @@ classdef CLirKeithley < CLirOutils
     % ici on passe à la lecture
     %-------------------------------
     function lecture(tO, src, event)
-      if tO.grepNomFichier();
+      try
+        if tO.grepNomFichier();
           tO.prepare();
           lirkith(tO);
           mnouvre2(tO.Fich, tO.Typo, tO.txtml);
+        end
+      catch moo;
+        rethrow(moo);
       end
     end
 

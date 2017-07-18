@@ -128,11 +128,12 @@ classdef CBaseStringGUI < handle
       % on s'assure que V est une structure
       if isa(V, 'struct')
 
-        % on utilise la liste des propriétés de la classe comme base
-        try
-          foo =tO.properties();
-        catch M
-          % "properties" n'est pas implémenté dans Octave
+        K =CParamGlobal.getInstance();
+        if K.matlab
+          % Matlab permet l'utilisation de la commande "properties"
+          foo =getProp(tO);
+        else
+          % Octave ne le permet pas
           foo =fieldnames(tO);
         end
 

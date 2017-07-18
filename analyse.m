@@ -7,9 +7,9 @@
 %
 % Copyrigth 1998 à 2017
 %   Auteur principal: Marcel Étienne Kaszap
-%   ont participé en apportant des idées, du code et/ou de l'argent
-%     Normand Teasdale, dépt. Kinésiologie, U. Laval
-%     Martin Simoneau, dépt. Kinésiologie, U. Laval
+%   ont participé en apportant des idées, du code et/ou du financement (pour la main d'oeuvre)
+%     Normand Teasdale, Laboratoire GRAME, dépt. Kinésiologie, U. Laval
+%     Martin Simoneau, Laboratoire GRAME, dépt. Kinésiologie, U. Laval
 %     Olivier Martin, GIPSA-Lab, Grenoble et enseignant à l'UFR STAPS.
 %     Caroline , étudiante en stage.
 %     Thelma Coyle, CNRS, Marseille
@@ -62,11 +62,10 @@ function analyse(varargin)
       % création de l'instance unique de l'application
       hA =CAnalyse.getInstance();
       % comme paramètres, on lui passe le numéro de version en format numérique et en texte
-      hA.initial(8.0229, '8.02.29');
+      hA.initial(8.0231, '8.02.31');
       % lecture du fichier des préférences (Cette fonction est inclus dans ce mfile)
       tmp =LeerParam(FF);
       hA.initLesPreferencias(tmp);
-
       % création du GUI principal
       hA.OFig =CDessine();
     catch tuhermanita;
@@ -78,32 +77,41 @@ function analyse(varargin)
   % Fonctionne bien, ferme et redémarre Analyse
   %-----------------------------------------------
   case 'arcommence'
-  	analyse('terminus');
-  	analyse();
+  	try
+      analyse('terminus');
+  	  analyse();
+  	catch fuu
+  	  parleMoiDe(fuu);
+  	end
 
   %--------------
   case 'terminus'
-    OA =CAnalyse.getInstance();
-    while OA.Fic.nf
-    	b =OA.fermecur();
-    	if ~b
-      	return;
-    	end
+    try
+      OA =CAnalyse.getInstance();
+      while OA.Fic.nf
+      	b =OA.fermecur();
+      	if ~b
+        	return;
+      	end
+      end
+      % avant de quitter, on sauvegarde les préférences tel que demandé.
+      sauveLesPref(OA, FF);
+      wmfig =findobj('type','figure','tag','WmFig');
+      if ~ isempty(wmfig)
+        delete(wmfig);
+      end
+      wmfig =findobj('tag','IpChoiXY');
+      if ~ isempty(wmfig)
+        delete(wmfig);
+      end
+      delete(OA);
+      pause(0.25);
+      clear java;
+      clear all;
+      warning('on','all');
+    catch moo;
+      CQueEsEsteError.dispOct(moo);
     end
-    % avant de quitter, on sauvegarde les préférences tel que demandé.
-    sauveLesPref(OA, FF);
-    wmfig =findobj('type','figure','tag','WmFig');
-    if ~ isempty(wmfig)
-      delete(wmfig);
-    end
-    wmfig =findobj('tag','IpChoiXY');
-    if ~ isempty(wmfig)
-      delete(wmfig);
-    end
-    delete(OA);
-    clear java;
-    clear all;
-    warning('on','all');
   end  %case
 end
 
@@ -121,7 +129,7 @@ function sauveLesPref(OAn, leFich)
     la_pos =get(OAn.OFig.fig,'position');
     diablo.param =OAn.Vg.affiche;
     diablo.param(2:5,1) =la_pos';
-    cd(OAn.Fic.basedir);
+%    cd(OAn.Fic.basedir);
     save(leFich, 'diablo', '-v6');
   else
     fid =fopen(leFich, 'r');

@@ -46,7 +46,16 @@ classdef CStrucA21XML < handle
     %------------------------
     function InitStruc(tO, N)
       G =CStrucA21XML();
-      U =properties(G);
+
+      K =CParamGlobal.getInstance();
+      if K.matlab
+        % Matlab permet l'utilisation de la commande "properties"
+        U =getProp(G);
+      else
+        % Octave ne le permet pas
+        U =fieldnames(G);
+      end
+
       delete(G);
       for V =1:length(U)
         tO.(U{V}) =zeros(N, 1);

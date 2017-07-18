@@ -31,7 +31,7 @@ function lirEMG(H)
   %_______________________
   % Ouverture d'un WaitBar
   %-----------------------
-  H.leWb =findobj('tag','WaitBarLecture');
+  H.leWb =findall(0, 'type','figure', 'name','WBarLecture');
   TextLocal =[H.txtml.fichier H.fname{1}];
   delwb =false;
   if isempty(H.leWb)

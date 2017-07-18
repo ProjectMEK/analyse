@@ -18,14 +18,17 @@
 %
 % Introduit dans Analyse
 % 30 octobre 2012, MEK
+% Ajout du calcul COG (mfile "gline.m" de:  Marcos Duarte  mduarte@usp.br 11oct1998)
+% juillet 2017
 %
-function fpltAmti(hObj, canal)
+function fpltAmti(hObj, R)
   oA =CAnalyse.getInstance();
   oF =oA.findcurfich();
   hdchnl =oF.Hdchnl;
   vg =oF.Vg;
+  canal =R.lesCan;
   leWb =laWaitbar(0, 'Calcul du centre de pression...', 'C', 'C', gcf);
-  leBout =vg.ess+5;
+  leBout =5+vg.ess+(R.COG*vg.ess);
   renduA =0;
   % création des canaux
   hdchnl.duplic([canal canal(3) canal(3)]);
@@ -69,6 +72,7 @@ function fpltAmti(hObj, canal)
     nMz =hMz.Nom;
     hdchnl.adname{end-nCanal} ='New_Mz';
     n.mz =suivant; suivant =suivant+1;
+    % on va chercher la longueur max des canaux
     letop =max([size(hFx.Dato.(nFx),1), size(hFy.Dato.(nFy),1), size(hFz.Dato.(nFz),1), size(hMx.Dato.(nMx),1), size(hMy.Dato.(nMy),1), size(hMz.Dato.(nMz),1)]);
     DoFx =zeros(letop, vg.ess);
     DoFy =DoFx;
@@ -94,6 +98,7 @@ function fpltAmti(hObj, canal)
     nMy =hMy.Nom;
     hdchnl.adname{end-nCanal} ='New_My';
     n.my =suivant; suivant =suivant+1;
+    % on va chercher la longueur max des canaux
     letop =max([size(hFz.Dato.(nFz), 1), size(hMx.Dato.(nMx), 1), size(hMy.Dato.(nMy), 1)]);
     DoFz =zeros(letop, vg.ess);
     DoMx =DoFz;
@@ -102,9 +107,13 @@ function fpltAmti(hObj, canal)
     DoCPy =DoFz;
   end
   n.cpx =suivant; suivant =suivant+1;
-  n.cpy =suivant;
-  renduA =renduA+2;
-  waitbar(renduA/leBout, leWb);
+  n.cpy =suivant; suivant =suivant+1;
+  if R.COG
+    DoCGx =DoCPx;
+    n.cgx =suivant; suivant =suivant+1;
+    DoCGy =DoCPy;
+    n.cgy =suivant;
+  end
   %--- Paramètre amplificateur MSA-6 ---%
   FxVex =hObj.getVFx; MxVex =hObj.getVMx;
   FyVex =hObj.getVFy; MyVex =hObj.getVMy;
@@ -124,9 +133,9 @@ function fpltAmti(hObj, canal)
   %--- Selon AMTI pour notre plate forme voir C3 - SN3245 du manuel
   %--- d'instrustion dans bureau à Normand (Zoff = 35 mm)
   Zoff =hObj.getZOff;
-  %--- Enfin le calcul ---%
   renduA =renduA+2;
   waitbar(renduA/leBout, leWb);
+  %--- Enfin le calcul du COP---%
   for trial =1:vg.ess
     NS =min(hdchnl.nsmpls(canal, trial));
     waitbar((renduA+trial)/leBout, leWb);
@@ -201,6 +210,39 @@ function fpltAmti(hObj, canal)
       hdchnl.min(n.cpy, trial) =min(DoCPy(1:NS,trial));
     end
   end
+  %--- Et le calcul du COG---%
+  if R.COG
+      waitbar(renduA/leBout, leWb, 'Calcul du centre de gravité...');
+    % création des canaux COG
+    if R.canFx > 0
+      hdchnl.duplic(n.cpx);
+      hdchnl.adname{end} ='CGx';
+      nbcan =nbcan+1;
+    end
+    if R.canFy > 0
+      hdchnl.duplic(n.cpy);
+      hdchnl.adname{end} ='CGy';
+      nbcan =nbcan+1;
+    end
+    % calcul de la masse en Kg.
+    lamasse =mean(DoFz(DoFz(:)~=0))/9.8;
+    renduA =renduA+trial;
+    for trial =1:vg.ess
+      NS =hdchnl.nsmpls(n.cpx, trial);
+      temps =[1:NS]/hdchnl.rate(n.cpx, trial);
+      waitbar((renduA+trial)/leBout, leWb);
+      if R.canFx > 0
+        DoCGx(1:NS,trial) =cogline(temps, -DoFx(1:NS,trial), DoCPx(1:NS,trial).*10, lamasse)./10;
+        hdchnl.max(n.cgx, trial) =max(DoCGx(1:NS,trial));
+        hdchnl.min(n.cgx, trial) =min(DoCGx(1:NS,trial));
+      end
+      if R.canFy > 0
+        DoCGy(1:NS,trial) =cogline(temps, -DoFy(1:NS,trial), DoCPy(1:NS,trial).*10, lamasse)./10;
+        hdchnl.max(n.cgy, trial) =max(DoCGy(1:NS,trial));
+        hdchnl.min(n.cgy, trial) =min(DoCGy(1:NS,trial));
+      end
+    end
+  end
   % Destruction des canaux inutils pour le reste du traitement
   % et sauvegarde des datas utiles
   tmpDt =CDtchnl();
@@ -263,6 +305,18 @@ function fpltAmti(hObj, canal)
     sD.tmp =DoCPy; clear DoCPy;
     tmpDt.Dato =sD;
     oF.setcanal(tmpDt, n.cpy);
+  end
+  if R.canFx > 0
+    % sauve Gpx
+    sD.tmp =DoCGx; clear DoCGx;
+    tmpDt.Dato =sD;
+    oF.setcanal(tmpDt, n.cgx);
+  end
+  if R.canFy > 0
+    % sauve Gpy
+    sD.tmp =DoCGy; clear DoCGy;
+    tmpDt.Dato =sD;
+    oF.setcanal(tmpDt, n.cgy);
   end
   vg.nad =vg.nad+nbcan;
   vg.sauve =true;

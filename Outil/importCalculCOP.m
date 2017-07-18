@@ -320,6 +320,25 @@ function p =importCalculCOP(hObj)
               break;
             end
           end
+        elseif strncmpi(ligne, '[copcog', 6)             % COPCOG
+          while ~ strncmpi(ligne, '[\copcog', 7)
+            if strncmpi(ligne, 'cops', 4)
+              i =findstr(ligne,'=');
+              if ~isempty(i)
+                i =i(1);
+                while (i <=length(ligne))&& ((ligne(i) ==' ')||((ligne(i) =='=')) );
+                  i =i+1;
+                end
+                if ~isempty(laVal)
+                  p.COPseul =str2num(ligne(i:end));
+                end
+              end
+            end
+            ligne =suivante();
+            if ligne == -1
+              break;
+            end
+          end  % while ~ strncmpi(ligne, '[\calib', 7)
         end
         ligne =suivante();
         if ligne == -1

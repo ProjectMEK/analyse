@@ -6,27 +6,51 @@ function guiToul(varargin)
     if nargin == 0
       return;
     else
+      % Instance principale d'Analyse
       OA =CAnalyse.getInstance();
       Ofich =OA.findcurfich();
       vg =Ofich.Vg;
       commande = varargin{1};
     end
+
   switch(commande)
 
-  %-------------------------
-  % Toggle la valeur du zoom
-  %---------------
   case 'zoomonoff'
-    vg.zoomonoff =CEOnOff(~vg.zoomonoff);
-    afficheZoom(vg.zoomonoff);
-  %________________________________
-  % Affichage des points avec texte
-  % vg.pt = 0   pas d'affichage
-  %         1   avec texte
-  %         2   sans texte
-  %         3   pas d'afficahge mais on crée les pts, en réflexion pour le faire disparaître
-  %-----------------
+    %-------------------------
+    % Toggle la valeur du zoom
+    %-------------------------
+    try
+      OZoom =CEOnOff(~vg.zoomonoff);
+      vg.zoomonoff =(OZoom == true);
+      afficheZoom(vg.zoomonoff, OA);
+    catch moo;
+      CQueEsEsteError.dispOct(moo);
+      rethrow(moo);
+    end
+
+  case 'zoomset'
+    %----------------------
+    % set la valeur du zoom
+    %----------------------
+    try
+      OZoom =CEOnOff(vg.zoomonoff);
+      vg.zoomonoff =(OZoom == true);
+      afficheZoom(vg.zoomonoff, OA);
+    catch moo;
+      CQueEsEsteError.dispOct(moo);
+      rethrow(moo);
+    end
+
   case 'outil_point'
+    %---------------------------------------------------
+    % Affichage des points avec texte
+    % vg.pt = 0   pas d'affichage
+    %         1   avec texte
+    %         2   sans texte
+    %         3   pas d'afficahge mais on crée les pts,
+    %             en réflexion pour le faire disparaître
+    %---------------------------------------------------
+
     hndltxt =findobj('tag', 'IpmnuPointSansTexte');
     set(hndltxt,'checked','off');
     hndl =findobj('tag', 'IpmnuPoint');
@@ -60,14 +84,17 @@ function guiToul(varargin)
         K.dttip.StringFcn =@K.Eltexto;
       end
     end
-  %________________________________
-  % Affichage des points sans texte
-  % vg.pt = 0   pas d'affichage
-  %         1   avec texte
-  %         2   sans texte
-  %         3   pas d'afficahge mais on crée les pts, en réflexion pour le faire disparaître
-  %---------------------------
+
   case 'AffichePointSansTexte'
+    %---------------------------------------------------
+    % Affichage des points sans texte
+    % vg.pt = 0   pas d'affichage
+    %         1   avec texte
+    %         2   sans texte
+    %         3   pas d'afficahge mais on crée les pts,
+    %             en réflexion pour le faire disparaître
+    %---------------------------------------------------
+
     hndl =findobj('tag', 'IpmnuPoint');
     set(hndl,'checked','off');
     hndltxt =findobj('tag', 'IpmnuPointSansTexte');
@@ -255,8 +282,11 @@ function guiToul(varargin)
     end
   %------------------
   case 'choix_canaux'
+    %
+    % On doit s'assurer que le mode XY n'est pas actif, car dans ce cas
+    % on a pas à réagir si l'usager a cliqué un canal.
     if strncmpi(get(findobj('tag', 'IpmnuXy'),'checked'),'of',2)
-    	 set(findobj('Type','uicontrol','tag', 'IpCanTous'),'Value',0)
+      set(findobj('Type','uicontrol','tag', 'IpCanTous'),'Value',0)
       lescan =OA.OFig.cano.getValue();
       if isempty(lescan)
         lescan =1;
@@ -556,14 +586,15 @@ function guiToul(varargin)
     end
     delete(dtX);
     delete(dtY);
-    afficheZoom(vg.zoomonoff);
+    afficheZoom(vg.zoomonoff, OA);
     OA.OFig.affiche();
   %----------------------------
   % Affiche un "cursorbar" pour
   % voir les coordonnées X-Y
   %------------------
   case 'affichecoord'
-    vg.affcoord =CEOnOff(~vg.affcoord);
+    foo =CEOnOff(~vg.affcoord);
+    vg.affcoord =(foo==false);
     afficheCoord(OA, vg.affcoord);
   %-----------------
   case 'permutation'
@@ -603,8 +634,8 @@ function guiToul(varargin)
   case 'ligne_type'
     gr =Ofich.Gr;
     hndl =findobj('tag','IpmnuSmpl');
-    bidon =CEOnOff.(get(hndl,'checked'));
-    vg.ligne =CEOnOff(abs(bidon-1));
+    bidon =CEOnOff(get(hndl,'checked'));
+    vg.ligne =CEOnOff(~bidon);
     set(hndl,'checked',char(vg.ligne));
     if vg.ligne
       letyp ='+';
@@ -647,33 +678,60 @@ end
 %
 % Applique la valeur "valZoom" à la propriété zoom de la fenêtre courante.
 %
-function afficheZoom(valZoom)
+function afficheZoom(valZoom, Oa)
+  try
     pp =CEOnOff(valZoom);
-    ss =zoom(gcf);
-    set(ss,'enable',char(pp));
-    set(findobj('tag','IpmnuZoom'),'checked',char(pp));
+    pptxt =char(pp);
+
+    % on va rechercher le handle de la figure à partir de celui de l'axe courant
+    mafig =get(Oa.OFig.Lax, 'parent');
+    while ~strncmpi(get(mafig,'type'), 'figure', 6)
+      mafig =get(mafig, 'parent');
+    end
+
+    if Oa.OPG.matlab
+      % on travaille sous Matlab
+      ss =zoom(mafig);
+      set(ss,'enable',pptxt);
+    else
+      % on travaille sous Octave
+
+      zoom(mafig, pptxt);
+    end
+    set(findobj('tag','IpmnuZoom'),'checked',pptxt);
+
+  catch moo;
+    CQueEsEsteError.dispOct(moo);
+    throw(moo);
+  end
 end
 
 %
 % Affiche un "cursorbar" pour voir les coordonnées X-Y
 %
 function afficheCoord(hDess, V)
-  f =hDess.OFig.haffcoord;
-  pp =CEOnOff(V);
-  set(findobj('tag','IpmnuCoord'),'checked',char(V));
-  % si le cursorbar existe ou n'a pas été détruit
-  % CDessine le supprimera. En attendant on le cache.
-  if isa(f, 'CAfficheCoord')
-    f.cache();
-  end
-  if V 
+  try
+    f =hDess.OFig.haffcoord;
+    pp =CEOnOff(V);
+    set(findobj('tag','IpmnuCoord'),'checked',char(pp));
+    % si le cursorbar existe ou n'a pas été détruit
+    % CDessine le supprimera. En attendant on le cache.
     if isa(f, 'CAfficheCoord')
-      if f.montre()
+      f.cache();
+    end
+    if V 
+      if isa(f, 'CAfficheCoord')
+        if f.montre()
+          hDess.OFig.haffcoord =CAfficheCoord();
+        end
+      else
         hDess.OFig.haffcoord =CAfficheCoord();
       end
-    else
-      hDess.OFig.haffcoord =CAfficheCoord();
     end
+
+  catch moo;
+    CQueEsEsteError.dispOct(moo);
+    throw(moo);
   end
 end
 

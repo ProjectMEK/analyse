@@ -80,6 +80,7 @@ function varargout =langue_fr(varargin)
     S.mnuip.mathellipsconf ='Ellipse de confiance';
     S.mnuip.mathmoyectyp ='Moy./Ecart-type par catégorie';
     S.mnuip.mathmoyptmarq ='Moyenne autour des points marqués';
+    S.mnuip.mathpentedrtregr ='Pente de la droite de régression';
     S.mnuip.mathcalcang ='Calcul d''angle';
     S.mnuip.mathtraitcan ='Traitement de canal';
 
@@ -95,10 +96,10 @@ function varargout =langue_fr(varargin)
     S.mnuip.emgdistprbampl ='&Distribution de probabilité d''Amplitude';
 
     S.mnuip.fplt ='&FPlt';
-    S.mnuip.fpltcop ='Centre de Pression(COP)';
+    S.mnuip.fpltcop ='Centre de Pression(COP) et COG AMTI';
     S.mnuip.fpltcopparammanuel ='Entrée des param manuelle';
     S.mnuip.fpltcopparamfichier ='Entrée des param par fichier';
-    S.mnuip.fpltcopoptima ='Centre de Pression(COP) OPTIMA';
+    S.mnuip.fpltcopoptima ='COP et COG OPTIMA';
     S.mnuip.fpltstat4cop ='Stat-4-COP';
 
     S.mnuip.trajet ='T&rajectoire';
@@ -115,6 +116,7 @@ function varargout =langue_fr(varargin)
     S.mnuip.ouechtempo ='Échelle &temporelle';
     S.mnuip.ouechtempodefaut ='Retour à la normale';
     S.mnuip.ouimportpoint ='&Importer point (Y vs X)';
+    S.mnuip.outrierpt ='Trier les points marqués';
     S.mnuip.oumark ='&Marquer';
     S.mnuip.ouzoom ='Zoom';
     S.mnuip.ouaffichercoord ='Afficher les Coordonnées';
@@ -248,6 +250,61 @@ function varargout =langue_fr(varargin)
     S.guipref.onstat ='Entrez vos préférences afin d''améliorer votre session de travail';
 
     S.guipref.btapplic ='Appliquer';
+
+    %___________________________________________________________________________
+    % Variable guimoypentri
+    % GUI POUR MOYENNE/PENTE/TRIER POINTS
+    %---------------------------------------------------------------------------
+    S.guimoypentri.name1 ='MENU MOYENNE AUTOUR...';
+    S.guimoypentri.name2 ='MENU PENTE ENTRE DEUX POINTS';
+    S.guimoypentri.name3 ='MENU TRIER POINTS...';
+
+    S.guimoypentri.selcan ='Choix du/des canal/aux';
+    S.guimoypentri.seless ='Choix du/des essais:';
+    S.guimoypentri.toutess ='tous les essais';
+
+    S.guimoypentri.lesep ='Séparateur:';
+    S.guimoypentri.selsep ={'virgule','point virgule','Tab'};
+
+    S.guimoypentri.fentrav ='Fenêtre de travail';
+    S.guimoypentri.rangtrav ='Range de points à trier';
+    S.guimoypentri.fentravtip1 =sprintf('Valeur numérique --> temps\n\np0 ou pi --> premier échantillon\npf --> dernier échantillon\np1 p2 p3 ... --> point marqué');
+    S.guimoypentri.fentravtip2 =sprintf('p0 ou pi --> premier échantillon\npf --> dernier échantillon\np1 p2 p3 ... --> point marqué');
+    S.guimoypentri.rangtravtip =sprintf('P0, Pi, P1 --> premier point\nPf ou end --> dernier point\nP1 P2 P3 ... --> point marqué');
+
+    S.guimoypentri.autpts ='Autour des points';
+    S.guimoypentri.autpttip =sprintf('Valeur numérique pour indiquer l''étendue avant et\naprès le point à considérer pour faire la moyenne');
+    S.guimoypentri.valneg ='Valeur à négliger';
+    S.guimoypentri.valnegtip =sprintf('Valeur numérique pour modifier la plage utile --> [(1er point + Valeur) jusqu''à (2ième point - Valeur)]');
+    S.guimoypentri.tipunit ={'échantillons','secondes'};
+    S.guimoypentri.maw =auTravail;
+
+    S.guimoypentri.info1 ='Par défaut, si on ne coche pas "Autour des points", la moyenne se fera sur les valeurs entre les deux bornes de la fenêtre de travail /si on la coche/ on fera les moyennes autour des points marqués.';
+    S.guimoypentri.info2 ='Le calcul de la pente sera effectué selon la fenêtre de travail fournie et le "pairage de point" demandé. La valeur à négliger réduira la plage de travail à droite du premier point et à gauche du second.';
+    S.guimoypentri.info3 ='Pour trier en ordre croissant, on écrira: [P1  Pf]. En ordre décroissant se sera: [Pf  P1]. De même, pour trier les 5 derniers: [end-4 end]';
+
+    % Partie Au Travail
+    S.guimoypentri.wbar1 ='Moyennage en cours';
+    S.guimoypentri.wbar2 ='Calcul en cours';
+    S.guimoypentri.wbar3 ='Trie des points en cours';
+
+    S.guimoypentri.putfich1 ='Résultat des Moyennes';
+    S.guimoypentri.putfich2 ='Résultat des Pentes';
+    S.guimoypentri.errfich ='Erreur dans le fichier de sortie.';
+
+    S.guimoypentri.fichori ='Fichier d''origine';
+    S.guimoypentri.legcan ='Légende des canaux';
+    S.guimoypentri.vnegli =S.guimoypentri.valneg;
+    S.guimoypentri.moyfait1 ='La moyenne a été faite sur';
+    S.guimoypentri.moyfait2 ='La moyenne est faite sur l''espace défini ci-haut';
+    S.guimoypentri.autpt ='autour du point';
+    S.guimoypentri.penfait ='La pente est calculée sur l''espace défini ci-haut';
+    S.guimoypentri.titess ='Essai';
+
+    S.guimoypentri.m2pt ='Moins de 2 points, pas de triage';
+    S.guimoypentri.errsyn ='Erreur dans la syntaxe du "Range de points à trier"';
+    S.guimoypentri.lecan ='pour le canal';
+    S.guimoypentri.less ='et l''essai';
 
     %___________________________________________________________________________
     % Variable guitretcan

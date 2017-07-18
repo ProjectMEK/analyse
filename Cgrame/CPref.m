@@ -196,11 +196,11 @@ classdef CPref < handle
       if vg.zoomonoff; cur =bitset(cur, 4, 1);  end     % (dé-)activer le zoom
       if vg.ligne;     cur =bitset(cur, 5, 1);  end     % affichage des échantillons
       if vg.colcan;    cur =bitset(cur, 6, 1);  end     % affichage des couleurs pour canaux
-      if vg.coless;    cur =bitset(cur, 7, 1); end     % affichage des couleurs pour essais
-      if vg.colcat;    cur =bitset(cur, 8, 1); end     % affichage des couleurs pour catégo
-      if vg.legende;   cur =bitset(cur, 9, 1); end     % affichage de la légende
-      if vg.trich;     cur =bitset(cur, 10, 1); end    % affichage de la légende
-      if vg.affcoord;  cur =bitset(cur, 11, 1);  end   % (dé-)activer l'affichage des coord
+      if vg.coless;    cur =bitset(cur, 7, 1);  end     % affichage des couleurs pour essais
+      if vg.colcat;    cur =bitset(cur, 8, 1);  end     % affichage des couleurs pour catégo
+      if vg.legende;   cur =bitset(cur, 9, 1);  end     % affichage de la légende
+      if vg.trich;     cur =bitset(cur, 10, 1); end     % affichage de la légende
+      if vg.affcoord;  cur =bitset(cur, 11, 1); end     % (dé-)activer l'affichage des coord
     end
 
     %----------------------------------------
@@ -338,7 +338,7 @@ end
 %         -------------
 %         - Si grame.mat n'existe pas           \
 %         - Si grame.mat n'est pas compatible    |--> On applique les préf par défaut
-%         - Si CPref.conserver = false          /         (Vg.affiche = 790 --> bin(1100010110) )
+%         - Si CPref.conserver = false          /       (Vg.affiche = 790 --> bin(1100010110) )
 %         
 %         - Si grame.mat est régulier            |--> On applique les CPref.*
 %         - Si CPref.conserver =true             |--> On fait suivre dans Vg.affiche

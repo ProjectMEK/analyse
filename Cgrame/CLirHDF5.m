@@ -28,7 +28,7 @@ classdef CLirHDF5 < CLirOutils
     % CONSTRUCTOR
     %------------------------
     function tO =CLirHDF5(hF)
-      tO.Typo =CFichEnum.HDF5;
+      tO.Typo =CEFich('HDF5');
       tO.Fich =hF;
       if isdir(tO.Fich.Info.prenom)
         cd(tO.Fich.Info.prenom);
@@ -44,11 +44,15 @@ classdef CLirHDF5 < CLirOutils
     % ouverture et lecture du fichier
     %-------------------
     function Lecture(tO)
-      tO.prepare();
-      if lirHDF5(tO)
-        mnouvre2(tO.Fich, tO.Typo, tO.txtml);
-      else
-        tO.Fermeture();
+      try
+        tO.prepare();
+        if lirHDF5(tO)
+          mnouvre2(tO.Fich, tO.Typo, tO.txtml);
+        else
+          tO.Fermeture();
+        end
+      catch moo;
+        rethrow(moo);
       end
     end
 

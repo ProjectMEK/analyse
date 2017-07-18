@@ -71,6 +71,7 @@ classdef CMenuMLIp < CBaseStringGUI
     mathellipsconf ='Ellipse de confiance';
     mathmoyectyp ='Moy./Ecart-type par catégorie';
     mathmoyptmarq ='Moyenne autour des points marqués';
+    mathpentedrtregr ='Pente de la droite de régression'
     mathcalcang ='Calcul d''angle';
     mathtraitcan ='Traitement de canal';
 
@@ -88,10 +89,10 @@ classdef CMenuMLIp < CBaseStringGUI
 
     %fplt
     fplt ='&FPlt';
-    fpltcop ='Centre de Pression(COP) AMTI';
+    fpltcop ='Centre de Pression(COP) et COG AMTI';
     fpltcopparammanuel ='Entrée des param manuelle';
     fpltcopparamfichier ='Entrée des param par fichier';
-    fpltcopoptima ='Centre de Pression(COP) OPTIMA';
+    fpltcopoptima ='COP et COG OPTIMA';
     fpltstat4cop ='Stat-4-COP';
 
     %trajectoire
@@ -110,6 +111,7 @@ classdef CMenuMLIp < CBaseStringGUI
     ouechtempo ='Échelle &temporelle';
     ouechtempodefaut ='Retour à la normale';
     ouimportpoint ='&Importer point (Y vs X)';
+    outrierpt ='Trier les points marqués';
     oumark ='&Marquer';
     ouzoom ='Zoom';
     ouaffichercoord ='Afficher Coordonnées';

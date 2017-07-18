@@ -10,7 +10,7 @@
 %    . = . . . . . .
 %    V =getGainMz(tO)
 %    V =getVFx(tO)
-%    . = . . . . .
+%    . = . . . . .COPseul
 %    V =getVMz(tO)
 %    V =getZOff(tO)
 %       importation(tO, p)
@@ -22,6 +22,8 @@ classdef CParamCalculCOP < handle
   properties (Access =protected)
     % Avec quelle plateforme on travaille
     newplt =0;        % (0)ancienne plateforme. (1) Optima
+    % Calcul du COP seulement
+    COPseul =true;
     % Numéro des canaux lus
     canFx =0;         % canal Fx
     canFy =0;         % canal Fy
@@ -182,6 +184,12 @@ classdef CParamCalculCOP < handle
     function V =getVMz(tO)
       V =tO.vMz;
     end
+
+    %--------------------------
+    function V =getCOPseul(tO)
+      V =tO.COPseul;
+    end
+
 
     %------------------------
     function V =getGainFx(tO)

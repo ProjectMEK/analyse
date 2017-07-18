@@ -20,7 +20,12 @@ classdef CModeXY < handle
     % CONSTRUCTOR
     %--------------------------
     function obj = CModeXY(Ppa)
-      obj.Initialise(Ppa);
+      try
+        obj.Initialise(Ppa);
+      catch mmoo;
+        CQueEsEsteError.dispOct(mmoo);
+        rethrow(mmoo);
+      end
     end
 
     %
@@ -32,27 +37,32 @@ classdef CModeXY < handle
 
     %---------------------------
     function Initialise(obj, hF)
-      obj.Fid =hF;
-      obj.IpmnuXy =findobj('tag', 'IpmnuXy');
-      obj.XX =hF.Vg.x;
-      obj.YY =hF.Vg.y;
-      obj.VerifieListXY();
-      IModeXY(obj);
-      vg =hF.Vg;
-      lenom =obj.listcanxy();
-      if isempty(obj.XX)      % aucun choix de fait
-        vg.choixy=1;
-      else                    % ici on a au moins un XX de choisi
-        if isempty(vg.choixy) | vg.choixy == 0 | vg.choixy > length(obj.YY)
-          vg.choixy =1;
+      try
+        obj.Fid =hF;
+        vg =hF.Vg;
+        obj.IpmnuXy =findobj('tag', 'IpmnuXy');
+        obj.XX =vg.x;
+        obj.YY =vg.y;
+        obj.VerifieListXY();
+        IModeXY(obj);
+        lenom =obj.listcanxy();
+        if isempty(obj.XX)      % aucun choix de fait
+          vg.choixy=1;
+        else                    % ici on a au moins un XX de choisi
+          if isempty(vg.choixy) | vg.choixy == 0 | vg.choixy > length(obj.YY)
+            vg.choixy =1;
+          end
+          vg.x =vg.x(vg.choixy);
+          if length(obj.YY)
+            vg.y =vg.y(vg.choixy);
+          end
         end
-        vg.x =vg.x(vg.choixy);
-        if length(obj.YY)
-          vg.y =vg.y(vg.choixy);
-        end
+        obj.canoXY.setString(lenom);
+        obj.canoXY.setValue(vg.choixy);
+      catch moo;
+        CQueEsEsteError.dispOct(moo);
+        rethrow(moo);
       end
-      obj.canoXY.setString(lenom);
-      obj.canoXY.setValue(vg.choixy);
     end
 
     %--------------------------------
@@ -93,7 +103,7 @@ classdef CModeXY < handle
     %--------------------
     function montrer(obj)
       hA =CAnalyse.getInstance();
-      obj.Fid.Vg.xy =1;
+      obj.Fid.Vg.xy =true;
       obj.cano.setString(obj.Fid.Hdchnl.Listadname);
       set(obj.Fig, 'Units','pixels', 'Position',hA.laPosXY, 'Units','normalized' , 'Visible','on');
       set(obj.IpmnuXy, 'checked','on');
@@ -106,7 +116,7 @@ classdef CModeXY < handle
     function cacher(obj)
       obj.AuRepos();
       hA =CAnalyse.getInstance();
-      obj.Fid.Vg.xy =0;
+      obj.Fid.Vg.xy =false;
       hA.OFig.affiche();
     end
 
@@ -116,7 +126,7 @@ classdef CModeXY < handle
     %--------------------
     function AuRepos(obj)
       hA =CAnalyse.getInstance();
-      set(obj.Fig, 'Units','pixels', 'Visible','off');
+      set(obj.Fig, 'units','pixels', 'visible','off');
       hA.laPosXY =get(obj.Fig, 'Position');
       set(obj.IpmnuXy, 'checked','off');
     end
@@ -387,10 +397,10 @@ classdef CModeXY < handle
       action =get(findobj('Tag','IpMarkX'),'value');
       if action
         set(findobj('Tag','IpMarkY'),'value',0);
-        obj.Fid.Vg.xymarkx =1;
+        obj.Fid.Vg.xymarkx =true;
       else
         set(findobj('Tag','IpMarkY'),'value',1);
-        obj.Fid.Vg.xymarkx =0;
+        obj.Fid.Vg.xymarkx =false;
       end
     end
 
@@ -404,10 +414,10 @@ classdef CModeXY < handle
       action =get(findobj('Tag','IpMarkY'),'value');
       if action
         set(findobj('Tag','IpMarkX'),'value',0);
-        obj.Fid.Vg.xymarkx=0;
+        obj.Fid.Vg.xymarkx=false;
       else
         set(findobj('Tag','IpMarkX'),'value',1);
-        obj.Fid.Vg.xymarkx=1;
+        obj.Fid.Vg.xymarkx=true;
       end
     end
 

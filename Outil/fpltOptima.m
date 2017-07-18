@@ -4,7 +4,7 @@
 %
 %% Ce programme permet de calculer le centre de pression à partir d'une ou
 % des force(s) [N] et des moments de forces [Nm] pour la plate forme de
-% force AMTI conductive (modèle OR6-6, laboratoire posture)
+% force Optima conductive (modèle OR6-6, laboratoire posture)
 %
 % Initié par M. Simoneau, Janvier 2002
 % Version 1.0
@@ -21,14 +21,20 @@
 % octobre 2012, MEK
 % Modifié pour la plateforme Optima
 % mars 2016, MEK
+% Ajout du calcul COG (mfile "gline.m" de:  Marcos Duarte  mduarte@usp.br 11oct1998)
+% juillet 2017
 %
-function fpltOptima(hObj, canal)
+function fpltOptima(hObj, R)
   oA =CAnalyse.getInstance();
   oF =oA.findcurfich();
   hdchnl =oF.Hdchnl;
   vg =oF.Vg;
+  canal =R.lesCan;
   leWb =laWaitbar(0, 'Calcul du centre de pression...', 'C', 'C', gcf);
-  leBout =vg.ess+5;
+  leBout =5+vg.ess+(R.COG*vg.ess);
+  if R.COG & R.canFx > 0 & R.canFy > 0
+    leBout =leBout+vg.ess;
+  end
   renduA =0;
   % création des canaux
   hdchnl.duplic([canal canal(3) canal(3)]);
@@ -107,12 +113,32 @@ function fpltOptima(hObj, canal)
     DoCPy =DoFz;
   end
   n.cpx =suivant; suivant =suivant+1;
-  n.cpy =suivant;
+  n.cpy =suivant; suivant =suivant+1;
+  if R.canFx > 0
+    DoCGx =DoCPx;
+    n.cgx =suivant; suivant =suivant+1;
+    % si on travaille avec 3 canaux seulement, il faut "définir" les canaux pour COG
+    if ~exist('DoFx','var')
+      DoFx =DoFz;
+      hFx =CDtchnl();
+      oF.getcanal(hFx, canal(1));
+      nFx =hFx.Nom;
+    end
+  end
+  if R.canFy > 0
+    DoCGy =DoCPy;
+    n.cgy =suivant;
+    % si on travaille avec 3 canaux seulement, il faut "définir" les canaux pour COG
+    if ~exist('DoFy','var')
+      DoFy =DoFz;
+      hFy =CDtchnl();
+      oF.getcanal(hFy, canal(1));
+      nFy =hFy.Nom;
+    end
+  end
   renduA =renduA+2;
   waitbar(renduA/leBout, leWb);
-  %--- Enfin le calcul ---%
-  renduA =renduA+2;
-  waitbar(renduA/leBout, leWb);
+  %--- Enfin le calcul du COP---%
   for trial =1:vg.ess
     NS =min(hdchnl.nsmpls(canal, trial));
     waitbar((renduA+trial)/leBout, leWb);
@@ -137,6 +163,14 @@ function fpltOptima(hObj, canal)
       DoCPy(:,trial) =(DoMx(:,trial)./DoFz(:,trial))*100;   % Unité: cm
       hdchnl.max(n.cpy, trial) =max(DoCPy(1:NS,trial));
       hdchnl.min(n.cpy, trial) =min(DoCPy(1:NS,trial));
+      %--- Fx pour COG ---
+      if R.canFx > 0
+        DoFx(1:NS,trial) =hFx.Dato.(nFx)(1:NS,trial)/optimaFC(1,1);
+      end
+      %--- Fy pour COG ---
+      if R.canFy > 0
+        DoFy(1:NS,trial) =hFy.Dato.(nFy)(1:NS,trial)/optimaFC(1,2);
+      end
     elseif length(canal) == 6  % [hFx, hFy, hFz, hMx, hMy, hMz]
       %--- Fx ---%
       DoFx(1:NS,trial) =hFx.Dato.(nFx)(1:NS,trial)/optimaFC(1,1);
@@ -170,6 +204,46 @@ function fpltOptima(hObj, canal)
       DoCPy(1:NS,trial) =(DoMx(1:NS,trial)./DoFz(1:NS,trial))*100;   % Unité: cm
       hdchnl.max(n.cpy, trial) =max(DoCPy(1:NS,trial));
       hdchnl.min(n.cpy, trial) =min(DoCPy(1:NS,trial));
+    end
+  end
+  %--- Et le calcul du COG---%
+  if R.COG
+    TEXTO ='Calcul du centre de gravité...';
+    renduA =renduA+vg.ess;
+    waitbar(renduA/leBout, leWb, TEXTO);
+    % création des canaux COG
+    if R.canFx > 0
+      hdchnl.duplic(n.cpx);
+      hdchnl.adname{end} ='CGx';
+      nbcan =nbcan+1;
+    end
+    if R.canFy > 0
+      hdchnl.duplic(n.cpy);
+      hdchnl.adname{end} ='CGy';
+      nbcan =nbcan+1;
+    end
+    % calcul de la masse en Kg.
+    lamasse =mean(DoFz(DoFz(:)>10))/9.8;
+    NS =0;
+    for trial =1:vg.ess
+      if ~(NS == hdchnl.nsmpls(n.cpx, trial))
+        NS =hdchnl.nsmpls(n.cpx, trial);
+        temps =[1:NS]/hdchnl.rate(n.cpx, trial);
+      end
+      if R.canFx > 0
+        renduA =renduA+1;
+        waitbar((renduA)/leBout, leWb, [TEXTO 'X,  ess: ' num2str(trial)]);
+        DoCGx(1:NS,trial) =cogline(temps, -DoFx(1:NS,trial), DoCPx(1:NS,trial).*10, lamasse)./10;
+        hdchnl.max(n.cgx, trial) =max(DoCGx(1:NS,trial));
+        hdchnl.min(n.cgx, trial) =min(DoCGx(1:NS,trial));
+      end
+      if R.canFy > 0
+        renduA =renduA+1;
+        waitbar((renduA)/leBout, leWb, [TEXTO 'Y,  ess: ' num2str(trial)]);
+        DoCGy(1:NS,trial) =cogline(temps, -DoFy(1:NS,trial), DoCPy(1:NS,trial).*10, lamasse)./10;
+        hdchnl.max(n.cgy, trial) =max(DoCGy(1:NS,trial));
+        hdchnl.min(n.cgy, trial) =min(DoCGy(1:NS,trial));
+      end
     end
   end
   % Destruction des canaux inutils pour le reste du traitement
@@ -234,6 +308,18 @@ function fpltOptima(hObj, canal)
     sD.tmp =DoCPy; clear DoCPy;
     tmpDt.Dato =sD;
     oF.setcanal(tmpDt, n.cpy);
+  end
+  if R.canFx > 0
+    % sauve Gpx
+    sD.tmp =DoCGx; clear DoCGx;
+    tmpDt.Dato =sD;
+    oF.setcanal(tmpDt, n.cgx);
+  end
+  if R.canFy > 0
+    % sauve Gpy
+    sD.tmp =DoCGy; clear DoCGy;
+    tmpDt.Dato =sD;
+    oF.setcanal(tmpDt, n.cgy);
   end
   vg.nad =vg.nad+nbcan;
   vg.sauve =true;

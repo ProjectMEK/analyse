@@ -37,7 +37,16 @@ classdef CMLMark < handle
     %
     function initTexto(tO, S)
       foo =CMLMark();
-      ch =properties(foo);
+
+      K =CParamGlobal.getInstance();
+      if K.matlab
+        % Matlab permet l'utilisation de la commande "properties"
+        ch =getProp(foo);
+      else
+        % Octave ne le permet pas
+        ch =fieldnames(foo);
+      end
+
       delete(foo);
       for U =1:length(ch)
         if isfield(S, ch{U}) || isprop(S, ch{U})

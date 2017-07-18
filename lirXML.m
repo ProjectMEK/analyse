@@ -51,7 +51,16 @@ function lirtextXML(tO)
   hVg.nomstim ={};
   %****LECTURE DES DATAS****
   G =CStrucA21XML();
-  elnombre =properties(G);
+
+  K =CParamGlobal.getInstance();
+  if K.matlab
+    % Matlab permet l'utilisation de la commande "properties"
+    elnombre =getProp(G);
+  else
+    % Octave ne le permet pas
+    elnombre =fieldnames(G);
+  end
+
   delete(G);
   hVg.nad =length(elnombre);
   tO.col =hVg.nad;
@@ -84,7 +93,7 @@ function lirtextXML(tO)
   tranche =1;
   transh =1;
   % Appel/création d'une waitbar
-  tO.leWb =findobj('tag','WaitBarLecture');
+  tO.leWb =findall(0, 'type','figure', 'name','WBarLecture');
   hT =tO.txtml;
   TextLocal =[hT.fichier tO.fname{1}];
   delwb =false;
