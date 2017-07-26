@@ -111,11 +111,7 @@ function stat4COP(hObj)
   cY =2;
   %_______________________________________
   %--- Vérification des datas (? NaN) ---%
-  fOo =isnan(dtchnl(:));
-  fOO =find(fOo == true);
-  if ~isempty(fOO)
-    dtchnl(fOO) =0;
-  end
+  dtchnl(isnan(dtchnl(:))) =0;
   %__________________________________________
   %--- CPdata dans une matrice distincte ---%
   CPdata =double(dtchnl);
@@ -165,7 +161,7 @@ function stat4COP(hObj)
   try
     c =find(hdchnl.nsmpls(leCx,:) > 1);
     if getborne       %--- pas de bornes donc pas de calcul selon des bornes temporelles
-      fprintf(fid,'Sujet;Condition;trial;RangeX;RangeY;Accroissement;RMSVCOPx;RMSVCOPx;COPsteadymnX;PmnVCOPx;COPsteadymxX;PmxVCOPx;COPsteadymnY;PmnVCOPy;COPsteadymxY;PmxVCOPy;Speed;Surface;VarCPx;VarCPy;VarCPxy;MoyCPx;MoyCPy\n'); 
+      fprintf(fid,'Sujet;Condition;trial;RangeX;RangeY;Accroissement;RMSVCOPx;RMSVCOPy;COPsteadymnX;PmnVCOPx;COPsteadymxX;PmxVCOPx;COPsteadymnY;PmnVCOPy;COPsteadymxY;PmxVCOPy;Speed;Surface;VarCPx;VarCPy;VarCPxy;MoyCPx;MoyCPy\n'); 
       for trial = c
         a =hdchnl.nsmpls(leCx, trial);
         renduA =trial/length(c);
@@ -193,11 +189,8 @@ function stat4COP(hObj)
           SteadyY = NaN;
         end
         %--- SOMMATION des déplacements sans égard à la direction (sommation des déplacements scalaires) ---%
-        for k =1:a-1
-          Accroiss(k,1) =sqrt((dtchnl(k+1,1,trial)-dtchnl(k,1,trial))^2+(dtchnl(k+1,2,trial)-dtchnl(k,2,trial))^2);
-        end
         %--- Accroissement ---%
-        Accroissement = sum(Accroiss);
+        Accroissement =sum(sqrt(diff(dtchnl(1:a,1,trial)).^2 + diff(dtchnl(1:a,2,trial)).^2));
         %--- Calcul du centre de pression moyen ---%
         MoyCPx = mean(dtchnl(1:a,1,trial));
         MoyCPy = mean(dtchnl(1:a,2,trial));
@@ -285,7 +278,7 @@ function stat4COP(hObj)
       for trial = c
         a =hdchnl.nsmpls(leCx, trial);
         renduA =trial/length(c);
-        borne =valeurDeBorne(hObj, ptchnl, trial, Sfreq);
+        borne =valeurDeBorne(hObj, ptchnl, trial, Sfreq)
         p =length(borne);
         %--- Écriture du numéro de la borne dans le fichier résultat
         borneID = 1;
@@ -371,14 +364,16 @@ function stat4COP(hObj)
             COPsteadymnY = NaN; 
           end
           %--- SOMMATION des déplacements sans égard à la direction (sommation des déplacements scalaires) ---%
-          Accroissement =0;
-          for k =borne(1,q):borne(1,q+1)-1
-            if k == a
-              break                   
-            else
-              Accroissement =Accroissement+sqrt((CPdata(k+1,1,trial)-CPdata(k,1,trial))^2+(CPdata(k+1,2,trial)-CPdata(k,2,trial))^2);
-            end
-          end
+          %  ANCIEN SCRIPT
+          %  Accroissement =0;
+          %  for k =borne(1,q):borne(1,q+1)-1
+          %    if k == a
+          %      break                   
+          %    else
+          %      Accroissement =Accroissement+sqrt((CPdata(k+1,1,trial)-CPdata(k,1,trial))^2+(CPdata(k+1,2,trial)-CPdata(k,2,trial))^2);
+          %    end
+          %  end
+          Accroissement =sum(sqrt(diff(CPdata(borne(1,q):borne(1,q+1),1,trial)).^2 + diff(CPdata(borne(1,q):borne(1,q+1),2,trial)).^2));
           %--- Calcul du centre de pression moyen ---%
           MoyCPx = mean(CPdata(borne(1,q):borne(1,q+1),1,trial));
           MoyCPy = mean(CPdata(borne(1,q):borne(1,q+1),2,trial));

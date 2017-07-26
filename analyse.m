@@ -14,7 +14,7 @@
 %     Caroline , étudiante en stage.
 %     Thelma Coyle, CNRS, Marseille
 %     Gérald Quaire  (début 1999, ses contributions sur le selspot ne sont plus utilisées)
-%     Jean-Philippe Pialasse, étudiant Msc, Phd, post-doc...
+%     Jean-Philippe Pialasse, étudiant++, Laboratoire GRAME, dépt. Kinésiologie, U. Laval
 %
 %   Plusieurs autres dont je n'ai pas les noms ont participés à l'élaboration
 %   de la documentation, sur un site "wiki".
@@ -45,7 +45,7 @@ function analyse(varargin)
 
   if nargin == 0                 % On ouvre Analyse
     commande ='ouverture';
-  else                           % Analyse est ddéjà ouvert
+  else                           % Analyse est déjà ouvert
     commande =varargin{1};
   end
 
@@ -62,7 +62,7 @@ function analyse(varargin)
       % création de l'instance unique de l'application
       hA =CAnalyse.getInstance();
       % comme paramètres, on lui passe le numéro de version en format numérique et en texte
-      hA.initial(8.0231, '8.02.31');
+      hA.initial(8.0233, '8.02.33');
       % lecture du fichier des préférences (Cette fonction est inclus dans ce mfile)
       tmp =LeerParam(FF);
       hA.initLesPreferencias(tmp);

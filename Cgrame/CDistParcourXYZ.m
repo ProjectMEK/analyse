@@ -198,9 +198,11 @@ classdef CDistParcourXYZ < handle
    		  waitbar(U/vg.ess);
         hdchnl.comment{vg.nad, U} =['Dist-Parcourue/total/' hdchnl.comment{tO.canX, U}];
      		letop =min([hdchnl.nsmpls(tO.canX, U), hdchnl.nsmpls(tO.canY, U)]);
-     		Xx =hCx.Dato.(Nx)(2:letop, U)-hCx.Dato.(Nx)(1:letop-1, U);
-     		Yy =hCy.Dato.(Ny)(2:letop, U)-hCy.Dato.(Ny)(1:letop-1, U);
-     		DXY =sqrt(Xx.^2+Yy.^2);
+     		% calcul de la distance inter-échantillon
+     		% Xx =hCx.Dato.(Nx)(2:letop, U)-hCx.Dato.(Nx)(1:letop-1, U);
+     		% Yy =hCy.Dato.(Ny)(2:letop, U)-hCy.Dato.(Ny)(1:letop-1, U);
+     		% DXY =sqrt(Xx.^2+Yy.^2);
+     	  DXY =sqrt(diff(hCx.Dato.(Nx)(1:letop, U)).^2 + diff(hCy.Dato.(Ny)(1:letop, U)).^2);
    		  for V = 1:letop-1
           D(V+1, U) =D(V, U)+DXY(V);
         end
@@ -234,10 +236,11 @@ classdef CDistParcourXYZ < handle
    		  waitbar(U/vg.ess);
         hdchnl.comment{vg.nad, U} =['Dist-Parcourue/total/' hdchnl.comment{tO.canX, U}];
      		letop =min([hdchnl.nsmpls(tO.canX, U), hdchnl.nsmpls(tO.canY, U), hdchnl.nsmpls(tO.canZ, U)]);
-     		Xx =hCx.Dato.(Nx)(2:letop, U)-hCx.Dato.(Nx)(1:letop-1, U);
-     		Yy =hCy.Dato.(Ny)(2:letop, U)-hCy.Dato.(Ny)(1:letop-1, U);
-     		Zz =hCz.Dato.(Nz)(2:letop, U)-hCz.Dato.(Nz)(1:letop-1, U);
-     		DXYZ =sqrt(Xx.^2+Yy.^2+Zz.^2);
+     		% calcul de la distance inter-échantillon
+     		% Xx =hCx.Dato.(Nx)(2:letop, U)-hCx.Dato.(Nx)(1:letop-1, U);
+     		% Yy =hCy.Dato.(Ny)(2:letop, U)-hCy.Dato.(Ny)(1:letop-1, U);
+     		% Zz =hCz.Dato.(Nz)(2:letop, U)-hCz.Dato.(Nz)(1:letop-1, U);
+     	  DXY =sqrt(diff(hCx.Dato.(Nx)(1:letop, U)).^2 + diff(hCy.Dato.(Ny)(1:letop, U)).^2 + diff(hCz.Dato.(Nz)(1:letop, U)).^2);
    		  for V = 1:letop-1
           D(V+1, U) =D(V, U)+DXYZ(V);
         end
@@ -312,9 +315,11 @@ classdef CDistParcourXYZ < handle
      		p2txt =num2str(round((P2-1)/hdchnl.rate(vg.nad, U)*1000)*0.001);
         hdchnl.comment{vg.nad, U} =['Dist-Parcourue/entre ' p1txt ' et ' p2txt '/' comment];
      		cur =1;
-     		Xx =hCx.Dato.(Nx)(P1+1:P2, U)-hCx.Dato.(Nx)(P1:P2-1, U);
-     		Yy =hCy.Dato.(Ny)(P1+1:P2, U)-hCy.Dato.(Ny)(P1:P2-1, U);
-     		DXY =sqrt(Xx.^2+Yy.^2);
+     		% calcul de la distance inter-échantillon
+     		% Xx =hCx.Dato.(Nx)(P1+1:P2, U)-hCx.Dato.(Nx)(P1:P2-1, U);
+     		% Yy =hCy.Dato.(Ny)(P1+1:P2, U)-hCy.Dato.(Ny)(P1:P2-1, U);
+     		% DXY =sqrt(Xx.^2+Yy.^2);
+     	  DXY =sqrt(diff(hCx.Dato.(Nx)(P1:P2, U)).^2 + diff(hCy.Dato.(Ny)(P1:P2, U)).^2);
    		  for V = P1:P2-1
           D(cur+1, U) =D(cur, U)+DXY(cur);
           cur =cur+1;
@@ -393,10 +398,12 @@ classdef CDistParcourXYZ < handle
      		p2txt =num2str(round((P2-1)/hdchnl.rate(vg.nad, U)*1000)*0.001);
         hdchnl.comment{vg.nad, U} =['Dist-Parcourue/entre ' p1txt ' et ' p2txt '/' comment];
      		cur =1;
-     		Xx =hCx.Dato.(Nx)(P1+1:P2, U)-hCx.Dato.(Nx)(P1:P2-1, U);
-     		Yy =hCy.Dato.(Ny)(P1+1:P2, U)-hCy.Dato.(Ny)(P1:P2-1, U);
- 		    Zz =hCz.Dato.(Nz)(P1+1:P2, U)-hCz.Dato.(Nz)(P1:P2-1, U);
-     		DXYZ =sqrt(Xx.^2+Yy.^2+Zz.^2);
+     		% calcul de la distance inter-échantillon
+     		% Xx =hCx.Dato.(Nx)(P1+1:P2, U)-hCx.Dato.(Nx)(P1:P2-1, U);
+     		% Yy =hCy.Dato.(Ny)(P1+1:P2, U)-hCy.Dato.(Ny)(P1:P2-1, U);
+ 		    % Zz =hCz.Dato.(Nz)(P1+1:P2, U)-hCz.Dato.(Nz)(P1:P2-1, U);
+     		% DXYZ =sqrt(Xx.^2+Yy.^2+Zz.^2);
+     	  DXY =sqrt(diff(hCx.Dato.(Nx)(P1:P2, U)).^2 + diff(hCy.Dato.(Ny)(P1:P2, U)).^2 + diff(hCz.Dato.(Nz)(P1:P2, U)).^2);
    		  for V = P1:P2-1
           D(cur+1, U) =D(cur, U)+DXYZ(cur);
           cur =cur+1;

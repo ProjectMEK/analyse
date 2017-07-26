@@ -245,7 +245,7 @@ classdef CDessine < handle
       lesnoms ={'Tous'};
       lesnoms(2:vg.nad+1) =Ofich.Hdchnl.Listadname;
       obj.canopts.updateprop({'String';lesnoms});
-      obj.cano.updateprop({'value';1;'String';Ofich.Hdchnl.Listadname;'max';vg.nad;'value';vg.can});
+      obj.cano.updateprop({'value';1;'String';Ofich.Hdchnl.Listadname;'max';vg.nad+1;'value';vg.can});
       set(findobj('tag','IpCanTous'),'value',vg.toucan);
       obj.essai.updateprop({'value';1});
       obj.essai.setString(vg.lesess);

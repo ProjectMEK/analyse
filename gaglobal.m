@@ -27,7 +27,6 @@ function gaglobal(varargin)
     end
   %------------- % Si on modifie les noms de canaux
   case 'editnom'
-    letop =max(2,vg.nad);
     hdchnl =Ofich.Hdchnl;
     hdchnl.ResetListAdname();
     lesnoms ={'Tous'};

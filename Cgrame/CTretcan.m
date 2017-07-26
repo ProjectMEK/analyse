@@ -319,8 +319,8 @@ classdef CTretcan < handle
     %--------------------------------------------
     % Fonction pour gérer le retour de la réponse
     %_____________________________________________
-    % quiero decir un pequeño  (ad-justage...  :-)
-    % que es un chiste (querido padre...)
+    % Quiero decir un pequeño  (ad-justage...  :-).
+    % Que es un chiste (querido padre...)
     %---------------------
     function ajustage(obj)
       vg =obj.fid.Vg;

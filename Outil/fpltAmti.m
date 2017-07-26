@@ -210,7 +210,9 @@ function fpltAmti(hObj, R)
       hdchnl.min(n.cpy, trial) =min(DoCPy(1:NS,trial));
     end
   end
-  %--- Et le calcul du COG---%
+  %---------------------------%
+  %--- Et le calcul du COG ---%
+  %---------------------------%
   if R.COG
       waitbar(renduA/leBout, leWb, 'Calcul du centre de gravité...');
     % création des canaux COG

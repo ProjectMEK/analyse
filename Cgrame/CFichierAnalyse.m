@@ -84,7 +84,7 @@ classdef CFichierAnalyse < CFichier
           vg.sauve =true;
         end
 
-        % On fabrique un fichier temporaire de travail avce les datas seulement
+        % On fabrique un fichier temporaire de travail avec les datas seulement
         tO.copycan();
         OA.CompVgPref(vg);
         tO.majchamp();

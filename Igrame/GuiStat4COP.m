@@ -77,7 +77,7 @@ function fig =GuiStat4COP(Ppa)
               'FontWeight','bold', 'String','Borne(s):  ', 'HorizontalAlignment','right');
     uicontrol('Parent',pan, 'Style','edit', 'Position',[posx+largeText posy largeBox haut], ...
               'FontSize',10, 'String',lesBornes, 'Tag','BorneDeTravail', ...
-              'TooltipString','/5 10 10 15/i Début incrément overlap Fin/Laissez vide pour ne pas avoir de résultat par tranche temporelle');
+              'TooltipString','/5 10 10 15/i Début fin incrément overlap/Laissez vide pour ne pas avoir de résultat par tranche temporelle');
    %__________________
    % Fichier de sortie
     posx =25; large2 =20; large =lpan-2*posx-large2; posy =posy-haut-2*dy; hautTop =haut-15;

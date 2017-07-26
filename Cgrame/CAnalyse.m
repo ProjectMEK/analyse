@@ -216,10 +216,10 @@ classdef (Sealed) CAnalyse < handle
       tO.Fic.vermot =vermot;
     end
 
-    %-------------------------------
+    %----------------------------------------
     % Mise à jour du fichier courant
-    % EN ENTRÉE on a  OFi --> un objet de la classe CLiranalyse
-    %--------------------------
+    % EN ENTRÉE, OFi --> un objet CLiranalyse
+    %----------------------------------------
     function majcurfich(tO,OFi)
       try
         % Mise à jour de curfich
@@ -244,19 +244,20 @@ classdef (Sealed) CAnalyse < handle
       end
     end
 
-    %--------------------------------------
-    % retourne le Handle du fichier courant
-    %--------------------------
+    %---------------------------------------
+    % retourne le Handle du fichier courant.
+    % F sera un objet:  CLiranalyse
+    %---------------------------------------
     function F =findcurfich(tO)
       F =tO.Fic.hfich{tO.Fic.curfich};
     end
 
-    %_______________________________________________
+    %________________________________________________
     % À la fin du processus d'ouverture d'un fichier
     % on passe par cette fonction peu importe le type
     % de fichier à ouvrir
-    % EN ENTRÉE on a  OFi --> un objet de la classe CLiranalyse
-    %-----------------------------
+    % EN ENTRÉE on a  OFi --> un objet CLiranalyse
+    %------------------------------------------------
     function finaliseLect(tO, OFi)
       try
         tO.Vg.mazero();
