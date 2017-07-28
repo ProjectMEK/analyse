@@ -141,6 +141,21 @@ classdef CGuiCalculCOP < CBasePourFigureAnalyse & COngletUtil & CParamCalculCOP
     %------------------------------------
     function changeCanFx(tO, src, event)
       tO.canFx =get(src, 'Value')-1;
+      if (tO.canFy == 0) & (tO.canFz == 0) & (tO.canMx == 0) & (tO.canMy == 0) & (tO.canMz == 0)
+        % on vérifie si les autres canaux ont été sélectionné, sinon
+        % on les remplie automatiquement avec les canaux suivants.
+        Ncan =length(get(src, 'string'));
+        tO.canFy =tO.canFx+1;
+        tO.canFz =tO.canFx+2;
+        tO.canMx =tO.canFx+3;
+        tO.canMy =tO.canFx+4;
+        tO.canMz =tO.canFx+5;
+        set(findobj('tag','CanauxFy'),'value',tO.canFy+1);
+        set(findobj('tag','CanauxFz'),'value',tO.canFz+1);
+        set(findobj('tag','CanauxMx'),'value',tO.canMx+1);
+        set(findobj('tag','CanauxMy'),'value',tO.canMy+1);
+        set(findobj('tag','CanauxMz'),'value',tO.canMz+1);
+      end
     end
 
     %-----------------------------------

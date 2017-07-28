@@ -17,6 +17,7 @@
 % Marcos Duarte  mduarte@usp.br 11oct1998 
 %
 function varargout = cogline(t,f,cop,mass)
+tic
   if size(t,1)==1
      t=t';
   end
@@ -35,12 +36,13 @@ function varargout = cogline(t,f,cop,mass)
   % consider the first and last points of COP coincident with GL to avoid problems
   % in the extremities (later, you must discard the first and last second of the GL):
   xzeros = [t(1); xzeros; t(end)];
+  long =length(xzeros);
   iep0 = interp1(t,cop,xzeros,'linear');
   % GL:
   %append xzeros to t:
   tcopglc = [t; xzeros];
   [tcopglc,inds] = sort(tcopglc);
-  fcopglc = [f; zeros(length(xzeros),1)];
+  fcopglc = [f; zeros(long,1)];
   fcopglc = fcopglc(inds);
   copglc = [cop;iep0];
   copglc = copglc(inds);
@@ -49,8 +51,11 @@ function varargout = cogline(t,f,cop,mass)
   tcopglc(ind0) = [];
   fcopglc(ind0) = [];
   copglc(ind0) = [];
-  vgl = [];gl = []; tgl2= []; ffgl = [];
-  for i = 1:length(xzeros)-1
+  ffgl = [];
+  vgl =zeros(length(tcopglc),1); gl =zeros(length(tcopglc),1); tgl2 =zeros(length(tcopglc),1);
+% mek =zeros(long,1);
+toc
+  for i = 1:long-1
      ini = find(tcopglc == xzeros(i));
      fim = find(tcopglc == xzeros(i+1));
      if fim > length(tcopglc)
@@ -58,18 +63,33 @@ function varargout = cogline(t,f,cop,mass)
      end
      if fim-ini > 1
         timegl = tcopglc(ini:fim);
+        dtimegl =diff(timegl);
         ffgl = fcopglc(ini:fim);
         copgl = copglc(ini:fim);
         % double integration of the force data:
+        % ancien scrypt
         v = 1000*cumtrapz( timegl, ffgl )/mass;	% m to mm
+        % v = 1000*    [0; dtimegl.*(ffgl(1:end-1)+(diff(ffgl)/2))]   /mass;	% m to mm
         v0 = ( copgl(end) -  copgl(1) - trapz( timegl, v ) ) / ( timegl(end)-timegl(1) );
+        foo = (copgl(end) - copgl(1) - sum(diff([0; dtimegl.*(v(1:end-1)+(diff(v)/2))])) ) / ( timegl(end)-timegl(1) );
         v = v0+v;
         vgl(ini:fim) = v;
-        x = copgl(1) + cumtrapz(timegl,v);
+        x = copgl(1) + cumtrapz(timegl,v);  % ????????????????????????????????????????????????
+        % x = copgl(1) + [0; dtimegl.*(v(1:end-1)+(diff(v)/2))]
         gl(ini:fim) = x;
         tgl2(ini:fim) = timegl;
      end
+     if foo ~= v0
+       i
+       break
+     end
+%    mek(i) =length(vgl);
   end
+class(x)
+class(v)
+toc
+% mek(1:15)
+% mek(end-14:end)
   temp = find( diff(tgl2)==0 );
   tgl2(temp) = [];
   gl(temp) = [];
@@ -85,6 +105,7 @@ function varargout = cogline(t,f,cop,mass)
   end
   gl = gl + meancop;
   varargout{1} = gl;
+toc
 end
 
 %

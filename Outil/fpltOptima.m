@@ -224,10 +224,12 @@ function fpltOptima(hObj, R)
       hdchnl.adname{end} ='CGy';
       nbcan =nbcan+1;
     end
+    % *************************************************************************************
+    % ***** DEMANDER À MARTIN SI IL VEUT LA MASSE PAR ESSAI, OU GLOBAL (MOINS LES ZÉROS???)
     % calcul de la masse en Kg.
     lamasse =mean(DoFz(DoFz(:)>10))/9.8;
     NS =0;
-    for trial =1:vg.ess
+    for trial =1:1  % vg.ess
       if ~(NS == hdchnl.nsmpls(n.cpx, trial))
         NS =hdchnl.nsmpls(n.cpx, trial);
         temps =[1:NS]/hdchnl.rate(n.cpx, trial);
@@ -239,7 +241,7 @@ function fpltOptima(hObj, R)
         hdchnl.max(n.cgx, trial) =max(DoCGx(1:NS,trial));
         hdchnl.min(n.cgx, trial) =min(DoCGx(1:NS,trial));
       end
-      if R.canFy > 0
+      if R.canFy > 1000
         renduA =renduA+1;
         waitbar((renduA)/leBout, leWb, [TEXTO 'Y,  ess: ' num2str(trial)]);
         DoCGy(1:NS,trial) =cogline(temps, -DoFy(1:NS,trial), DoCPy(1:NS,trial).*10, lamasse)./10;
