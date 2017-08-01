@@ -229,7 +229,8 @@ function fpltOptima(hObj, R)
     % calcul de la masse en Kg.
     lamasse =mean(DoFz(DoFz(:)>10))/9.8;
     NS =0;
-    for trial =1:1  % vg.ess
+    for trial =1:vg.ess
+      tic
       if ~(NS == hdchnl.nsmpls(n.cpx, trial))
         NS =hdchnl.nsmpls(n.cpx, trial);
         temps =[1:NS]/hdchnl.rate(n.cpx, trial);
@@ -237,17 +238,18 @@ function fpltOptima(hObj, R)
       if R.canFx > 0
         renduA =renduA+1;
         waitbar((renduA)/leBout, leWb, [TEXTO 'X,  ess: ' num2str(trial)]);
-        DoCGx(1:NS,trial) =cogline(temps, -DoFx(1:NS,trial), DoCPx(1:NS,trial).*10, lamasse)./10;
+        DoCGx(1:NS,trial) =cogline(temps, -DoFx(1:NS,trial), DoCPx(1:NS,trial).*10,lamasse) /10;
         hdchnl.max(n.cgx, trial) =max(DoCGx(1:NS,trial));
         hdchnl.min(n.cgx, trial) =min(DoCGx(1:NS,trial));
       end
-      if R.canFy > 1000
+      if R.canFy > 0
         renduA =renduA+1;
         waitbar((renduA)/leBout, leWb, [TEXTO 'Y,  ess: ' num2str(trial)]);
-        DoCGy(1:NS,trial) =cogline(temps, -DoFy(1:NS,trial), DoCPy(1:NS,trial).*10, lamasse)./10;
+        DoCGy(1:NS,trial) =cogline(temps, -DoFy(1:NS,trial), DoCPy(1:NS,trial).*10, lamasse) /10;
         hdchnl.max(n.cgy, trial) =max(DoCGy(1:NS,trial));
         hdchnl.min(n.cgy, trial) =min(DoCGy(1:NS,trial));
       end
+      toc
     end
   end
   % Destruction des canaux inutils pour le reste du traitement

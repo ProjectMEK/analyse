@@ -45,19 +45,21 @@ f = f-mean(f);
 meancop = mean(cop);
 cop = cop-meancop;
 % Find the instants where F is zero (in these instants GL and COP coincide):
-[ind,xzeros] = findzeros(t,f);
-ind = ind';
+% **-** [ind,xzeros] = findzeros(t,f);
+xzeros = findzeros(t,f);     % ind n'est pas utilisé plus bas
+% **-** ind = ind';
 xzeros = xzeros';
 %consider the first and last points of COP coincident with GL to avoid problems
 % in the extremities (later, you must discard the first and last second of the GL):
-ind = [1; ind; length(t)];
+% **-** ind = [1; ind; length(t)];
 xzeros = [t(1); xzeros; t(end)];
+long =length(xzeros)-1;
 iep0=interp1(t,cop,xzeros,'linear');
 % GL:
 %append xzeros:
 tcopglc=[t; xzeros];
 [tcopglc,inds]=sort(tcopglc);
-fcopglc=[f; zeros(length(xzeros),1)];
+fcopglc=[f; zeros(long+1,1)];
 fcopglc=fcopglc(inds);
 copglc=[cop;iep0];
 copglc=copglc(inds);
@@ -66,7 +68,7 @@ tcopglc(ind0)=[];
 fcopglc(ind0)=[];
 copglc(ind0)=[];
 vgl=[];gl=[];tgl2=[];ffgl=[];
-for i=1:length(xzeros)-1
+for i=1:long
    ini=find(tcopglc==xzeros(i));
    fim=find(tcopglc==xzeros(i+1));
    if fim > length(tcopglc)
@@ -101,10 +103,43 @@ if exist('col')
 end
 gl=gl+meancop;
 varargout{1}=gl;
+end
+
+%
+% Routine modifié par MEK
+% voir plus bas, la routine originale
+%
+function yzeros = findzeros(x,y)
+  % on veut des matrices lignes
+  if size(y,2) == 1
+     y = y';
+  end
+  if size(x,2) == 1
+     x = x';
+  end
+  % find +- transitions (approximate values for zeros):
+  % ind(i): the first number AFTER the zero value
+  K =abs(diff(sign([y(1) y y(end)])));
+  ind =find(K==2);
+  % find better approximation of zeros values using linear interpolation:
+  %
+  % b  = Y1 - m X1
+  % X0 = -b / m
+  % on aura donc
+  % X0 = X1 - Y1/m
+  %
+  yzeros = zeros(1,length(ind));
+  dx =x(1)-x(2);
+  for i = 1:length(ind)
+    % p = l'inverse de la pente (1/m)
+    p = dx/( y(ind(i)-1)-y(ind(i)));
+    yzeros(i) = x(ind(i)-1) - (y(ind(i)-1)*p );
+  end
+  yzeros = sort([yzeros x(find(y==0))]);
+end
 
 
-
-function varargout = findzeros(varargin)
+function varargout = findzeros-ORIGINAL(varargin)
 %FINDZEROS  Find zeros in a vector.
 %  IND=FINDZEROS(Y) finds the indices (IND) which are close to local zeros in the vector Y.  
 %  [IND,XZEROS]=FINDZEROS(X,Y), besides IND finds the values of local zeros (XZEROS) in the 

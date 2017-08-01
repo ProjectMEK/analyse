@@ -17,7 +17,6 @@
 % Marcos Duarte  mduarte@usp.br 11oct1998 
 %
 function varargout = cogline(t,f,cop,mass)
-tic
   if size(t,1)==1
      t=t';
   end
@@ -36,13 +35,13 @@ tic
   % consider the first and last points of COP coincident with GL to avoid problems
   % in the extremities (later, you must discard the first and last second of the GL):
   xzeros = [t(1); xzeros; t(end)];
-  long =length(xzeros);
+  long =length(xzeros)-1;
   iep0 = interp1(t,cop,xzeros,'linear');
   % GL:
   %append xzeros to t:
   tcopglc = [t; xzeros];
   [tcopglc,inds] = sort(tcopglc);
-  fcopglc = [f; zeros(long,1)];
+  fcopglc = [f; zeros(long+1,1)];
   fcopglc = fcopglc(inds);
   copglc = [cop;iep0];
   copglc = copglc(inds);
@@ -51,11 +50,8 @@ tic
   tcopglc(ind0) = [];
   fcopglc(ind0) = [];
   copglc(ind0) = [];
-  ffgl = [];
-  vgl =zeros(length(tcopglc),1); gl =zeros(length(tcopglc),1); tgl2 =zeros(length(tcopglc),1);
-% mek =zeros(long,1);
-toc
-  for i = 1:long-1
+  ffgl = [];vgl=[];gl=[];tgl2=[];
+  for i = 1:long
      ini = find(tcopglc == xzeros(i));
      fim = find(tcopglc == xzeros(i+1));
      if fim > length(tcopglc)
@@ -67,29 +63,27 @@ toc
         ffgl = fcopglc(ini:fim);
         copgl = copglc(ini:fim);
         % double integration of the force data:
-        % ancien scrypt
-        v = 1000*cumtrapz( timegl, ffgl )/mass;	% m to mm
-        % v = 1000*    [0; dtimegl.*(ffgl(1:end-1)+(diff(ffgl)/2))]   /mass;	% m to mm
-        v0 = ( copgl(end) -  copgl(1) - trapz( timegl, v ) ) / ( timegl(end)-timegl(1) );
-        foo = (copgl(end) - copgl(1) - sum(diff([0; dtimegl.*(v(1:end-1)+(diff(v)/2))])) ) / ( timegl(end)-timegl(1) );
+        % *********************************  ANCIEN SCRYPT  *********************************
+        %  v = 1000*cumtrapz( timegl, ffgl )/mass;	% m to mm
+        %  v0 = ( copgl(end) -  copgl(1) - trapz( timegl, v ) ) / ( timegl(end)-timegl(1) );
+        %  x = copgl(1) + cumtrapz(timegl,v);
+        % ***********************************************************************************
+        % Je n'utilise plus les functions trapz et cumtrapz de Matlab car elles sont
+        % un peu trop "lente" compte tenu que les calcul sont très nombreux.
+        % ex: sur un essai qui prenait 31 sec, je suis passé à 25 sec.
+        % ***********************************************************************************
+        % v = 1000*cumtrapz( timegl, ffgl )/mass;	% m to mm
+        v = 1000* cumsum([0; dtimegl.*(ffgl(1:end-1)+(diff(ffgl)/2))]) /mass;	% m to mm
+        % v0 = ( copgl(end) -  copgl(1) - trapz( timegl, v ) ) / ( timegl(end)-timegl(1) );
+        v0 = (copgl(end) - copgl(1) - sum(dtimegl.*(v(1:end-1)+(diff(v)/2))) ) / ( timegl(end)-timegl(1) );
         v = v0+v;
         vgl(ini:fim) = v;
-        x = copgl(1) + cumtrapz(timegl,v);  % ????????????????????????????????????????????????
-        % x = copgl(1) + [0; dtimegl.*(v(1:end-1)+(diff(v)/2))]
+        % x = copgl(1) + cumtrapz(timegl,v);
+        x = copgl(1) + cumsum([0; dtimegl.*(v(1:end-1)+(diff(v)/2))]);
         gl(ini:fim) = x;
         tgl2(ini:fim) = timegl;
      end
-     if foo ~= v0
-       i
-       break
-     end
-%    mek(i) =length(vgl);
   end
-class(x)
-class(v)
-toc
-% mek(1:15)
-% mek(end-14:end)
   temp = find( diff(tgl2)==0 );
   tgl2(temp) = [];
   gl(temp) = [];
@@ -105,7 +99,6 @@ toc
   end
   gl = gl + meancop;
   varargout{1} = gl;
-toc
 end
 
 %
