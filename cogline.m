@@ -1,3 +1,12 @@
+%
+% "An algorithm for determining gravity line location from posturographic recordings"
+% Journal of Biomechanics 31 (1998) 161—164
+% Vladimir M. Zatsiorsky*, Deborah L. King
+% *The Biomechanics Laboratory, Department of Kinesiology, The Pennsylvania State University, University Park, PA 16802, U.S.A.
+%
+%
+%
+%
 % COGLINE calculates the gravity line from horizontal force and COP data.
 % The method of double integration of horizontal force is used here. 
 % The values of COGLINE coincide with the values of COP when the horizontal
@@ -36,21 +45,22 @@ function varargout = cogline(t,f,cop,mass)
   % in the extremities (later, you must discard the first and last second of the GL):
   xzeros = [t(1); xzeros; t(end)];
   long =length(xzeros)-1;
-  iep0 = interp1(t,cop,xzeros,'linear');
+  iep0 = interp1(t,cop,xzeros,'linear');  % Step-1
   % GL:
   %append xzeros to t:
   tcopglc = [t; xzeros];
   [tcopglc,inds] = sort(tcopglc);
-  fcopglc = [f; zeros(long+1,1)];
+  % la force est transformé--> accélération et millimètre.
+  fcopglc = [1000*f/mass; zeros(long+1,1)];
   fcopglc = fcopglc(inds);
-  copglc = [cop;iep0];
+  copglc = [cop;iep0];  % Step-1
   copglc = copglc(inds);
   % on repère les valeurs identiques qui se suivent
   ind0 = find(diff(tcopglc) == 0);
   tcopglc(ind0) = [];
   fcopglc(ind0) = [];
   copglc(ind0) = [];
-  ffgl = [];vgl=[];gl=[];tgl2=[];
+  ffgl = [];gl=[];tgl2=[];
   for i = 1:long
      ini = find(tcopglc == xzeros(i));
      fim = find(tcopglc == xzeros(i+1));
@@ -72,12 +82,13 @@ function varargout = cogline(t,f,cop,mass)
         % un peu trop "lente" compte tenu que les calcul sont très nombreux.
         % ex: sur un essai qui prenait 31 sec, je suis passé à 25 sec.
         % ***********************************************************************************
+        % La transformation en 'mm' et la division par la masse sont faites à
+        % l'extérieur de la boucle FOR.
         % v = 1000*cumtrapz( timegl, ffgl )/mass;	% m to mm
-        v = 1000* cumsum([0; dtimegl.*(ffgl(1:end-1)+(diff(ffgl)/2))]) /mass;	% m to mm
+        v = cumsum([0; dtimegl.*(ffgl(1:end-1)+(diff(ffgl)/2))]);  % Step-2
         % v0 = ( copgl(end) -  copgl(1) - trapz( timegl, v ) ) / ( timegl(end)-timegl(1) );
         v0 = (copgl(end) - copgl(1) - sum(dtimegl.*(v(1:end-1)+(diff(v)/2))) ) / ( timegl(end)-timegl(1) );
         v = v0+v;
-        vgl(ini:fim) = v;
         % x = copgl(1) + cumtrapz(timegl,v);
         x = copgl(1) + cumsum([0; dtimegl.*(v(1:end-1)+(diff(v)/2))]);
         gl(ini:fim) = x;
@@ -87,13 +98,12 @@ function varargout = cogline(t,f,cop,mass)
   temp = find( diff(tgl2)==0 );
   tgl2(temp) = [];
   gl(temp) = [];
-  vgl(temp) = [];
   temp = find( tgl2(2:end)==0 );
   tgl2(temp+1) = [];
   gl(temp+1) = [];
-  vgl(temp+1) = [];
   % interp gl with t:
-  gl = interp1(tgl2',gl',t,'spline');
+  % gl = interp1(tgl2',gl',t,'spline');   % ?????
+  gl = interp1(tgl2',gl',t,'linear');
   if exist('col')
      gl = gl';
   end
@@ -119,10 +129,11 @@ function yzeros = findzeros(x,y)
   ind =find(K==2);
   % find better approximation of zeros values using linear interpolation:
   %
-  % b  = Y1 - m X1
-  % X0 = -b / m
+  %     Y  = m X + b
+  %     b  = Y - m X
+  % X(y=0) = -b / m
   % on aura donc
-  % X0 = X1 - Y1/m
+  % X(y=0) = X - Y/m
   %
   yzeros = zeros(1,length(ind));
   dx =x(1)-x(2);
