@@ -230,7 +230,6 @@ function fpltOptima(hObj, R)
     lamasse =mean(DoFz(DoFz(:)>10))/9.8;
     NS =0;
     for trial =1:vg.ess
-      tic
       if ~(NS == hdchnl.nsmpls(n.cpx, trial))
         NS =hdchnl.nsmpls(n.cpx, trial);
         temps =[1:NS]/hdchnl.rate(n.cpx, trial);
@@ -249,7 +248,6 @@ function fpltOptima(hObj, R)
         hdchnl.max(n.cgy, trial) =max(DoCGy(1:NS,trial));
         hdchnl.min(n.cgy, trial) =min(DoCGy(1:NS,trial));
       end
-      toc
     end
   end
   % Destruction des canaux inutils pour le reste du traitement

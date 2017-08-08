@@ -4,8 +4,9 @@
 % Vladimir M. Zatsiorsky*, Deborah L. King
 % *The Biomechanics Laboratory, Department of Kinesiology, The Pennsylvania State University, University Park, PA 16802, U.S.A.
 %
-%
-%
+% "An estimation of center of gravity from force platform data"
+% Journal of Biomechanics 17 (1984) 53-60
+% Takeshi Shimba
 %
 % COGLINE calculates the gravity line from horizontal force and COP data.
 % The method of double integration of horizontal force is used here. 
@@ -57,6 +58,7 @@ function varargout = cogline(t,f,cop,mass)
   copglc = copglc(inds);
   % on repère les valeurs identiques qui se suivent
   ind0 = find(diff(tcopglc) == 0);
+  % et on les retranche
   tcopglc(ind0) = [];
   fcopglc(ind0) = [];
   copglc(ind0) = [];
@@ -82,13 +84,20 @@ function varargout = cogline(t,f,cop,mass)
         % un peu trop "lente" compte tenu que les calcul sont très nombreux.
         % ex: sur un essai qui prenait 31 sec, je suis passé à 25 sec.
         % ***********************************************************************************
-        % La transformation en 'mm' et la division par la masse sont faites à
-        % l'extérieur de la boucle FOR.
+        % La transformation en 'mm' et la division par la masse
+        % sont faites à l'extérieur de la boucle FOR.
         % v = 1000*cumtrapz( timegl, ffgl )/mass;	% m to mm
         v = cumsum([0; dtimegl.*(ffgl(1:end-1)+(diff(ffgl)/2))]);  % Step-2
+        % Première constante d'intégration (c'est la vitesse initiale: Vo)
+        % Step 3: Subtract Xcop(Tf) from X(tf). The difference, divided by Tf-Ti,
+        % equals the difference between the actual and arbitrary
+        % values of initial velocity. This latter difference is equal to
+        % the actual initial velocity dX/dT (Ti); where Xcop(tf) is the
+        % experimentally recorded value of COP, and X(Tf) from
+        % the calculated GLP value from Step 2.
         % v0 = ( copgl(end) -  copgl(1) - trapz( timegl, v ) ) / ( timegl(end)-timegl(1) );
-        v0 = (copgl(end) - copgl(1) - sum(dtimegl.*(v(1:end-1)+(diff(v)/2))) ) / ( timegl(end)-timegl(1) );
-        v = v0+v;
+        v0 = (copgl(end) - copgl(1) - sum(dtimegl.*(v(1:end-1)+(diff(v)/2))) ) / ( timegl(end)-timegl(1) );  % Step-3
+        v = v+v0;
         % x = copgl(1) + cumtrapz(timegl,v);
         x = copgl(1) + cumsum([0; dtimegl.*(v(1:end-1)+(diff(v)/2))]);
         gl(ini:fim) = x;
