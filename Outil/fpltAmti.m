@@ -29,6 +29,9 @@ function fpltAmti(hObj, R)
   canal =R.lesCan;
   leWb =laWaitbar(0, 'Calcul du centre de pression...', 'C', 'C', gcf);
   leBout =5+vg.ess+(R.COG*vg.ess);
+  if R.COG & R.canFx > 0 & R.canFy > 0
+    leBout =leBout+vg.ess;
+  end
   renduA =0;
   % création des canaux
   hdchnl.duplic([canal canal(3) canal(3)]);
@@ -108,11 +111,27 @@ function fpltAmti(hObj, R)
   end
   n.cpx =suivant; suivant =suivant+1;
   n.cpy =suivant; suivant =suivant+1;
-  if R.COG
+  if R.canFx > 0
     DoCGx =DoCPx;
     n.cgx =suivant; suivant =suivant+1;
+    % si on travaille avec 3 canaux seulement, il faut "définir" les canaux pour COG
+    if ~exist('DoFx','var')
+      DoFx =DoFz;
+      hFx =CDtchnl();
+      oF.getcanal(hFx, canal(1));
+      nFx =hFx.Nom;
+    end
+  end
+  if R.canFy > 0
     DoCGy =DoCPy;
     n.cgy =suivant;
+    % si on travaille avec 3 canaux seulement, il faut "définir" les canaux pour COG
+    if ~exist('DoFy','var')
+      DoFy =DoFz;
+      hFy =CDtchnl();
+      oF.getcanal(hFy, canal(1));
+      nFy =hFy.Nom;
+    end
   end
   %--- Paramètre amplificateur MSA-6 ---%
   FxVex =hObj.getVFx; MxVex =hObj.getVMx;
@@ -163,6 +182,18 @@ function fpltAmti(hObj, R)
       DoCPy(:,trial) =(DoMx(:,trial)./DoFz(:,trial))*100;   % Unité: cm
       hdchnl.max(n.cpy, trial) =max(DoCPy(1:NS,trial));
       hdchnl.min(n.cpy, trial) =min(DoCPy(1:NS,trial));
+      %--- Fx pour COG ---
+      if R.canFx > 0
+        DoFx(1:NS,trial) =hFx.Dato.(nFx)(1:NS,trial).*(amtiMC(4,4)*kFx)+hFy.Dato.(nFy)(1:NS,trial).*(amtiMC(4,5)*kFy) +...
+                        hFz.Dato.(nFz)(1:NS,trial).*(amtiMC(4,6)*kFz)+hMx.Dato.(nMx)(1:NS,trial).*(amtiMC(4,1)*kMx) +...
+                        hMy.Dato.(nMy)(1:NS,trial).*(amtiMC(4,2)*kMy)+hMz.Dato.(nMz)(1:NS,trial).*(amtiMC(4,3)*kMz);
+      end
+      %--- Fy pour COG ---
+      if R.canFy > 0
+        DoFy(1:NS,trial) =hFx.Dato.(nFx)(1:NS,trial).*(amtiMC(5,4)*kFx)+hFy.Dato.(nFy)(1:NS,trial).*(amtiMC(5,5)*kFy) +...
+                        hFz.Dato.(nFz)(1:NS,trial).*(amtiMC(5,6)*kFz)+hMx.Dato.(nMx)(1:NS,trial).*(amtiMC(5,1)*kMx) +...
+                        hMy.Dato.(nMy)(1:NS,trial).*(amtiMC(5,2)*kMy)+hMz.Dato.(nMz)(1:NS,trial).*(amtiMC(5,3)*kMz);
+      end
     elseif length(canal) == 6  % [hFx, hFy, hFz, hMx, hMy, hMz]
       %--- Fx ---%
       DoFx(1:NS,trial) =hFx.Dato.(nFx)(1:NS,trial).*(amtiMC(4,4)*kFx)+hFy.Dato.(nFy)(1:NS,trial).*(amtiMC(4,5)*kFy) +...
@@ -214,7 +245,9 @@ function fpltAmti(hObj, R)
   %--- Et le calcul du COG ---%
   %---------------------------%
   if R.COG
-      waitbar(renduA/leBout, leWb, 'Calcul du centre de gravité...');
+    TEXTO ='Calcul du centre de gravité...';
+    renduA =renduA+vg.ess;
+    waitbar(renduA/leBout, leWb, TEXTO);
     % création des canaux COG
     if R.canFx > 0
       hdchnl.duplic(n.cpx);
@@ -226,19 +259,26 @@ function fpltAmti(hObj, R)
       hdchnl.adname{end} ='CGy';
       nbcan =nbcan+1;
     end
+    % *************************************************************************************
+    % ***** DEMANDER À MARTIN SI IL VEUT LA MASSE PAR ESSAI, OU GLOBAL (MOINS LES ZÉROS???)
     % calcul de la masse en Kg.
     lamasse =mean(DoFz(DoFz(:)~=0))/9.8;
-    renduA =renduA+trial;
+    NS =0;
     for trial =1:vg.ess
-      NS =hdchnl.nsmpls(n.cpx, trial);
-      temps =[1:NS]/hdchnl.rate(n.cpx, trial);
-      waitbar((renduA+trial)/leBout, leWb);
+      if ~(NS == hdchnl.nsmpls(n.cpx, trial))
+        NS =hdchnl.nsmpls(n.cpx, trial);
+        temps =[1:NS]/hdchnl.rate(n.cpx, trial);
+      end
       if R.canFx > 0
+        renduA =renduA+1;
+        waitbar((renduA)/leBout, leWb, [TEXTO 'X,  ess: ' num2str(trial)]);
         DoCGx(1:NS,trial) =cogline(temps, -DoFx(1:NS,trial), DoCPx(1:NS,trial).*10, lamasse)./10;
         hdchnl.max(n.cgx, trial) =max(DoCGx(1:NS,trial));
         hdchnl.min(n.cgx, trial) =min(DoCGx(1:NS,trial));
       end
       if R.canFy > 0
+        renduA =renduA+1;
+        waitbar((renduA)/leBout, leWb, [TEXTO 'Y,  ess: ' num2str(trial)]);
         DoCGy(1:NS,trial) =cogline(temps, -DoFy(1:NS,trial), DoCPy(1:NS,trial).*10, lamasse)./10;
         hdchnl.max(n.cgy, trial) =max(DoCGy(1:NS,trial));
         hdchnl.min(n.cgy, trial) =min(DoCGy(1:NS,trial));

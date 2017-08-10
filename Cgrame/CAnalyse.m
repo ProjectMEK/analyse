@@ -90,7 +90,7 @@ classdef (Sealed) CAnalyse < handle
 
   methods
 
-    %-----------
+    %------------------
     % DESTRUCTOR
     %------------------
     function delete(tO)
@@ -100,6 +100,8 @@ classdef (Sealed) CAnalyse < handle
       tO.Fic =[];
       delete(tO.Vg);
       tO.Vg =[];
+      Oj =CJournal.getInstance();
+      delete(Oj);
       if ~isempty(tO.OFig)
         delete(tO.OFig);
       end
@@ -108,7 +110,7 @@ classdef (Sealed) CAnalyse < handle
     %------------------------------------------------
     % Pour supprimer un objet qui controle une figure
     % quand on clique sur le X en haut à droite
-    %---------------------------------
+    %------------------------------------------------
     function DelCurObj(tO, src, event)
       V =get(src, 'UserData');     % peut être le handle d'un objet
       if ~isempty(V)
@@ -120,7 +122,7 @@ classdef (Sealed) CAnalyse < handle
     %________________________________________________
     % Pour supprimer un objet qui controle une figure
     % il doit avoir une propriété: thatObj.fig
-    %--------------------------------------
+    %------------------------------------------------
     function delFigTravailFini(tO, thatObj)
       if ~isempty(thatObj)
         set(tO.OFig.fig, 'WindowButtonMotionFcn',{@CValet.GarbageCollector, thatObj});
@@ -128,7 +130,7 @@ classdef (Sealed) CAnalyse < handle
       end
     end
 
-    %____________________________
+    %__________________________________
     % Application des préférences
     %----------------------------------
     function initLesPreferencias(tO, p)

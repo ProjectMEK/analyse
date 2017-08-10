@@ -33,7 +33,7 @@ function IpMenu(obj)
   uimenu('Parent',mnu, 'tag', 'IpmnuAjouter', 'Label',tt.fileajout, 'Callback','appel(''ajoutfich'')', 'enable','off');
   % BATCH
   uimenu('Parent',mnu, 'tag', 'IpmnuBatch', 'Label',tt.filebatch, ...
-         'Callback','appel(''editbatch'')', 'Enable','off');
+         'Callback','appel(''editbatch'')', 'Enable','on');
   % FERMER
   uimenu('Parent',mnu, 'tag', 'IpmnuFermer', 'Callback','appel(''fermerfich'')', ...
          'Label',tt.filefermer, 'Enable','off');

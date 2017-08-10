@@ -24,7 +24,8 @@ function appel(varargin)
       ajoutFichAnalyse();
 
     case 'editbatch'                      % Exécuter des jobs en batch
-      batchEditExec();
+      % batchEditExec();
+      oTmp =CBatchEditExec();
 
     case 'fermerfich'                     % Fermer le fichier courant
       OA.fermerfich();
