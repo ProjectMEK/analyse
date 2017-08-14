@@ -224,10 +224,10 @@ function fpltOptima(hObj, R)
       hdchnl.adname{end} ='CGy';
       nbcan =nbcan+1;
     end
-    % *************************************************************************************
-    % ***** DEMANDER À MARTIN SI IL VEUT LA MASSE PAR ESSAI, OU GLOBAL (MOINS LES ZÉROS???)
+    % ****************************************************************************
+    % Pour éviter de tenir compte des essais de calibration, on va prendre Fz > 25
     % calcul de la masse en Kg.
-    lamasse =mean(DoFz(DoFz(:)>10))/9.8;
+    lamasse =mean(DoFz(DoFz(:)>25))/9.8;
     NS =0;
     for trial =1:vg.ess
       if ~(NS == hdchnl.nsmpls(n.cpx, trial))

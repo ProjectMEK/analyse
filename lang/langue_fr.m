@@ -136,8 +136,8 @@ function varargout =langue_fr(varargin)
     S.mnuip.hlp ='&Aide';
     S.mnuip.hlpdoc ='Rappel en cas de panique  :-)';
     S.mnuip.hlplog ='Historique';
+    S.mnuip.hlplogbook ='Journal des actions';
     S.mnuip.hlpabout ='À propos de';
-    S.mnuip.hlprecup ='Récupération';
 
   	%___________________________________________________________________________
   	% Variable guiip

@@ -133,8 +133,8 @@ classdef CMenuMLIp < CBaseStringGUI
     hlp ='&Aide';
     hlpdoc ='Rappel en cas de panique  :-)';
     hlplog ='Historique';
+    hlplogbook ='Journal des actions';
     hlpabout ='À propos de';
-    hlprecup ='Récupération';
 
   end  %properties
 

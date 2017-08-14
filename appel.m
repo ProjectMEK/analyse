@@ -276,7 +276,11 @@ function appel(varargin)
       aideDoc('leweb');
 
     case  'histoire'                   % dirigé sur l'historique d'analyse
-      aideDoc('histoire')
+      aideDoc('histoire');
+
+    case  'journalisation'             % Afficher le journal des actions
+      Oj =CJournal.getInstance();
+      Oj.afficher();
 
     case  'aidedoc'                    % dirigé "À propos d'Analyse"
       aideDoc();

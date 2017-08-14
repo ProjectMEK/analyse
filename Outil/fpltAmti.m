@@ -260,7 +260,7 @@ function fpltAmti(hObj, R)
       nbcan =nbcan+1;
     end
     % *************************************************************************************
-    % ***** DEMANDER À MARTIN SI IL VEUT LA MASSE PAR ESSAI, OU GLOBAL (MOINS LES ZÉROS???)
+    % Pour éviter de tenir compte des essais de calibration, on va prendre Fz > 25
     % calcul de la masse en Kg.
     lamasse =mean(DoFz(DoFz(:)~=0))/9.8;
     NS =0;

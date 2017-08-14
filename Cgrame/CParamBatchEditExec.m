@@ -6,6 +6,15 @@
 classdef CParamBatchEditExec < handle
 
   properties
+      % Info sur les fichiers à traiter
+      Nfich =0;
+      listFich ={'aucun fichier à traiter'};
+      % Info sur les actions
+      Naction =0;
+      listAction =[];
+      % handle du fichier virtuel
+      fiVirt =[];
+      %
       status =0;
       erreur =0;
       Path =pwd;
@@ -24,7 +33,7 @@ classdef CParamBatchEditExec < handle
       tot =0;
       elno =0;
       tacfic =1;
-      tach(1).Descr ={'****Nouvelle tâche****'};
+      tach =[];
   end  %properties
 
 end

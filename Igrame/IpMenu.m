@@ -167,6 +167,7 @@ function IpMenu(obj)
   mnu =uimenu('Parent',elfig, 'Label',tt.hlp);
   uimenu('Parent',mnu, 'Label',tt.hlpdoc, 'Enable','On', 'Callback','appel(''leweb'')');
   uimenu('Parent',mnu, 'Label',tt.hlplog, 'Callback','appel(''histoire'')');
+  uimenu('Parent',mnu, 'Label',tt.hlplogbook, 'Callback','appel(''journalisation'')');
   uimenu('Parent',mnu, 'Label',tt.hlpabout, 'Callback','appel(''aidedoc'')');
 
   %

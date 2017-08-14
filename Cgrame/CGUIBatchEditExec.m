@@ -19,6 +19,38 @@ classdef CGUIBatchEditExec < CBasePourFigureAnalyse & CParamBatchEditExec
       tO.fig =GUIBatchEditExec(tO);
     end
 
+    %-----------------------------------
+    % Ajouter une action
+    %-----------------------------------
+    function ajouterAction(tO, varargin)
+    end
+
+    %-----------------------------------
+    % Effacer une action
+    %-----------------------------------
+    function effacerAction(tO, varargin)
+    end
+
+    %-------------------------------------------------
+    % Monter une action
+    % pour déplacer vers le haut la tache sélectionnée
+    %-------------------------------------------------
+    function monterAction(tO, varargin)
+    end
+
+    %------------------------------------------------
+    % Descendre une action
+    % pour déplacer vers le bas la tache sélectionnée
+    %------------------------------------------------
+    function descendreAction(tO, varargin)
+    end
+
+    %-----------------------------------
+    % Modifier une action
+    %-----------------------------------
+    function modifierAction(tO, varargin)
+    end
+
   end  % methods
 
 end
