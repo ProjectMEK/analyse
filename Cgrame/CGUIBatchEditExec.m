@@ -19,6 +19,21 @@ classdef CGUIBatchEditExec < CBasePourFigureAnalyse & CParamBatchEditExec
       tO.fig =GUIBatchEditExec(tO);
     end
 
+    %------------------------------------------------
+    % CHANGE SÉLECTION DE RADIOBUTTON DANS LE UIGROUP
+    % une petite flèche indiquera la sélection
+    % src  est le handle du uigroup
+    %------------------------------------------------
+    function changePosteRadio(tO, src, varargin)
+      % on recherche les radiobutton qui appartiennent au groupe
+      tmp =findobj('style','radiobutton', 'parent',src);
+      % on flush le CDATA
+      set(tmp, 'cdata',[]);
+      % on load l'image et on l'affiche
+      ico =imread('ptiteflechdrte.bmp','BMP');
+      set(get(src,'SelectedObject'), 'cdata',ico);
+    end
+
     %-----------------------------------
     % Ajouter une action
     %-----------------------------------

@@ -77,8 +77,4 @@ function varargout =suppcan(varargin)
     guidata(findobj('tag','IpBatch'),hh);
     wbatch('disptach');
   end
-return
-
-
--	sc.exe config lanmanworkstation depend= bowser/mrxsmb10/nsi 
--	sc.exe config mrxsmb20 start= disabled
+end

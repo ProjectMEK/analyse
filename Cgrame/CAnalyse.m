@@ -26,7 +26,7 @@
 %        fermerfich(tO,src,event)
 %        fichrecent(tO)
 %     F =findcurfich(tO)
-%        finlect(tO, OFi)
+%        finaliseLect(tO, OFi)
 %        initial(tO, vernum, vermot, Aqui)
 %        initLesPreferencias(tO)
 %        initLesPreferenciasGlobal(tO)

@@ -273,6 +273,7 @@ classdef CDessine < handle
     % Lors de l'ouverture d'un premier fichier
     %---------------------
     function chonmenu(obj)
+      set(findobj('Type','uimenu','tag', 'IpmnuBatch'), 'Enable','off');
       set(findobj('Type','uimenu','tag', 'IpmnuSave'), 'Enable','on');
       set(findobj('Type','uimenu','tag', 'IpmnuSaveas'), 'Enable','on');
       set(findobj('Type','uimenu','tag', 'IpmnuFermer'), 'Enable','on');
@@ -295,6 +296,7 @@ classdef CDessine < handle
     % et à l'ouverture de l'application
     %----------------------
     function choffmenu(obj)
+      set(findobj('Type','uimenu','tag', 'IpmnuBatch'), 'Enable','on');
       set(findobj('Type','uimenu','tag', 'IpmnuSave'), 'Enable','off');
       set(findobj('Type','uimenu','tag', 'IpmnuSaveas'), 'Enable','off');
       set(findobj('Type','uimenu','tag', 'IpmnuFermer'), 'Enable','off');

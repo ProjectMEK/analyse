@@ -262,7 +262,7 @@ function fpltAmti(hObj, R)
     % *************************************************************************************
     % Pour éviter de tenir compte des essais de calibration, on va prendre Fz > 25
     % calcul de la masse en Kg.
-    lamasse =mean(DoFz(DoFz(:)~=0))/9.8;
+    lamasse =mean(DoFz(DoFz(:)>25))/9.8;
     NS =0;
     for trial =1:vg.ess
       if ~(NS == hdchnl.nsmpls(n.cpx, trial))

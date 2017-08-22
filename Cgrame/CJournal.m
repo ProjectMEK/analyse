@@ -11,16 +11,14 @@
 %
 %__________________________
 % METHODS (Access =private)
-%   tO =CJournal     % CONSTRUCTOR
+%     tO =CJournal     % CONSTRUCTOR
 %
 % METHODS (Static)
 %   sObj =getInstance
 %
 % METHODS
-%      tO = CJournal
-%    sObj = getInstance
-%           delete(tO)     % DESTRUCTOR
-%           initLesmots(tO)
+%         delete(tO)     % DESTRUCTOR
+%         initLesmots(tO)
 %
 classdef (Sealed) CJournal < CGUIJournal
 
