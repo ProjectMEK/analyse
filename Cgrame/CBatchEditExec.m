@@ -21,6 +21,12 @@ classdef CBatchEditExec < CGUIBatchEditExec
       tO.initGui();
     end
 
+    function delete(tO)
+      if ~isempty(tO.listAction)
+        tO.effaceTouteAction()
+      end
+    end
+
   end
 
 end

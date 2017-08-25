@@ -50,8 +50,10 @@ classdef CGUIBatchEditExec < CBasePourFigureAnalyse & CParamBatchEditExec
         % choix des fichiers manuellement
         tO.afficheFichierManuel();
       case 'undosstousfich'
+        % tous les fichiers sont dans un dossier
         tO.afficheDossier();
       case 'dossousdoss'
+        % ici on va descendre au travers des sous-dossiers aussi
         tO.afficheDossier();
       end
     end
@@ -134,16 +136,39 @@ classdef CGUIBatchEditExec < CBasePourFigureAnalyse & CParamBatchEditExec
       set(get(findobj('tag','BGnomfichOUT'),'children'),'enable',S);
     end
 
-    %-----------------------------------
-    % Ajouter une action
-    %-----------------------------------
+    %------------------------------------------
+    % Ajouter une action à partir de la listbox
+    %------------------------------------------
     function ajouterAction(tO, varargin)
+      % lire la sélection dans la listbox
+      valchoix =get(findobj('tag','listbatchafaire'),'value');
+      % sortir les noms d'action
+      leschoix =tO.listChoixActions(valchoix);
+      tO.ajoutAction(leschoix);
+      tO.afficheListAction(0);
+    end
+
+    %---------------------------------------
+    % Ajouter une action à partir d'une cell
+    %---------------------------------------
+    function ajoutAction(tO, meschoix)
+      % on vérifie que meschoix n'est pas vide
+      if ~isempty(meschoix)
+        % on va boucler tous les éléments de meschoix
+        for U = 1:length(meschoix)
+          % création d'un objet CAction
+          tO.creerNouvelAction(meschoix{U});
+        end
+      end
     end
 
     %-----------------------------------
     % Effacer une action
     %-----------------------------------
     function effacerAction(tO, varargin)
+      V =get(findobj('tag','batchafaire'),'value');
+      tO.effaceAction(V);
+      tO.afficheListAction(0);
     end
 
     %-------------------------------------------------
@@ -151,6 +176,9 @@ classdef CGUIBatchEditExec < CBasePourFigureAnalyse & CParamBatchEditExec
     % pour déplacer vers le haut la tache sélectionnée
     %-------------------------------------------------
     function monterAction(tO, varargin)
+      V =get(findobj('tag','batchafaire'),'value');
+      tO.remonte(V);
+      tO.afficheListAction(-1);
     end
 
     %------------------------------------------------
@@ -158,12 +186,37 @@ classdef CGUIBatchEditExec < CBasePourFigureAnalyse & CParamBatchEditExec
     % pour déplacer vers le bas la tache sélectionnée
     %------------------------------------------------
     function descendreAction(tO, varargin)
+      V =get(findobj('tag','batchafaire'),'value');
+      tO.redescend(V);
+      tO.afficheListAction(1);
     end
 
     %-----------------------------------
     % Modifier une action
     %-----------------------------------
     function modifierAction(tO, varargin)
+    end
+
+    %-----------------------------------------------
+    % Afficher la liste des actions sélectionnées
+    % ordre nous permet de faire monter ou descendre
+    % la sélection dans la listbox
+    %-----------------------------------------------
+    function afficheListAction(tO,ordre)
+      % on génère la liste selon l'ordre entrée dans tO.listAction
+      foo =tO.genereListAction();
+      % on affiche dans le listbox: ATTENTION 'value'
+      N =get(findobj('tag','batchafaire'),'value')+ordre;
+      N =max(1,min(tO.Naction,N));
+      set(findobj('tag','batchafaire'),'value',1,'string',foo,'value',N);
+    end
+
+    %-------------------------------
+    % Au travail
+    %-------------------------------
+    function auTravail(tO, varargin)
+      hJ =CJournal.getInstance();
+      hJ.ajouter(['Travail en lot, début: ' datestr(now)]);
     end
 
   end  % methods
