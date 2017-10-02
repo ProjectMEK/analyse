@@ -38,23 +38,50 @@ classdef CGUIBatchEditExec < CBasePourFigureAnalyse & CParamBatchEditExec
       set(get(src,'SelectedObject'), 'cdata',ico);
     end
 
-    %------------------------------------------------
-    % Sélection de l'emplacement du fichier d' entrée
-    %------------------------------------------------
+    %----------------------------------------------
+    % DÉ-SÉLECTION DES RADIOBUTTONS DANS LE UIGROUP
+    % On efface les icones et SelectedObject = []
+    % src  est le handle du uigroup
+    %----------------------------------------------
+    function resetPosteRadio(tO, src, varargin)
+      % on recherche les radiobutton qui appartiennent au groupe
+      tmp =findobj('style','radiobutton', 'parent',src);
+      % on flush le CDATA de tous les radiobutton
+      set(tmp, 'cdata',[]);
+      % on remet la sélection vide
+      set(src,'SelectedObject',[]);
+    end
+
+    %-----------------------------------------------
+    % Sélection de l'emplacement du fichier d'entrée
+    % src est le handle du radiobutton
+    %-----------------------------------------------
     function dossierFichierEntree(tO, src, varargin)
-      tO.changePosteRadio(src);
-      foo =get(src,'SelectedObject');
+      ppa =get(src,'parent');
+      % on recherche les radiobutton qui appartiennent au groupe
+      tmp =findobj('style','radiobutton', 'parent',ppa);
+      % on flush le CDATA de tous les radiobutton
+      set(tmp,'value',0,'cdata',[]);
+      % on load l'image et on l'affiche
+      ico =imread('ptiteflechdrte.bmp','BMP');
+      set(src,'value',1,'cdata',ico);
+      % on vide la listbox de son contenu
+      set(findobj('tag','choixfichier'),'value',1,'string','');
+      rep =true;
       % En fonction du type de sélection, on choisi quel fichier traiter
-      switch get(foo,'tag')
+      switch get(src,'tag')
       case 'fichiermanuel'
         % choix des fichiers manuellement
-        tO.afficheFichierManuel();
+        rep =tO.afficheFichierManuel();
       case 'undosstousfich'
         % tous les fichiers sont dans un dossier
-        tO.afficheDossier();
+        rep =tO.afficheDossier();
       case 'dossousdoss'
         % ici on va descendre au travers des sous-dossiers aussi
-        tO.afficheDossier();
+        rep =tO.afficheDossier();
+      end
+      if ~ rep
+        set(tmp,'value',0,'cdata',[]);
       end
     end
 
@@ -62,11 +89,13 @@ classdef CGUIBatchEditExec < CBasePourFigureAnalyse & CParamBatchEditExec
     % On fait la sélection des fichiers à traiter manuellement 
     % et on inscrit le path complet dans la listbox.
     %----------------------------------------------------------
-    function afficheFichierManuel(tO)
+    function cok = afficheFichierManuel(tO)
+      cok =true;
       lesmots ='Choix des fichiers à traiter';
       [fnom,pnom] =uigetfile({'*.mat','Fichier Analyse (*.mat)'},lesmots,'multiselect','on');
       % on est sortie en annulant la commande (aucun choix)
       if ~ischar(pnom)
+        cok =false;
         return;
       end
       % si on a choisi un seul fichier, il ne sera pas placé dans une cellule
@@ -85,11 +114,13 @@ classdef CGUIBatchEditExec < CBasePourFigureAnalyse & CParamBatchEditExec
     % On choisi le dossier qui contient tous les fichiers à traiter
     % et on inscrit le path du dossier dans la listbox.
     %--------------------------------------------------------------
-    function afficheDossier(tO)
+    function cok = afficheDossier(tO)
+      cok =true;
       lesmots ='Choix du dossier qui contient tous les fichiers à traiter';
       pnom =uigetdir(lesmots);
       % on est sortie en annulant la commande (aucun choix)
       if ~ischar(pnom)
+        cok =false;
         return;
       end
       % on affiche dans la listbox
@@ -162,9 +193,9 @@ classdef CGUIBatchEditExec < CBasePourFigureAnalyse & CParamBatchEditExec
       end
     end
 
-    %-----------------------------------
-    % Effacer une action
-    %-----------------------------------
+    %------------------------------
+    % Effacer l'action sélectionnée
+    %------------------------------
     function effacerAction(tO, varargin)
       V =get(findobj('tag','batchafaire'),'value');
       tO.effaceAction(V);
@@ -215,8 +246,212 @@ classdef CGUIBatchEditExec < CBasePourFigureAnalyse & CParamBatchEditExec
     % Au travail
     %-------------------------------
     function auTravail(tO, varargin)
+      % On appelle le journal pour l'écriture des événements
+      tO.S =0;
       hJ =CJournal.getInstance();
       hJ.ajouter(['Travail en lot, début: ' datestr(now)]);
+      % vérification des param d'entrée avant de commencer
+      if ~ tO.verifGUI(hJ);
+        return;
+      end
+    end
+
+    %-----------------------------------
+    % Vérification des paramètres du GUI, il y a 3 panels à vérifier
+    % FICHIER ENTRÉE
+    % FICHIER SORTIE
+    % ACTION À FAIRE
+    %-----------------------------------
+    function OK = verifGUI(tO, J)
+      OK =true;
+      J.ajouter('Vérification des paramètres d''entrées',tO.S);
+      tO.S =tO.S+2;
+      % PARAM FICHIER ENTRÉE
+      %---------------------
+      hfIN =tO.getSelectedObject();
+      if isempty(hfIN)
+        OK =false;
+        J.ajouter('*** Il faut faire un choix de fichier à traiter', tO.S);
+      end
+      % PARAM FICHIER SORTIE
+      %---------------------
+      hfOUT =get(findobj('tag','BGfichOUT'),'SelectedObject');
+      OK =(OK & tO.verifFsortie(hfOUT,J));
+      % PARAM ACTION À FAIRE
+      %---------------------
+      if isempty(get(findobj('tag','batchafaire'),'string'))
+        OK =false;
+        J.ajouter('*** Il faut choisir au moins une action pour pouvoir traiter!!!', tO.S);
+      end
+      % Si il n'y a pas d'erreur, on fabrique les listes de fichier entrée/sorties
+      if OK
+        % On fabrique la liste des fichiers à traiter
+        tO.fabricListFichierIn(hfIN);
+        % Puis on fabrique la liste des fichiers de sortie
+        if tO.Nfich < 1
+          % il n'y a pas de fichier dans notre sélection
+          OK =false;
+          J.ajouter('*** Le dossier sélectionné ne contient pas de fichier à traiter', tO.S);
+        else
+          % fabrication de la liste des fichiers de sortie
+          tO.fabricListFichierOut(hfOUT,hfIN);
+          % ON EST RENDU À VÉRIFIER LES ACTIONS
+        end
+      end
+      tO.S =max(0,tO.S-2);
+    end
+
+    %-------------------------------------------------------------------------
+    % Trouver le radiobutton qui est sélectionné dans notre Pseudo-ButtonGroup
+    % On retourne le handle du radiobutton ou []
+    %-------------------------------------------------------------------------
+    function V = getSelectedObject(tO)
+      Ppa =findobj('tag','BGfichIN');
+      V =findobj('parent',Ppa, 'style','radiobutton','value',1);
+    end
+
+    %--------------------------------------------
+    % On fabrique la liste des fichiers à traiter
+    % En entrée, FIN --> handle du radiobutton
+    %--------------------------------------------
+    function fabricListFichierIn(tO,FIN)
+      pnom =get(findobj('tag','choixfichier'),'string');
+      switch get(FIN, 'tag')
+      case 'fichiermanuel'
+        % le cas ou on a choisi les fichier manuellement
+        foo =pnom;
+        if ~iscell(foo)
+          % lorsqu'il n'y a qu'un choix on a une string plutôt qu'une cellule
+          foo ={foo};
+        end
+      case 'undosstousfich'
+        % le cas ou on a choisi un dossier
+        fnom =dir([pnom '\*.mat']);
+        foo ={};
+        for U =1:length(fnom)
+          foo{end+1,1} =fullfile(pnom,fnom(U).name);
+        end
+      case 'dossousdoss'
+        % le cas ou on a choisi un dossier et tous ses sous-dossiers
+        foo ={};
+        foo =tO.listFichRecursif(pnom,foo);
+      end
+      tO.listFichIN =foo;
+      tO.Nfich =length(foo);
+    end
+
+    %--------------------------------------------------------
+    % Vérification des infos du uipanel de fichier de sortie
+    % En Entrée, hF  est le handle du radiobutton sélectionné
+    %            hL  est le handle du "logbook"
+    %--------------------------------------------------------
+    function rep = verifFsortie(tO,hF,hL)
+      rep =true;
+      letag =get(hF, 'tag');
+      if strncmpi(letag,'changfich',9) | strncmpi(letag,'changtout',9)
+        % Changement du nom de fichier
+        txt =deblank(get(findobj('Tag','editfichierpresuf'),'string'));
+        if isempty(txt)
+          rep =false;
+          hL.ajouter('*** Il faut donner un préfixe/suffixe pour le nouveau nom de fichier de sortie',tO.S)
+        end
+      end
+      if strncmpi(letag,'changdoss',9) | strncmpi(letag,'changtout',9)
+        % Changement du nom de dossier
+        dd =deblank(get(findobj('tag','editdossierfinal'),'string'));
+        if isempty(dd)
+          rep =false;
+          hL.ajouter('*** Il faut donner un nom pour le nouveau nom de dossier de sortie',tO.S)
+        end
+      end
+    end
+
+    %-----------------------------------------------------------------------------------
+    % En fonction du choix, on fabrique la liste des fichiers pour la sauvegarde
+    % En entrée: hFo  est le handle du radiobutton sélectionné pour le dossier de sortie
+    %            hFi  est le handle du radiobutton sélectionné pour le nom de fichier
+    %-----------------------------------------------------------------------------------
+    function fabricListFichierOut(tO,hFo,hFi)
+      % quel est le choix de dossier de sortie sélectionné
+      letag =get(hFo, 'tag');
+      % on va travailler sur une liste temporaire
+      Ltmp =tO.listFichIN;
+      % MODIFICATION du nom de fichier
+      if strncmpi(letag,'changfich',9) | strncmpi(letag,'changtout',9)
+        % mot à ajouter en pré/suf(fixe) au nom de fichier
+        txt =deblank(get(findobj('Tag','editfichierpresuf'),'string'));
+        % préfixe ou suffixe
+        pfixtag =get(get(findobj('tag','BGnomfichOUT'),'SelectedObject'),'tag');
+        pfix =false;
+        if strncmpi(pfixtag,'prefix',6)
+          pfix =true;
+        end
+        % modification de la partie "nom de fichier"
+        for U =1:tO.Nfich
+          % on sépare le path/nom fichier/extension
+          [a,b,c] =fileparts(Ltmp{U});
+          if pfix
+            % la modif s'ajoute comme un préfixe
+            Ltmp{U} =fullfile(a,[txt b c]);
+          else
+            % la modif s'ajoute comme un suffixe
+            Ltmp{U} =fullfile(a,[b txt c]);
+          end
+        end
+      end
+      % MODIFICATION de la partie nom du dossier
+      if strncmpi(letag,'changdoss',9) | strncmpi(letag,'changtout',9)
+        % nouveau nom pour le dossier de sortie
+        nouvd =deblank(get(findobj('tag','editdossierfinal'),'string'));
+        % on va discréminer en fonction du type de sélection faite pour les fichiers d'entrée
+        switch get(hFi, 'tag')
+          case {'fichiermanuel','undosstousfich'}
+            % ici on a juste à changer le nom de dossier complet
+            for U =1:tO.Nfich
+              % on sépare le path/nom fichier/extension
+              [a,b,c] =fileparts(Ltmp{U});
+              Ltmp{U} =fullfile(nouvd,[b c]);
+            end
+          case 'dossousdoss'
+            % ancien nom pour le dossier, c'est la partie à modifier
+            ancd =get(findobj('tag','choixfichier'),'string');
+            % longueur de la string
+            Lancd =length(ancd);
+            for U =1:tO.Nfich
+              % on sépare le path/nom fichier/extension
+              [a,b,c] =fileparts(Ltmp{U});
+              Ltmp{U} =fullfile(nouvd,a(Lancd+1:end), [b c]);
+            end
+        end
+      end
+      tO.listFichOUT =Ltmp;
+    end
+
+    %--------------------------------------------------------------------
+    % Fonction récursive pour démanteler tous les fichiers ".mat"
+    % au travers des dossiers/sous-dossiers
+    % En entrée:  lepath  est le dossier à inspecter
+    %             rep     est la liste des fichiers "dossier\fichier.mat"
+    %--------------------------------------------------------------------
+    function rep =listFichRecursif(tO,lepath,rep)
+      % on conserve le dossier de départ
+      pIN =pwd();
+      % on se place dans le dossier à inspecter
+      cd(lepath);
+      % lecture du dossier courant
+      lfich =dir();
+      % on commence à 3 car les 2 premières sont: "." et ".."
+      for U =3:length(lfich)
+        [a,b,ext] =fileparts(lfich(U).name);
+        if lfich(U).isdir
+          % il s'agit d'un dossier
+          rep =tO.listFichRecursif(lfich(U).name,rep);
+        elseif strncmpi(ext, '.mat', 3)
+          rep{end+1,1} =fullfile(pwd(), lfich(U).name);
+        end
+      end
+      % on retourne au dossier de départ avant de quitter
+      cd (pIN);
     end
 
   end  % methods

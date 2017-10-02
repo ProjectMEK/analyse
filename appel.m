@@ -120,7 +120,8 @@ function appel(varargin)
       fiFilt();
 
     case 'derive'                        % Le même DIFFER que dans DATAC.DOS
-      fncDiffer();
+      % fncDiffer();
+      foo =CDiffer();
 
     case 'moindre'                       % Menu Polynomial-Fit
       moindreCarre();                    % dérivé par la méthode des moindres carrés

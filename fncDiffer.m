@@ -1,5 +1,5 @@
 function fncDiffer(varargin)
-% 
+%
 % DialogBox pour demander les infos relatives à la différenciation
 % puis on passe à l'action. On suit la démarche retrouvé dans le
 % programme differ.pas développé pour l'environnement DOS.
@@ -80,10 +80,10 @@ function fncDiffer(varargin)
     aubout =nombre*vg.ess;
     for U =1:nombre
    	  % on vérifie la grosseur en mémoire pour un canal complet
-     	% on permet 250 Mo max
+     	% on permet 300 Mo max
      	comodato =vg.ess*max(hdchnl.nsmpls(Vcan(U),:))*4/1024/1024;
-   	  if comodato > 250
-   	    disp(['Le canal ' num2str(U) ' dépasse 250 Mo en mémoire']);
+   	  if comodato > 300
+   	    disp(['Le canal ' num2str(U) ' dépasse 300 Mo en mémoire']);
    	  	continue;
    	  end
       Ofich.getcanal(dtchnl, Vcan(U));

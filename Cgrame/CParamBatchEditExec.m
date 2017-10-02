@@ -10,12 +10,18 @@
 classdef CParamBatchEditExec < handle
 
   properties
+      % utile à long terme
+      ver =1.01;
+      % nombre d'espace à ajouter dans le journal "pour faire beau"
+      S =0;
       % Info sur les fichiers à traiter
       Nfich =0;
-      listFich ={'aucun fichier à traiter'};
+      listFichIN ={'aucun fichier à traiter'};
+      % Info sur les fichiers de sortie
+      listFichOUT =[];
       % Info sur les actions
-      %   Liste des actions disponibles
-      listChoixActions ={'Couper les patates...','Donner le bain aux enfants','Sortir les vidanges'};
+      % Liste des actions disponibles
+      listChoixActions ={'Effacer canaux','Effacer essais','Effacer points marqués'};
       Naction =0;
       listAction =[];
 
@@ -30,13 +36,6 @@ classdef CParamBatchEditExec < handle
       ChoixSortie =4;
       isFichierIn =0;
       isFichierOut =0;
-      PathEntree =pwd;
-      PathSortie =pwd;
-      ListeFentree ={'aucun fichier à traiter'};
-      ListeFsortie ={'Fichier de sortie à déterminer'};
-      prefixe =1;
-      prenom =[];
-      NbFTraiter =0;
       exten ='.mat';
       tot =0;
       elno =0;

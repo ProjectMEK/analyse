@@ -9,17 +9,31 @@ classdef CAction < handle
   properties
       % nom/description de l'action
       description =[];
+      % nom de la classe à appeler
+      classe =[];
+      % paramètre (structure) à passer à l'action
+      pact =[];
   end  %properties
 
   methods
 
-    %------------------------------------------
+    %----------------------------------------------------------------------
     % CONSTRUCTOR
-    % En Entrée: on veut un nom valide d'action
-    %------------------------------------------
-    function tO = CAction(varargin)
-      if nargin > 0
-        tO.description =varargin{1};
+    % En Entrée
+    %   description  est le nom valide d'action
+    %   laclasse     le nom de la classe pour créer l'objet
+    %   lastruct     structure qui contient les param utiles à cette action
+    %----------------------------------------------------------------------
+    function tO = CAction(description,laclasse,lastruct)
+      if exist('lastruct')
+        tO.description =description;
+        tO.classe =laclasse;
+        tO.pact =lastruct;
+      elseif exist('laclasse')
+        tO.description =description;
+        tO.classe =laclasse;
+      elseif exist('description')
+        tO.description =description;
       end
     end
 

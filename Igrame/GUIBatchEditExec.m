@@ -9,7 +9,9 @@ function fig = GUIBatchEditExec(Ppa)
     lapos =positionfen('C','C',large,haut,lafig);
     GRIS =[0.8 0.8 0.8];
     BLANC =[1 1 1];
-    fig  =figure('Name','TRAITEMENT EN LOT','tag', 'IpBatch',...
+    delete(findobj('tag', 'IpBatch'));
+    pause(0.5);
+    fig  =figure('Name','TRAITEMENT EN LOT','tag','IpBatch',...
                  'Resize','on', 'Position', lapos, ...
                  'CloseRequestFcn',@Ppa.terminus,'MenuBar','none',...
                  'defaultuicontrolunits','Normalized',...
@@ -46,21 +48,19 @@ function fig = GUIBatchEditExec(Ppa)
     A.haut=A.posy-0.06;A.posy=A.posy-A.haut;
     uicontrol('parent',pan,'tag','choixfichier','BackgroundColor',BLANC,'Style','listbox',...
               'fontsize',9,'Position',A.pos,'String',lastr,'Value',1);
-  % BUTTONGROUP
+  % IMITATION D'UN BUTTONGROUP
+  % **************************
     A.posx=margex;A.large=lcol2;A.haut=0.5;A.posy=memy-A.haut;memA=A.pos;
-    uibg =uibuttongroup('parent',pan,'tag','BGfichIN','backgroundColor',GRIS,...
-                        'selectionchangefcn',@Ppa.dossierFichierEntree,'position',A.pos);
+    uibg =uipanel('parent',pan,'tag','BGfichIN','backgroundColor',GRIS,'position',A.pos);
     A.posx=0.05;A.large=1-2*A.posx;A.haut=1/7;A.posy=1-2*A.haut;
-    ico =imread('ptiteflechdrte.bmp','BMP');
-    uicontrol('parent',uibg,'style','radiobutton','position',A.pos,'tag','fichiermanuel',...
-              'string','Sélectionner les fichiers manuellement','Value',0);
+    uicontrol('parent',uibg,'style','radiobutton','position',A.pos,'tag','fichiermanuel','Value',0,...
+              'string','Sélectionner les fichiers manuellement','callback',@Ppa.dossierFichierEntree);
     A.posy=A.posy-2*A.haut;
-    uicontrol('parent',uibg,'style','radiobutton','position',A.pos,'tag','undosstousfich',...
-              'string','Un dossier contenant tous les fichiers','Value',0);
+    uicontrol('parent',uibg,'style','radiobutton','position',A.pos,'tag','undosstousfich','Value',0,...
+              'string','Un dossier contenant tous les fichiers','callback',@Ppa.dossierFichierEntree);
     A.posy=A.posy-2*A.haut;
-    uicontrol('parent',uibg,'style','radiobutton','position',A.pos,'tag','dossousdoss',...
-              'string','Contenu d''un dossier+sous-dossiers','Value',0);
-    set(uibg,'SelectedObject',[]);
+    uicontrol('parent',uibg,'style','radiobutton','position',A.pos,'tag','dossousdoss','Value',0,...
+              'string','Contenu d''un dossier+sous-dossiers','callback',@Ppa.dossierFichierEntree);
     %----------------------------
     %    PANEL FICHIER SORTIE
     %----------------------------
@@ -88,7 +88,7 @@ function fig = GUIBatchEditExec(Ppa)
     A.posx=lcol1+2*margex;A.large=lcol2+lcol3+lcol4+margex;A.haut=hbout;A.posy=1-1.5*A.haut;memx=A.posx;
     uicontrol('parent',pan,'style','text','position',A.pos,'string','Dossier pour la sauvegarde des résultats');
     A.posy=A.posy-A.haut;memy2=A.posy;
-    uicontrol('parent',pan,'Tag','editdossierfinal','BackgroundColor',BLANC,...
+    uicontrol('parent',pan,'tag','editdossierfinal','BackgroundColor',BLANC,...
               'Style','edit','Position',A.pos,'string','');
   % BOUTTON ... CHOIX DU DOSSIER
     A.posx=A.posx+A.large;A.large=lcol5;
@@ -102,7 +102,7 @@ function fig = GUIBatchEditExec(Ppa)
     uicontrol('parent',pan,'style','text','position',A.pos,'string','Modification au nom de fichier','horizontalalignment','center');
     A.posy=A.posy-A.haut;
     uicontrol('parent',pan,'Tag','editfichierpresuf','BackgroundColor',BLANC,...
-              'Style','edit','Position',A.pos,'string','');
+              'Style','edit','Position',A.pos,'string','_batch');
   % BUTTONGROUP PRÉ/SUFFIXE
     A.posx=A.posx+A.large+margex;A.large=lcol4;A.posy=memy;A.haut=memy2-A.posy-hbout;
     uibg =uibuttongroup('parent',pan,'tag','BGnomfichOUT','backgroundColor',GRIS,...
@@ -110,10 +110,10 @@ function fig = GUIBatchEditExec(Ppa)
     A.posx=margex;A.large=1-2*A.posx;A.haut=1/5;A.posy=1-2*A.haut;
     ico =imread('ptiteflechdrte.bmp','BMP');
     uicontrol('parent',uibg,'style','radiobutton','position',A.pos,...
-              'string','Comme préfixe','Value',0);
+              'string','Comme préfixe','Value',0,'tag','prefix');
     A.posy=A.posy-2*A.haut;
     uicontrol('parent',uibg,'style','radiobutton','position',A.pos,'Value',1,...
-              'string','Comme suffixe','cdata',ico);
+              'string','Comme suffixe','cdata',ico,'tag','suffix');
   %---------------------
   %    PANEL ACTION
   %---------------------
