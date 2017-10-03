@@ -176,6 +176,7 @@ classdef CGUIBatchEditExec < CBasePourFigureAnalyse & CParamBatchEditExec
       % sortir les noms d'action
       leschoix =tO.listChoixActions(valchoix);
       tO.ajoutAction(leschoix);
+      % afficher la liste dans la listbox des actions sélectionnées
       tO.afficheListAction(0);
     end
 
