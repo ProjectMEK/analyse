@@ -2,7 +2,7 @@
 % classdef CAction < handle
 %
 % METHODS
-%         tO = CAction(varargin)  % CONSTRUCTOR
+%         tO = CAction(description,laclasse,lastruct)  % CONSTRUCTOR
 %
 classdef CAction < handle
 
@@ -11,7 +11,7 @@ classdef CAction < handle
       description =[];
       % nom de la classe à appeler
       classe =[];
-      % paramètre (structure) à passer à l'action
+      % paramètre (structure) à passer à la classe
       pact =[];
   end  %properties
 

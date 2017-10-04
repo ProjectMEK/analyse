@@ -20,6 +20,7 @@ classdef CBatchEditExec < CGUIBatchEditExec
     % CONSTRUCTOR
     %-----------------------------
     function tO = CBatchEditExec()
+      tO.listChoixActions =infoActions();
       tO.initGui();
     end
 

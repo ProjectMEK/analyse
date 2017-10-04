@@ -21,7 +21,7 @@ classdef CParamBatchEditExec < handle
       listFichOUT =[];
       % Info sur les actions
       % Liste des actions disponibles
-      listChoixActions ={'Effacer canaux','Effacer essais','Effacer points marqués'};
+      listChoixActions =[];
       Naction =0;
       listAction =[];
 
@@ -52,10 +52,20 @@ classdef CParamBatchEditExec < handle
     % En Sortie: on retourne le handle de l'objet créé
     %-------------------------------------------------
     function varargout = creerNouvelAction(tO,nom)
-      tO.listAction{end+1} =CAction(nom);
-      tO.Naction =length(tO.listAction);
-      if nargout > 0
-        varargout{1} =tO.listAction{end};
+      % vérification si le nom existe et quelle classe lui est associée
+      [nAct,cAct] =infoActions(nom);
+      if ~isempty(nAct)
+        % le nom existe alors on crée un objet CAction en lui passant le nom et la classe
+        tO.listAction{end+1} =CAction(nAct,cAct);
+        % on met à jour la propriété Naction
+        tO.Naction =length(tO.listAction);
+        if nargout > 0
+          varargout{1} =tO.listAction{end};
+        end
+      else
+        for U =1:nargout
+          varargout{U} =[];
+        end
       end
     end
 

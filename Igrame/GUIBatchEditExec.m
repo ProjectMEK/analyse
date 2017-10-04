@@ -134,7 +134,7 @@ function fig = GUIBatchEditExec(Ppa)
   % LISTBOX DES ACTIONS SÉLECTIONNÉES
   	A.posx=A.posx+A.large+0.5*margex;A.large=lcol3;A.posy=lapos(2);A.haut=lapos(4);
     uicontrol('parent',pan,'tag','batchafaire','BackgroundColor',BLANC,'Style','listbox',...
-              'Position',A.pos,'String','','Value',1);
+              'Position',A.pos,'String','','max',1,'Value',1);
     A.posx=A.posx+A.large+margex;A.large=lcol4;A.haut=hy;A.posy=debuty-((debuty-finy-4*A.haut)/2)-A.haut;
     uicontrol('parent',pan,'Callback',@Ppa.effacerAction,'Position',A.pos,'String','Supprimer');
     A.posy =A.posy-A.haut;
