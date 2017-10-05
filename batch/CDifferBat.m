@@ -26,8 +26,8 @@ classdef CDifferBat < CDiffer
     function tO = CDifferBat(queHacer)
       if exist('queHacer')
         switch queHacer
-          case 'ouverture'
-          
+          case 'configuration'
+            
         end
       end
     end

@@ -20,10 +20,14 @@ classdef CParamBatchEditExec < handle
       % Info sur les fichiers de sortie
       listFichOUT =[];
       % Info sur les actions
-      % Liste des actions disponibles
+      % Liste des actions possibles
       listChoixActions =[];
-      Naction =0;
+      % liste des actions sélectionnées
       listAction =[];
+      % nombre d'actions sélectionnées
+      Naction =0;
+      % liste de fichier virtuel
+      listFichVirt =[];
 
 
       % handle du fichier virtuel (contient les param nb can, nb ess, etc..)
