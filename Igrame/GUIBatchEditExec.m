@@ -51,7 +51,8 @@ function fig = GUIBatchEditExec(Ppa)
   % IMITATION D'UN BUTTONGROUP
   % **************************
     A.posx=margex;A.large=lcol2;A.haut=0.5;A.posy=memy-A.haut;memA=A.pos;
-    uibg =uipanel('parent',pan,'tag','BGfichIN','backgroundColor',GRIS,'position',A.pos);
+    uibg =uipanel('parent',pan,'tag','BGfichIN','backgroundColor',GRIS,'position',A.pos, ...
+                  'titleposition','rightbottom','title',[num2str(Ppa.Nfich) ' fichiers à traiter']);
     A.posx=0.05;A.large=1-2*A.posx;A.haut=1/7;A.posy=1-2*A.haut;
     uicontrol('parent',uibg,'style','radiobutton','position',A.pos,'tag','fichiermanuel','Value',0,...
               'string','Sélectionner les fichiers manuellement','callback',@Ppa.dossierFichierEntree);
@@ -103,7 +104,7 @@ function fig = GUIBatchEditExec(Ppa)
     A.posy=A.posy-A.haut;
     uicontrol('parent',pan,'Tag','editfichierpresuf','BackgroundColor',BLANC,...
               'Style','edit','Position',A.pos,'string','_batch');
-  % BUTTONGROUP PRÉ/SUFFIXE
+  % BUTTONGROUP (PRÉ/SUF)FIXE
     A.posx=A.posx+A.large+margex;A.large=lcol4;A.posy=memy;A.haut=memy2-A.posy-hbout;
     uibg =uibuttongroup('parent',pan,'tag','BGnomfichOUT','backgroundColor',GRIS,...
                         'selectionchangefcn',@Ppa.changePosteRadio,'position',A.pos);
@@ -135,18 +136,18 @@ function fig = GUIBatchEditExec(Ppa)
   	A.posx=A.posx+A.large+0.5*margex;A.large=lcol3;A.posy=lapos(2);A.haut=lapos(4);
     uicontrol('parent',pan,'tag','batchafaire','BackgroundColor',BLANC,'Style','listbox',...
               'Position',A.pos,'String','','max',1,'Value',1);
-    A.posx=A.posx+A.large+margex;A.large=lcol4;A.haut=hy;A.posy=debuty-((debuty-finy-4*A.haut)/2)-A.haut;
+    A.posx=A.posx+A.large+margex;A.large=lcol4;A.haut=hy;A.posy=debuty-((debuty-finy-5*A.haut)/2)-A.haut;
     uicontrol('parent',pan,'Callback',@Ppa.effacerAction,'Position',A.pos,'String','Supprimer');
     A.posy =A.posy-A.haut;
     uicontrol('parent',pan,'Callback',@Ppa.monterAction,'Position',A.pos,'String','Monter');
     A.posy =A.posy-A.haut;
     uicontrol('parent',pan,'Callback',@Ppa.descendreAction,'Position',A.pos,'String','Descendre');
-    A.posy =A.posy-A.haut;
-    uicontrol('parent',pan,'Callback',@Ppa.modifierAction,'Position',A.pos,'String','Modifier');
+    A.posy =A.posy-2*A.haut;
+    uicontrol('parent',pan,'Callback',@Ppa.modifierAction,'Position',A.pos,'String','Paramètrer');
   % ********AU TWAFFAILLE, foyons, fé qui kia encowe pis mes dents... :-B
     A.posx=(1-A.large)/2; A.haut=bouty/3; A.posy=bouty/4;
     uicontrol('parent',fig,'Callback',@Ppa.auTravail,'Position',A.pos,'String','Au travail');
-    guidata(fig,Ppa);
+%    guidata(fig,Ppa);
     delete(A);
     Ppa.dossierFichierSortie(membg);
 end

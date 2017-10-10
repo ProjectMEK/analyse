@@ -57,6 +57,7 @@ classdef CGUIBatchEditExec < CBasePourFigureAnalyse & CParamBatchEditExec
     % src est le handle du radiobutton
     %-----------------------------------------------
     function dossierFichierEntree(tO, src, varargin)
+      % recherche du uipanel qui contient les radiobuttons
       ppa =get(src,'parent');
       % on recherche les radiobutton qui appartiennent au groupe
       tmp =findobj('style','radiobutton', 'parent',ppa);
@@ -67,6 +68,7 @@ classdef CGUIBatchEditExec < CBasePourFigureAnalyse & CParamBatchEditExec
       set(src,'value',1,'cdata',ico);
       % on vide la listbox de son contenu
       set(findobj('tag','choixfichier'),'value',1,'string','');
+      tO.Nfich =0;
       rep =true;
       % En fonction du type de sélection, on choisi quel fichier traiter
       switch get(src,'tag')
@@ -82,7 +84,10 @@ classdef CGUIBatchEditExec < CBasePourFigureAnalyse & CParamBatchEditExec
       end
       if ~ rep
         set(tmp,'value',0,'cdata',[]);
+      else
+        tO.fabricListFichierIn(src);
       end
+      set(ppa,'title',[num2str(tO.Nfich) ' fichiers à traiter'])
     end
 
     %----------------------------------------------------------
@@ -269,6 +274,7 @@ classdef CGUIBatchEditExec < CBasePourFigureAnalyse & CParamBatchEditExec
       tO.S =tO.S+2;
       % PARAM FICHIER ENTRÉE
       %---------------------
+      % recherche du radiobutton sélection dans le uipanel des fichiers à traiter
       hfIN =tO.getSelectedObject();
       if isempty(hfIN)
         OK =false;
