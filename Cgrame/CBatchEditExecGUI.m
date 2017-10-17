@@ -1,5 +1,5 @@
 %
-% classdef CGUIBatchEditExec < CBasePourFigureAnalyse & CParamBatchEditExec
+% classdef CBatchEditExecGUI < CBasePourFigureAnalyse & CBatchEditExecParam
 %
 % Classe de gestion du GUI GUIBatchEditExec
 % prendra en charge tous les callback du GUI
@@ -7,12 +7,20 @@
 % METHODS
 %       initGui(tO)
 %       changePosteRadio(tO, src, varargin)
+%       resetPosteRadio(tO, src, varargin)
+%       dossierFichierEntree(tO, src, varargin)
+% cok = afficheFichierManuel(tO)
+% cok = afficheDossier(tO)
 %       dossierFichierSortie(tO, src, varargin)
 %       afficheModifDossier(tO,S)
 %       afficheModifFichier(tO,S)
 %       ajouterAction(tO, varargin)
+%       ajoutAction(tO, meschoix)
+%       effacerAction(tO, varargin)
+%       monterAction(tO, varargin)
+%       descendreAction(tO, varargin)
 %
-classdef CGUIBatchEditExec < CBasePourFigureAnalyse & CParamBatchEditExec
+classdef CBatchEditExecGUI < CBasePourFigureAnalyse & CBatchEditExecParam
 
   methods
 
@@ -228,10 +236,23 @@ classdef CGUIBatchEditExec < CBasePourFigureAnalyse & CParamBatchEditExec
       tO.afficheListAction(1);
     end
 
-    %-----------------------------------
-    % Modifier une action
-    %-----------------------------------
+    %------------------------------------
+    % Modifier/Configurer une action
+    %------------------------------------
     function modifierAction(tO, varargin)
+      % on s'assure qu'il y a des actions
+      if tO.Naction > 0
+        % alors, de quel action il s'agit
+        v =get(findobj('tag','batchafaire'),'value');
+        foo =tO.listAction{v};
+        % et quels seront les fichiers virtuels
+        [fref,fout] = tO.getFichVirt(v);
+        if isempty(fref)
+          
+        else
+          foo.afficheGUI(fref,fout);
+        end
+      end
     end
 
     %-----------------------------------------------
@@ -258,6 +279,7 @@ classdef CGUIBatchEditExec < CBasePourFigureAnalyse & CParamBatchEditExec
       hJ.ajouter(['Travail en lot, début: ' datestr(now)]);
       % vérification des param d'entrée avant de commencer
       if ~ tO.verifGUI(hJ);
+        hJ.ajouter('Le traitement en batch n''a pas été effectué.');
         return;
       end
     end
@@ -303,6 +325,12 @@ classdef CGUIBatchEditExec < CBasePourFigureAnalyse & CParamBatchEditExec
           % fabrication de la liste des fichiers de sortie
           tO.fabricListFichierOut(hfOUT,hfIN);
           % ON EST RENDU À VÉRIFIER LES ACTIONS
+          if tO.isActionsPretes()
+            
+          else
+            OK =false;
+            J.ajouter('*** Il faut configurer toutes les actions à exécuter', tO.S);
+          end
         end
       end
       tO.S =max(0,tO.S-2);
@@ -322,6 +350,13 @@ classdef CGUIBatchEditExec < CBasePourFigureAnalyse & CParamBatchEditExec
     % En entrée, FIN --> handle du radiobutton
     %--------------------------------------------
     function fabricListFichierIn(tO,FIN)
+      if ~exist(FIN)
+        FIN =tO.getSelectedObject();
+        if isempty(FIN)
+          tO.Nfich =0;
+          return;
+        end
+      end
       pnom =get(findobj('tag','choixfichier'),'string');
       switch get(FIN, 'tag')
       case 'fichiermanuel'

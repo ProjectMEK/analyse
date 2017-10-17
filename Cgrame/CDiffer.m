@@ -17,10 +17,10 @@ classdef CDiffer < handle
 
   methods
 
-    %-----------------------------
-    % CONSTRUCTOR
-    %-----------------------------
-    function tO = CDiffer()
+    %------------------------------------------------------
+    % Affiche le GUI pour définir les paramètres de travail
+    %------------------------------------------------------
+    function guiDiffer(tO)
       OA =CAnalyse.getInstance();
       Ofich =OA.findcurfich();
       hdchnl =Ofich.Hdchnl;

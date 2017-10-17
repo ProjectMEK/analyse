@@ -1,5 +1,5 @@
 %
-% classdef CParamBatchEditExec < handle
+% classdef CBatchEditExecParam < handle
 %
 % METHODS
 %         varargout = creerNouvelAction(tO)
@@ -7,7 +7,7 @@
 %                     effaceTouteAction(tO)
 %                     effaceAction(tO,N)
 %
-classdef CParamBatchEditExec < handle
+classdef CBatchEditExecParam < handle
 
   properties
       % utile à long terme
@@ -28,10 +28,9 @@ classdef CParamBatchEditExec < handle
       Naction =0;
       % liste de fichier virtuel
       listFichVirt =[];
+      % fichier virtuel de référence
+      refFichVirt =CFichierVirtuel();
 
-
-      % handle du fichier virtuel (contient les param nb can, nb ess, etc..)
-      fiVirt =[];
       %
       status =0;
       erreur =0;
@@ -128,6 +127,61 @@ classdef CParamBatchEditExec < handle
         tO.listAction{N} =foo;
       end
     end
+
+    %--------------------------------------------------------
+    % Vérification si toutes les actions ont été configurées.
+    % En sortie  cOk --> true o false
+    %--------------------------------------------------------
+    function cOk = isActionsPretes(tO)
+      cOk =true;
+      for U =1:tO.Naction
+        cOk =(cOk && tO.listAction{U}.pret);
+      end
+    end
+
+    %------------------------------------------------
+    % On vérifie la liste des fichiers à traiter
+    % Si elle n'existe pas, on la crée
+    % En sortie K  --> 0 si elle ne peut être créé
+    %                  1 si il y a au moins 1 fichier
+    %------------------------------------------------
+    function K = verifieListFichierIn(tO)
+      if tO.Nfich == 0
+        tO.fabricListFichierIn();
+      end
+      K =(tO.Nfich > 0);
+    end
+
+    %-----------------------------------------------
+    % On fabrique la liste des fichiers à traiter
+    % Devrait être "overloadé" par une classe Parent
+    %-----------------------------------------------
+    function fabricListFichierIn(tO,FIN)
+      % on laisse les parents s'en occuper...
+    end
+
+    %----------------------------------------------------------------------
+    % on retourne le fichier virtuel de référence et celui de sortie
+    % En entrée     V  --> numéro de l'action sélectionnée
+    % En sortie laref  --> fichier de référence (lecture seulement)
+    %          retour  --> fichier qui conservera les modif de cette action
+    %----------------------------------------------------------------------
+    function [laref,retour] = getFichVirt(tO, V)
+      % initialisation des variables de sortie
+      laref =[];
+      retour =[];
+      % on vérifie si la liste des fichiers existe
+      if tO.verifieListFichierIn()
+        tO.fabricListFichierIn();
+        if tO.Nfich == 0
+          return;
+        else
+          tO.refFichVirt.lire(tO.listFichIN{1});
+        end
+      end
+
+    end
+
   end  % methods
 
 end

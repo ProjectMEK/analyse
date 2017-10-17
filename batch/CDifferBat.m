@@ -13,7 +13,8 @@
 classdef CDifferBat < CDiffer
 
   properties
-      % 
+    % handle de l'action qui l'a "callé"
+    hAct =[];
   end  %properties
 
   methods
@@ -23,13 +24,28 @@ classdef CDifferBat < CDiffer
     % En Entrée
     %   queHacer  que faire à l'ouverture
     %----------------------------------------------------------------------
-    function tO = CDifferBat(queHacer)
+    function tO = CDifferBat(queHacer,H)
       if exist('queHacer')
         switch queHacer
           case 'configuration'
-            
+            % on conserve la trace de celui qui nous a appelé
+            tO.hAct =H;
+            % on appelle le GUI
+            GUIDiffer(tO);
+            set(tO.fig,'CloseRequestFcn',@tO.cFeni);
         end
       end
+    end
+
+    %
+    % On ferme le GUI
+    %
+    function cFeni(tO)
+      set(tO.fig, 'visible','off');
+      pause(2)
+      set(tO.fig, 'visible','off');
+      pause(1)
+      delete(tO.fig);
     end
 
   end  % methods

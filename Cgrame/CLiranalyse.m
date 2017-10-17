@@ -69,7 +69,7 @@ classdef CLiranalyse < CFichierAnalyse
             end
             return;
           end
-          waitbar(75/100, dd, TextLocal);
+          waitbar(0.75, dd, TextLocal);
           if Y == CEFich('analyse')
             fic.foname =finame;
           else
@@ -130,7 +130,7 @@ classdef CLiranalyse < CFichierAnalyse
             obj.Vg.defniv =1;
           end
           obj.Hdchnl.initial(fifich.hdchnl);
-          waitbar(85/100,dd);
+          waitbar(0.85,dd);
 
           if isfield(fifich,'autre')
             obj.autre =fifich.autre;
@@ -149,7 +149,7 @@ classdef CLiranalyse < CFichierAnalyse
           if isfield(fifich,'tpchnl') & ~isempty(fifich.tpchnl)
             obj.Tpchnl.initial(fifich.tpchnl);
           end
-          waitbar(95/100,dd);
+          waitbar(0.95,dd);
           if delwb
             delete(dd);
           end

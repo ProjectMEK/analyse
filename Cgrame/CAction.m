@@ -3,6 +3,7 @@
 %
 % METHODS
 %         tO = CAction(description,laclasse,lastruct)  % CONSTRUCTOR
+%              afficheGUI(tO)
 %
 classdef CAction < handle
 
@@ -13,6 +14,8 @@ classdef CAction < handle
       classe =[];
       % paramètre (structure) à passer à la classe
       pact =[];
+      % les paramètres ont été sauvegardés, on est prêt à passer à l'action
+      pret =false;
   end  %properties
 
   methods
@@ -35,6 +38,14 @@ classdef CAction < handle
       elseif exist('description')
         tO.description =description;
       end
+    end
+
+    %-------------------------------------------------------
+    % Affichage du GUI pour la configuration de cette action
+    %-------------------------------------------------------
+    function afficheGUI(tO)
+      foo =str2func(tO.classe);
+      foo('configuration',tO);
     end
 
   end  % methods

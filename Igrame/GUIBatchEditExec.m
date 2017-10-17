@@ -143,7 +143,7 @@ function fig = GUIBatchEditExec(Ppa)
     A.posy =A.posy-A.haut;
     uicontrol('parent',pan,'Callback',@Ppa.descendreAction,'Position',A.pos,'String','Descendre');
     A.posy =A.posy-2*A.haut;
-    uicontrol('parent',pan,'Callback',@Ppa.modifierAction,'Position',A.pos,'String','Paramètrer');
+    uicontrol('parent',pan,'Callback',@Ppa.modifierAction,'Position',A.pos,'String','Configurer');
   % ********AU TWAFFAILLE, foyons, fé qui kia encowe pis mes dents... :-B
     A.posx=(1-A.large)/2; A.haut=bouty/3; A.posy=bouty/4;
     uicontrol('parent',fig,'Callback',@Ppa.auTravail,'Position',A.pos,'String','Au travail');

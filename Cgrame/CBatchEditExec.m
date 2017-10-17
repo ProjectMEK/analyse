@@ -12,7 +12,7 @@
 % version 1.01       première essai de traitement en batch
 %
 %-------------------------------------------------------------------------
-classdef CBatchEditExec < CGUIBatchEditExec
+classdef CBatchEditExec < CBatchEditExecGUI
 
   methods
 

@@ -122,6 +122,7 @@ function appel(varargin)
     case 'derive'                        % Le même DIFFER que dans DATAC.DOS
       % fncDiffer();
       foo =CDiffer();
+      foo.guiDiffer();
 
     case 'moindre'                       % Menu Polynomial-Fit
       moindreCarre();                    % dérivé par la méthode des moindres carrés

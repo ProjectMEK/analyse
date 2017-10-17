@@ -314,7 +314,7 @@ classdef CFichierAnalyse < CFichier
         %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
         lerate =max(hdchnl.rate(:));
         a =find(hdchnl.nsmpls(:) < 1);
-        if length(a)
+        if ~isempty(a)
           hdchnl.nsmpls(a)=0;
         end
         hdchnl.rate(hdchnl.rate < 0.0001) =lerate;
