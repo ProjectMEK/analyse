@@ -1,7 +1,7 @@
 %
 % DialogBox pour demander les infos relatives à la différenciation
 % puis on passe à l'action.
-% En entrée:  Ppa  --> objet de la classe CDiffer
+% En entrée:  Ppa  --> objet de la classe CDiffer(Bat)
 %
 function GUIDiffer(Ppa, nad, Listadname)
     if nad > 2;letop =nad;else letop =nad+1;end

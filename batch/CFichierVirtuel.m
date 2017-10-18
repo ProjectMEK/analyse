@@ -41,6 +41,8 @@ classdef CFichierVirtuel < CFichier
           Cok =false;
           return;
         end
+        % on conserve le nom du fichier
+        tO.Info.finame =fnom;
         % on initialise tO.Vg
         tO.Vg.initial(fifich.vg);
         % on initialise hdchnl

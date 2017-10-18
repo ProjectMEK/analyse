@@ -246,11 +246,9 @@ classdef CBatchEditExecGUI < CBasePourFigureAnalyse & CBatchEditExecParam
         v =get(findobj('tag','batchafaire'),'value');
         foo =tO.listAction{v};
         % et quels seront les fichiers virtuels
-        [fref,fout] = tO.getFichVirt(v);
-        if isempty(fref)
-          
-        else
-          foo.afficheGUI(fref,fout);
+        foo.hfi = tO.getFichVirt(v);
+        if ~isempty(foo.hfi)
+          foo.afficheGUI(tO.tmpFichVirt);
         end
       end
     end

@@ -14,8 +14,10 @@ classdef CAction < handle
       classe =[];
       % paramètre (structure) à passer à la classe
       pact =[];
-      % les paramètres ont été sauvegardés, on est prêt à passer à l'action
+      % si les paramètres ont été sauvegardés, on est prêt à passer à l'action
       pret =false;
+      % handle du fichier (peut-être virtuel) à traiter
+      hfi =[];
   end  %properties
 
   methods
@@ -40,12 +42,14 @@ classdef CAction < handle
       end
     end
 
-    %-------------------------------------------------------
+    %---------------------------------------------------------
     % Affichage du GUI pour la configuration de cette action
-    %-------------------------------------------------------
-    function afficheGUI(tO)
+    % En entrée on reçoit htmp un objet CFichVirt() qui est le
+    % fichier virtuel temporaire de travail.
+    %---------------------------------------------------------
+    function afficheGUI(tO, htmp)
       foo =str2func(tO.classe);
-      foo('configuration',tO);
+      foo('configuration',tO,htmp);
     end
 
   end  % methods

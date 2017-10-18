@@ -26,10 +26,12 @@ classdef CBatchEditExecParam < handle
       listAction =[];
       % nombre d'actions sélectionnées
       Naction =0;
-      % liste de fichier virtuel
+      % liste de fichier virtuel (il doit y en avoir autant qu'il y a d'action)
       listFichVirt =[];
-      % fichier virtuel de référence
+      % fichier virtuel de référence (on ne le modifie pas)
       refFichVirt =CFichierVirtuel();
+      % fichier virtuel de travail
+      tmpFichVirt =CFichierVirtuel();
 
       %
       status =0;
@@ -166,18 +168,25 @@ classdef CBatchEditExecParam < handle
     % En sortie laref  --> fichier de référence (lecture seulement)
     %          retour  --> fichier qui conservera les modif de cette action
     %----------------------------------------------------------------------
-    function [laref,retour] = getFichVirt(tO, V)
+    function retour = getFichVirt(tO, V)
       % initialisation des variables de sortie
-      laref =[];
       retour =[];
       % on vérifie si la liste des fichiers existe
       if tO.verifieListFichierIn()
-        tO.fabricListFichierIn();
-        if tO.Nfich == 0
-          return;
+      	% on s'assure que le fichier de ref est inclus dans la liste de fichier à traiter
+      	if ~ismember(tO.refFichVirt.Info.finame,tO.listFichIN);
+      		tO.refFichVirt.lire(tO.listFichIN{1});
+      	end
+        if V == 1
+          laref =tO.refFichVirt;
         else
-          tO.refFichVirt.lire(tO.listFichIN{1});
+        	if ~tO.listAction{V-1}.pret
+        		return;
+        	end
+          laref =tO.listFichVirt{V-1};
         end
+        laref.reClone(tO.tmpFichVirt);
+        retour =tO.listFichVirt{V};
       end
 
     end
