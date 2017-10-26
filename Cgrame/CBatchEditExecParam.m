@@ -22,16 +22,16 @@ classdef CBatchEditExecParam < handle
       % Info sur les actions
       % Liste des actions possibles
       listChoixActions =[];
-      % liste des actions sélectionnées
+      % liste des handles des CAction sélectionnées
       listAction =[];
       % nombre d'actions sélectionnées
       Naction =0;
       % liste de fichier virtuel (il doit y en avoir autant qu'il y a d'action)
       listFichVirt =[];
-      % fichier virtuel de référence (on ne le modifie pas)
-      refFichVirt =CFichierVirtuel();
       % fichier virtuel de travail
       tmpFichVirt =CFichierVirtuel();
+      % fichier en traitement
+      curFich =[];
 
       %
       status =0;
@@ -51,8 +51,8 @@ classdef CBatchEditExecParam < handle
   methods
 
     %-------------------------------------------------
-    % création d'un nouvel objet CAction et ajout de
-    % son handle dans la liste tO.listAction
+    % Création d'un nouvel objet CAction et ajout de son handle dans la liste tO.listAction.
+    % Aussi, création d'un fichier virtuel et ajout dans la liste tO.listFichVirt
     % En ENtrée: on veut le nom de l'action
     % En Sortie: on retourne le handle de l'objet créé
     %-------------------------------------------------
@@ -64,6 +64,8 @@ classdef CBatchEditExecParam < handle
         tO.listAction{end+1} =CAction(nAct,cAct);
         % on met à jour la propriété Naction
         tO.Naction =length(tO.listAction);
+        % création d'un fichier virtuel et ajout dans la liste
+        tO.listFichVirt{end+1} =CFichierVirtuel();
         if nargout > 0
           varargout{1} =tO.listAction{end};
         end
@@ -100,9 +102,16 @@ classdef CBatchEditExecParam < handle
     %-----------------------------------------------
     function effaceAction(tO,N)
       if length(tO.listAction) >= N
+        % on efface l'objet correspondant à l'action N
         delete(tO.listAction{N});
+        % on vide la liste en conséquence
         tO.listAction(N) =[];
+        % on ré-ajuste le nombre d'action dans la liste
         tO.Naction =length(tO.listAction);
+        % on efface le fichier virtuel correspondant
+        delete(tO.listFichVirt{N});
+        % on vide la liste en conséquence
+        tO.listFichVirt(N) =[];
       end
     end
 
@@ -163,32 +172,85 @@ classdef CBatchEditExecParam < handle
     end
 
     %----------------------------------------------------------------------
-    % on retourne le fichier virtuel de référence et celui de sortie
-    % En entrée     V  --> numéro de l'action sélectionnée
-    % En sortie laref  --> fichier de référence (lecture seulement)
-    %          retour  --> fichier qui conservera les modif de cette action
+    % On vérifie si les actions antérieures à A sont toutes prêtes.
+    % En entrée   A  --> le numéro de l'action à vérifier
+    % En sortie cOK  --> true si les actions antérieures sont toutes prêtes
     %----------------------------------------------------------------------
-    function retour = getFichVirt(tO, V)
+    function cOK = isActionAvantPret(tO,A)
+      cOK =true;
+      for U =1:A-1
+        cOK =(cOK && tO.listAction{U}.pret);
+      end
+    end
+
+    %---------------------------------------------------------------------
+    % Mise À Zéro(false) de la valeur de la propriété "pret" pour toutes
+    % les actions suivantes incluant la courante.
+    % En entrée   A  --> le numéro de l'action à modifier (par défaut = 1)
+    %---------------------------------------------------------------------
+    function mazPret(tO,A)
+      % si A n'est pas défini, il sera égal à 1
+      if ~exist('A')
+        A =1;
+      elseif A == 0
+        A =1;
+      end
+      for U =A:tO.Naction
+        tO.listAction{U}.pret =false;
+      end
+    end
+
+    %---------------------------------------------------------------
+    % on retourne le fichier virtuel de référence et celui de sortie
+    % En entrée       V  --> numéro de l'action sélectionnée
+    % En sortie  retour  --> true si il n'y a pas d'erreur
+    %---------------------------------------------------------------
+    function retour = setTmpFichVirt(tO, V)
       % initialisation des variables de sortie
-      retour =[];
+      retour =false;
       % on vérifie si la liste des fichiers existe
       if tO.verifieListFichierIn()
-      	% on s'assure que le fichier de ref est inclus dans la liste de fichier à traiter
-      	if ~ismember(tO.refFichVirt.Info.finame,tO.listFichIN);
-      		tO.refFichVirt.lire(tO.listFichIN{1});
-      	end
-        if V == 1
-          laref =tO.refFichVirt;
+      	% laref va contenir le fichier temporaire de travail
+      	laref =tO.tmpFichVirt;
+      	if V == 1
+      	  % si on traite la 1ère action, on relie le fichier analyse
+      	  laref.lire(tO.listFichIN{1});
         else
-        	if ~tO.listAction{V-1}.pret
-        		return;
-        	end
-          laref =tO.listFichVirt{V-1};
+          % autrement, laref sera une copie du fichier virtuel précédent
+          prec =tO.listFichVirt{V-1};
+          prec.reClone(laref);
         end
-        laref.reClone(tO.tmpFichVirt);
-        retour =tO.listFichVirt{V};
+        retour =true;
       end
 
+    end
+
+    %-----------------------------------------------------
+    % C'est ici que l'on gère les travaux en batch
+    % En entrée  hJ  --> handle du journal de bord
+    %
+    % - Une boucle pour passer chacun des fichiers à faire
+    % - Puis une pour chacune des actions
+    %-----------------------------------------------------
+    function tournezLaManivelle(tO,hJ)
+      J.ajouter('Tout semble conforme, début du travail sur les fichiers.',tO.S);
+      tO.S =tO.S+2;
+      % boucle pour les fichiers
+      for U =1:tO.Nfich
+        % On vérifie si les fichiers d'entrées et sortie sont identique
+        if ~strcmpi(tO.listFichIN{U},tO.listFichOUT{U})
+          % si non, on s'assure que le path de sortie existe
+          [a,b,c] =fileparts(tO.listFichOUT{U});
+          if ~isdir(a)
+            % création du path de sortie
+            mkdir(a);
+          end
+          % on va copier le fichier source dans le fichier destination pour le travail
+          copyfile(tO.listFichIN{U},tO.listFichOUT{U},'f');
+        end
+        % maintenant on ouvre le "fichier de sortie"
+        
+      end
     end
 
   end  % methods

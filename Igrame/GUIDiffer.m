@@ -29,7 +29,7 @@ function GUIDiffer(Ppa, nad, Listadname)
               'Style','edit', 'String','11', ...
               'TooltipString','Si laissé à 0 ou 1, dérivé brute: (Xi+1)-(Xi)');
     uicontrol('Parent',lafig, 'Callback',@Ppa.travail, 'Position',[45 25 100 25], ...
-              'String','Au travail!');
+              'String','Au travail!','tag','boutonTravail');
     set(lafig,'WindowStyle','modal');
 end
 

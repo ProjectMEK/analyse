@@ -18,6 +18,8 @@ classdef CAction < handle
       pret =false;
       % handle du fichier (peut-être virtuel) à traiter
       hfi =[];
+      % handle de l'objet défini par tO.classe
+      hO =[];
   end  %properties
 
   methods
@@ -42,14 +44,41 @@ classdef CAction < handle
       end
     end
 
+    % DESTRUCTOR
+    %
+    function delete(tO)
+      if ~isempty(tO.hO)
+        delete(tO.hO);
+        tO.hO =[];
+      end
+    end
+
     %---------------------------------------------------------
     % Affichage du GUI pour la configuration de cette action
     % En entrée on reçoit htmp un objet CFichVirt() qui est le
     % fichier virtuel temporaire de travail.
     %---------------------------------------------------------
-    function afficheGUI(tO, htmp)
-      foo =str2func(tO.classe);
-      foo('configuration',tO,htmp);
+    function afficheGUI(tO)
+      % si c'est la 1ère fois que l'on appelle le constructeur
+      if isempty(tO.hO)
+        foo =str2func(tO.classe);
+        tO.hO =foo();
+      end
+      tO.hO.aFaire('configuration',tO);
+    end
+
+    %----------------------------------------------
+    % On sauvegarde suite au passage par le GUI
+    % En entrée   S  --> structure des infos du GUI
+    %----------------------------------------------
+    function sauveConfig(tO,S)
+      % on conserve les params du GUI
+      tO.pact =S;
+      tO.pret =true;
+      % on conserve le fichier virtuel
+      H2 =CBatchEditExec.getInstance();
+      ftmp =H2.tmpFichVirt;
+      ftmp.reClone(tO.hfi);
     end
 
   end  % methods

@@ -211,8 +211,13 @@ classdef CBatchEditExecGUI < CBasePourFigureAnalyse & CBatchEditExecParam
     % Effacer l'action sélectionnée
     %------------------------------
     function effacerAction(tO, varargin)
+      % De quelle action s'agit-il
       V =get(findobj('tag','batchafaire'),'value');
+      % on l'efface
       tO.effaceAction(V);
+      % on remet à zéro la propriété "pret"
+      tO.mazPret(V);
+      % on ré-affiche laliste
       tO.afficheListAction(0);
     end
 
@@ -221,8 +226,12 @@ classdef CBatchEditExecGUI < CBasePourFigureAnalyse & CBatchEditExecParam
     % pour déplacer vers le haut la tache sélectionnée
     %-------------------------------------------------
     function monterAction(tO, varargin)
+      % De quelle action s'agit-il
       V =get(findobj('tag','batchafaire'),'value');
+      % on la déplace
       tO.remonte(V);
+      % on remet à zéro la propriété "pret"
+      tO.mazPret(V-1);
       tO.afficheListAction(-1);
     end
 
@@ -231,26 +240,52 @@ classdef CBatchEditExecGUI < CBasePourFigureAnalyse & CBatchEditExecParam
     % pour déplacer vers le bas la tache sélectionnée
     %------------------------------------------------
     function descendreAction(tO, varargin)
+      % De quelle action s'agit-il
       V =get(findobj('tag','batchafaire'),'value');
+      % on la déplace
       tO.redescend(V);
+      % on remet à zéro la propriété "pret"
+      tO.mazPret(V);
       tO.afficheListAction(1);
     end
 
-    %------------------------------------
+    %-----------------------------------------------
     % Modifier/Configurer une action
-    %------------------------------------
+    % Lorsque l'on configure une action, il faut que
+    % les actions précédentes aient été configurées.
+    %-----------------------------------------------
     function modifierAction(tO, varargin)
       % on s'assure qu'il y a des actions
       if tO.Naction > 0
         % alors, de quel action il s'agit
         v =get(findobj('tag','batchafaire'),'value');
+      	% handle de l'action à configurer
         foo =tO.listAction{v};
-        % et quels seront les fichiers virtuels
-        foo.hfi = tO.getFichVirt(v);
-        if ~isempty(foo.hfi)
-          foo.afficheGUI(tO.tmpFichVirt);
+        % on passe le bon handle du fichier virtuel à l'action
+        foo.hfi =tO.listFichVirt{v};
+        % il faut que les actions précédentes aient été configurées
+        if tO.isActionAvantPret(v)
+          qui =tO.setTmpFichVirt(v);
+        else
+      	  hJ =CJournal.getInstance();
+          hJ.ajouter('Il faut configurer les actions précédentes avant de configurer celle-ci!', tO.S);
+      		return;
+      	end
+        if qui
+          foo.afficheGUI();
         end
       end
+    end
+
+    %-------------------------------------------------------------
+    % Comme il y a eu une modification majeure dans les paramètres
+    % de l'action en cours de modification, on doit changer la
+    % propriété "pret" des actions suivantes.
+    %-------------------------------------------------------------
+    function resetApres(tO)
+      % il faut savoir quelle est l'action "courante"
+      v =get(findobj('tag','batchafaire'),'value');
+      tO.mazPret(v+1);
     end
 
     %-----------------------------------------------
@@ -276,9 +311,11 @@ classdef CBatchEditExecGUI < CBasePourFigureAnalyse & CBatchEditExecParam
       hJ =CJournal.getInstance();
       hJ.ajouter(['Travail en lot, début: ' datestr(now)]);
       % vérification des param d'entrée avant de commencer
-      if ~ tO.verifGUI(hJ);
+      if tO.verifGUI(hJ);
+        % on commence à travailler en mode batch
+        tO.tournezLaManivelle(hJ);
+      else
         hJ.ajouter('Le traitement en batch n''a pas été effectué.');
-        return;
       end
     end
 
@@ -292,6 +329,7 @@ classdef CBatchEditExecGUI < CBasePourFigureAnalyse & CBatchEditExecParam
       OK =true;
       J.ajouter('Vérification des paramètres d''entrées',tO.S);
       tO.S =tO.S+2;
+      %---------------------
       % PARAM FICHIER ENTRÉE
       %---------------------
       % recherche du radiobutton sélection dans le uipanel des fichiers à traiter
@@ -300,10 +338,12 @@ classdef CBatchEditExecGUI < CBasePourFigureAnalyse & CBatchEditExecParam
         OK =false;
         J.ajouter('*** Il faut faire un choix de fichier à traiter', tO.S);
       end
+      %---------------------
       % PARAM FICHIER SORTIE
       %---------------------
       hfOUT =get(findobj('tag','BGfichOUT'),'SelectedObject');
       OK =(OK & tO.verifFsortie(hfOUT,J));
+      %---------------------
       % PARAM ACTION À FAIRE
       %---------------------
       if isempty(get(findobj('tag','batchafaire'),'string'))
@@ -324,7 +364,7 @@ classdef CBatchEditExecGUI < CBasePourFigureAnalyse & CBatchEditExecParam
           tO.fabricListFichierOut(hfOUT,hfIN);
           % ON EST RENDU À VÉRIFIER LES ACTIONS
           if tO.isActionsPretes()
-            
+            % rien pour l'instant
           else
             OK =false;
             J.ajouter('*** Il faut configurer toutes les actions à exécuter', tO.S);
@@ -348,7 +388,7 @@ classdef CBatchEditExecGUI < CBasePourFigureAnalyse & CBatchEditExecParam
     % En entrée, FIN --> handle du radiobutton
     %--------------------------------------------
     function fabricListFichierIn(tO,FIN)
-      if ~exist(FIN)
+      if ~exist('FIN')
         FIN =tO.getSelectedObject();
         if isempty(FIN)
           tO.Nfich =0;
@@ -472,6 +512,7 @@ classdef CBatchEditExecGUI < CBasePourFigureAnalyse & CBatchEditExecParam
     % au travers des dossiers/sous-dossiers
     % En entrée:  lepath  est le dossier à inspecter
     %             rep     est la liste des fichiers "dossier\fichier.mat"
+    % En sortie   rep      "   "
     %--------------------------------------------------------------------
     function rep =listFichRecursif(tO,lepath,rep)
       % on conserve le dossier de départ
@@ -486,7 +527,7 @@ classdef CBatchEditExecGUI < CBasePourFigureAnalyse & CBatchEditExecParam
         if lfich(U).isdir
           % il s'agit d'un dossier
           rep =tO.listFichRecursif(lfich(U).name,rep);
-        elseif strncmpi(ext, '.mat', 3)
+        elseif strncmpi(ext, '.mat', 4)
           rep{end+1,1} =fullfile(pwd(), lfich(U).name);
         end
       end

@@ -17,6 +17,16 @@ classdef CDiffer < handle
 
   methods
 
+    %------------------
+    % DESTRUCTOR
+    %------------------
+    function delete(tO)
+      if ~isempty(tO.fig)
+        delete(tO.fig);
+        tO.fig =[];
+      end
+    end
+
     %------------------------------------------------------
     % Affiche le GUI pour définir les paramètres de travail
     %------------------------------------------------------
@@ -117,13 +127,6 @@ classdef CDiffer < handle
       hndt.Dato.(hndt.Nom)(1:smpls-1, ess) =hndt.Dato.(hndt.Nom)(2:smpls, ess)-hndt.Dato.(hndt.Nom)(1:smpls-1, ess);
       hndt.Dato.(hndt.Nom)(smpls, ess) =hndt.Dato.(hndt.Nom)(smpls-1, ess);
       hndt.Dato.(hndt.Nom)(:, ess) =hndt.Dato.(hndt.Nom)(:, ess)*rate;
-    end
-
-    function delete(tO)
-      if ~isempty(tO.fig)
-        delete(tO.fig);
-        tO.fig =[];
-      end
     end
 
   end

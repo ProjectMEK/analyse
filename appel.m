@@ -25,7 +25,7 @@ function appel(varargin)
 
     case 'editbatch'                      % Exécuter des jobs en batch
       % batchEditExec();
-      oTmp =CBatchEditExec();
+      oTmp =CBatchEditExec.getInstance();
 
     case 'fermerfich'                     % Fermer le fichier courant
       OA.fermerfich();
