@@ -19,7 +19,7 @@ function hF = ouvreFichBatch(fichier)
     % On ouvre un fichier au format "Analyse"
     [hF.Info.prenom,b,c] =fileparts(fichier);
     hF.Info.finame =[b c];
-    hF.Vg.valeur =0;
+    hF.Vg.valeur =1;
     % on finalise l'ouverture
 
     OA =CAnalyse.getInstance();

@@ -237,20 +237,30 @@ classdef CBatchEditExecParam < handle
       tO.S =tO.S+2;
       % boucle pour les fichiers
       for U =1:tO.Nfich
-        % On vérifie si les fichiers d'entrées et sortie sont identique
-        if ~strcmpi(tO.listFichIN{U},tO.listFichOUT{U})
-          % si non, on s'assure que le path de sortie existe
-          [a,b,c] =fileparts(tO.listFichOUT{U});
-          if ~isdir(a)
-            % création du path de sortie
-            mkdir(a);
-          end
-          % on va copier le fichier source dans le fichier destination pour le travail
-          copyfile(tO.listFichIN{U},tO.listFichOUT{U},'f');
-        end
-        % maintenant on ouvre le "fichier de sortie"
-        
+        % ouverture du fichier U
+        tO.ouvrirFichier(U);
       end
+    end
+
+    %----------------------------------------------------------------
+    % Ouverture d'un fichier Analyse pour le travail en batch
+    % On va négliger tout les aspect affichage dans le GUI principale
+    % En entrée  N  --> numéro du fichier dans la liste
+    %----------------------------------------------------------------
+    function ouvrirFichier(tO,N)
+      % On vérifie si les fichiers d'entrées et sortie sont identique
+      if ~strcmpi(tO.listFichIN{N},tO.listFichOUT{N})
+        % si non, on s'assure que le path de sortie existe
+        [a,b,c] =fileparts(tO.listFichOUT{N});
+        if ~isdir(a)
+          % création du path de sortie
+          mkdir(a);
+        end
+        % on va copier le fichier source dans le fichier destination pour le travail
+        copyfile(tO.listFichIN{N},tO.listFichOUT{N},'f');
+      end
+      % maintenant on ouvre le "fichier de sortie"
+      tO.curFich =ouvreFichBatch(tO.listFichOUT{N});
     end
 
   end  % methods
