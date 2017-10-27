@@ -33,7 +33,7 @@ function hF = ouvreFichBatch(fichier)
   
     try
       foo =CEFich(eltypo);
-      test =hF.lire(foo);
+      test =hF.lire(foo,true);
     catch tout;
       test =false;
     end
