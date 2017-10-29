@@ -53,11 +53,9 @@ classdef CAction < handle
       end
     end
 
-    %---------------------------------------------------------
-    % Affichage du GUI pour la configuration de cette action
-    % En entrée on reçoit htmp un objet CFichVirt() qui est le
-    % fichier virtuel temporaire de travail.
-    %---------------------------------------------------------
+    %--------------------------------------------------------
+    % Affichage du GUI pour la configuration de cette action.
+    %--------------------------------------------------------
     function afficheGUI(tO)
       % si c'est la 1ère fois que l'on appelle le constructeur
       if isempty(tO.hO)
@@ -65,6 +63,20 @@ classdef CAction < handle
         tO.hO =foo();
       end
       tO.hO.aFaire('configuration',tO);
+    end
+
+    %----------------------------------------------------------
+    % On démarre le travail à faire de cette action
+    % En entrée on reçoit hF un objet CLireAnalyse() qui est le
+    % fichier courant (de travail).
+    %----------------------------------------------------------
+    function enRoute(tO,hF)
+      % si c'est la 1ère fois que l'on appelle le constructeur
+      if isempty(tO.hO)
+        foo =str2func(tO.classe);
+        tO.hO =foo();
+      end
+      tO.hO.aFaire('auTravail',hF);
     end
 
     %----------------------------------------------

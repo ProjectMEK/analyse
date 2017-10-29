@@ -46,6 +46,9 @@ classdef CDifferBat < CDiffer
             H2 =CBatchEditExec.getInstance();
             ftmp =H2.tmpFichVirt;
             tO.onDessine(ftmp.Vg.nad, ftmp.Hdchnl.Listadname);
+          case 'auTravail'
+          	% En entrée, H1  --> handle du fichier de travail
+          	tO.cParti(H1,tO.hAct.pact);
         end
       end
     end

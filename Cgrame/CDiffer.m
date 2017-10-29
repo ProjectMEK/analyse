@@ -43,13 +43,30 @@ classdef CDiffer < handle
     %--------------------------------------------------------------------
     function travail(tO,varargin)
       OA =CAnalyse.getInstance();
-      Ofich =OA.findcurfich();
+      hF =OA.findcurfich();
+      % lecture des paramètres du GUI
+      foo.nad =get(findobj('tag','ListeCan'),'Value')';            % canaux à différencier
+      foo.ovw =abs(get(findobj('tag','memeCan'),'Value')-1);    % on écrase le canal source
+      foo.lar =get(findobj('Tag','LargeurFenLissage'),'String');    % Nb de point pour le lissage en char
+      % on appel la fonction qui va faire le travail
+      tO.cParti(hF,foo);
+    end
+
+    %---------------------------------------------------
+    % Ici on effectue le travail pour la fonction Differ
+    % même chose en mode batch
+    % En entrée  Ofich  --> handle du fichier à traiter
+    %                S  --> structure des param du GUI
+    %---------------------------------------------------
+    function cParti(tO,Ofich,S)
+      % paramètres du GUI
+      Vcan =S.nad
+      nouveau =S.ovw
+      fen =S.lar
+      % infos utiles du fichier
       hdchnl =Ofich.Hdchnl;
       vg =Ofich.Vg;
       dtchnl =CDtchnl();
-      Vcan =get(findobj('tag','ListeCan'),'Value')';            % canaux à différencier
-      nouveau =abs(get(findobj('tag','memeCan'),'Value')-1);    % on écrase le canal source
-      fen =get(findobj('Tag','LargeurFenLissage'),'String');    % Nb de point pour le lissage en char
       window =str2double(fen);                                  % Nb de point pour le lissage en chiffre
       auTravail =str2func('differ');
       if window < 2

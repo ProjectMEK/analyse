@@ -233,13 +233,46 @@ classdef CBatchEditExecParam < handle
     % - Puis une pour chacune des actions
     %-----------------------------------------------------
     function tournezLaManivelle(tO,hJ)
-      J.ajouter('Tout semble conforme, début du travail sur les fichiers.',tO.S);
+      hA =CAnalyse.getInstance();
+      hJ.ajouter('Tout semble conforme, début du travail sur les fichiers.',tO.S);
       tO.S =tO.S+2;
+
       % boucle pour les fichiers
       for U =1:tO.Nfich
+
         % ouverture du fichier U
-        tO.ouvrirFichier(U);
+        if tO.ouvrirFichier(U);
+          hJ.ajouter(['Ouverture de:  ' tO.listFichOUT{U}],tO.S);
+          tO.S =tO.S+2;
+
+          % boucle pour les actions
+          for A =1:tO.Naction
+            % quel est le handle de l'action à effectuer
+            H =tO.listAction{U};
+            % on inscrit dans le journal la description de la fonction à effectuer
+            desc =H.description;
+            hJ.ajouter(['Fonction:  ' desc],tO.S);
+            tO.S =tO.S+2;
+
+            % on exécute le travail
+            H.enRoute(tO.curFich);
+            hJ.ajouter(['Fonction:  ' desc ' réussie...'],tO.S);
+            tO.S =tO.S-2;
+          end
+
+          % sauvegarde du fichier
+          tt =tO.curFich.sauver();
+          % fermeture du fichier
+          hA.fermecur();
+          tO.S =tO.S-2;
+        else
+        	hJ.ajouter(['Erreur de lecture: ' tO.listFichOUT{U}],tO.S);
+        end
       end
+
+      tO.S =tO.S-2;
+      J.ajouter('Fin du travail en batch!',tO.S);
+
     end
 
     %----------------------------------------------------------------
@@ -247,7 +280,7 @@ classdef CBatchEditExecParam < handle
     % On va négliger tout les aspect affichage dans le GUI principale
     % En entrée  N  --> numéro du fichier dans la liste
     %----------------------------------------------------------------
-    function ouvrirFichier(tO,N)
+    function reussi = ouvrirFichier(tO,N)
       % On vérifie si les fichiers d'entrées et sortie sont identique
       if ~strcmpi(tO.listFichIN{N},tO.listFichOUT{N})
         % si non, on s'assure que le path de sortie existe
@@ -261,6 +294,11 @@ classdef CBatchEditExecParam < handle
       end
       % maintenant on ouvre le "fichier de sortie"
       tO.curFich =ouvreFichBatch(tO.listFichOUT{N});
+      if isempty(tO.curfich)
+      	reussi =false;
+      else
+      	reussi =true;
+      end
     end
 
   end  % methods

@@ -321,7 +321,7 @@ classdef (Sealed) CAnalyse < handle
 
     %------------------------------
     % Sauvegarde le fichier courant
-    %--------------------
+    %------------------------------
     function sauvecur(tO)
       set(tO.OFig.fig,'Pointer','custom');
       Ofich =tO.findcurfich();
@@ -380,7 +380,7 @@ classdef (Sealed) CAnalyse < handle
     % Appelé par un Callback
     %--------------------------------
     function fermerfich(tO,src,event)
-      tO.fermecur();
+      vide =tO.fermecur();
     end
 
     %-------------------------------
