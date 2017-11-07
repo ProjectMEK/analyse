@@ -1,5 +1,5 @@
 %
-% classdef CGuiCalculCOP < CBasePourFigureAnalyse & COngletUtil & CParamCalculCOP
+% classdef CCalculCOPGUI < CBasePourFigureAnalyse & COngletUtil & CCalculCOPParam
 %
 % Classe de gestion du GUI GuiCalculCOP
 % prendra en charge tous les callback du GUI
@@ -21,15 +21,28 @@
 %       showPanel(tO, src, event)
 %       surveilleZOffset(tO, src, event)
 %
-classdef CGuiCalculCOP < CBasePourFigureAnalyse & COngletUtil & CParamCalculCOP
+classdef CCalculCOPGUI < CBasePourFigureAnalyse & COngletUtil & CCalculCOPParam
 
   methods
 
-    %-------------------
-    % On va créer le GUI
-    %-------------------
-    function initGui(tO)
-      tO.fig =GuiCalculCOP(tO);
+    %-------------------------------------------------------------
+    % on appel le GUI GuiCalculCOP() et les param peuvent être lus
+    % directement d'un fichier
+    % EN ENTRÉE on a conGUI une variable logique qui déterminera si:
+    %   false -->  on initialise les paramètres à partir d'un fichier
+    %   true  -->  se sera les valeurs par défauts.
+    %-------------------------------------------------------------
+    function guiCalculCOP(tO, conGUI)
+      if ~exist('conGUI')
+        conGUI =true;
+      end
+      if ~conGUI
+        tO.lireParam();
+      end
+      hA =CAnalyse.getInstance();
+      Ofich =hA.findcurfich();
+      hdchnl =Ofich.Hdchnl;
+      GuiCalculCOP(tO, hdchnl.Listadname);
     end
 
     %---------------------------------
@@ -141,10 +154,11 @@ classdef CGuiCalculCOP < CBasePourFigureAnalyse & COngletUtil & CParamCalculCOP
     %------------------------------------
     function changeCanFx(tO, src, event)
       tO.canFx =get(src, 'Value')-1;
-      if (tO.canFy == 0) & (tO.canFz == 0) & (tO.canMx == 0) & (tO.canMy == 0) & (tO.canMz == 0)
+      Ncan =length(get(src, 'string'));
+      if (tO.canFy == 0) & (tO.canFz == 0) & (tO.canMx == 0) & (tO.canMy == 0) &...
+         (tO.canMz == 0) & (tO.canFx+6 <= Ncan)
         % on vérifie si les autres canaux ont été sélectionné, sinon
         % on les remplie automatiquement avec les canaux suivants.
-        Ncan =length(get(src, 'string'));
         tO.canFy =tO.canFx+1;
         tO.canFz =tO.canFx+2;
         tO.canMx =tO.canFx+3;

@@ -94,7 +94,7 @@ function fig = GUIBatchEditExec(Ppa)
   % BOUTTON ... CHOIX DU DOSSIER
     A.posx=A.posx+A.large;A.large=lcol5;
     uicontrol('parent',pan,'position',A.pos,'string','...','tag','boutondossierfinal',...
-              'tooltipstring','Pour faire la sélection du dossier de sortie');
+              'tooltipstring','Faire la sélection du dossier de sortie','callback',@Ppa.choixDossierSortie);
   % TEXT AJOUTER POUR LE (pré/suf)FIXE DU NOUVEAU NOM DE FICHIER
     A.posx=memx;A.large=lcol2;A.posy=memy-A.haut+(memy2-memy)/2;
     uicontrol('parent',pan,'style','text','position',A.pos,'string','Ajouter: ','horizontalalignment','right');
@@ -147,7 +147,10 @@ function fig = GUIBatchEditExec(Ppa)
   % ********AU TWAFFAILLE, foyons, fé qui kia encowe pis mes dents... :-B
     A.posx=(1-A.large)/2; A.haut=bouty/3; A.posy=bouty/4;
     uicontrol('parent',fig,'Callback',@Ppa.auTravail,'Position',A.pos,'String','Au travail');
-%    guidata(fig,Ppa);
+    % on fait le ménage des objets inutiles
     delete(A);
+    % on rend la figure modal
+    Ppa.setFigModal();
+    % on affiche la flèche au choix par défaut du dossier de sortie
     Ppa.dossierFichierSortie(membg);
 end

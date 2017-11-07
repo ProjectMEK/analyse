@@ -32,7 +32,7 @@ function hF = ouvreFichBatch(fichier)
     waitbar(1/1000,WBhnd);
   
     try
-      foo =CEFich(eltypo);
+      foo =CEFich(1);
       test =hF.lire(foo,true);
     catch tout;
       test =false;
@@ -45,8 +45,6 @@ function hF = ouvreFichBatch(fichier)
     	waitbar(0.8, WBhnd, TextLocal);
     	OA.majcurfich(hF);
       waitbar(0.95, WBhnd, TextLocal);
-      %
-  
     else
       delete(hF);
       hF =[];

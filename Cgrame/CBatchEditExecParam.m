@@ -19,6 +19,8 @@ classdef CBatchEditExecParam < handle
       listFichIN ={'aucun fichier à traiter'};
       % Info sur les fichiers de sortie
       listFichOUT =[];
+      % Path du fichier de sortie
+      pathOUT =[];
       % Info sur les actions
       % Liste des actions possibles
       listChoixActions =[];
@@ -32,23 +34,20 @@ classdef CBatchEditExecParam < handle
       tmpFichVirt =CFichierVirtuel();
       % fichier en traitement
       curFich =[];
-
       %
-      status =0;
-      erreur =0;
-      Path =pwd;
-      ChoixEntree =1;
-      ChoixSortie =4;
-      isFichierIn =0;
-      isFichierOut =0;
-      exten ='.mat';
-      tot =0;
-      elno =0;
-      tacfic =1;
-      tach =[];
   end  %properties
 
   methods
+
+    % Remise à zéro de toutes les propriétés
+    function onVide(tO)
+      % nombre d'espace à ajouter dans le journal "pour faire beau"
+      tO.S =0;
+      % Info sur les fichiers à traiter
+      tO.Nfich =0;
+      % Liste des actions possibles
+      tO.effaceTouteAction();
+    end
 
     %-------------------------------------------------
     % Création d'un nouvel objet CAction et ajout de son handle dans la liste tO.listAction.
@@ -238,40 +237,57 @@ classdef CBatchEditExecParam < handle
       tO.S =tO.S+2;
 
       % boucle pour les fichiers
+      %-------------------------
       for U =1:tO.Nfich
 
         % ouverture du fichier U
+        %-----------------------
         if tO.ouvrirFichier(U);
-          hJ.ajouter(['Ouverture de:  ' tO.listFichOUT{U}],tO.S);
+          hJ.ajouter(['Ouverture de:  ' tO.listFichIN{U}],tO.S);
           tO.S =tO.S+2;
 
           % boucle pour les actions
+          %------------------------
           for A =1:tO.Naction
             % quel est le handle de l'action à effectuer
-            H =tO.listAction{U};
+            H =tO.listAction{A};
             % on inscrit dans le journal la description de la fonction à effectuer
             desc =H.description;
             hJ.ajouter(['Fonction:  ' desc],tO.S);
             tO.S =tO.S+2;
 
             % on exécute le travail
+            %----------------------
             H.enRoute(tO.curFich);
-            hJ.ajouter(['Fonction:  ' desc ' réussie...'],tO.S);
+            hJ.ajouter(['...' desc ' réussie...'],tO.S);
             tO.S =tO.S-2;
           end
 
           % sauvegarde du fichier
+          %-----------------------
           tt =tO.curFich.sauver();
-          % fermeture du fichier
-          hA.fermecur();
           tO.S =tO.S-2;
+          hJ.ajouter(['Sauvegarde de:  ' tO.listFichOUT{U}],tO.S);
+          % fermeture du fichier
+          %---------------------
+          hA.fermecur();
         else
-        	hJ.ajouter(['Erreur de lecture: ' tO.listFichOUT{U}],tO.S);
+        	hJ.ajouter(['Erreur de lecture: ' tO.listFichIN{U}],tO.S);
         end
       end
 
+      % Travail en lot terminé
+      %-----------------------
       tO.S =tO.S-2;
-      J.ajouter('Fin du travail en batch!',tO.S);
+      hJ.ajouter(['Fin du travail en batch, ' datestr(now)],tO.S);
+      % on va sauvegarder le log dans le répertoire du haut des fichier de sortie
+      fnom =datestr(now);
+      % on remplace les espaces et retire les ':'
+      fnom(find(isspace(fnom))) ='_';
+      fnom(findstr(fnom,':'))=[];
+      complet =fullfile(tO.pathOUT,[fnom '.log']);
+      hJ.ajouter(['Sauvegarde du journal dans: ' complet],tO.S);
+      hJ.sauvegarde(complet);
 
     end
 
@@ -294,7 +310,7 @@ classdef CBatchEditExecParam < handle
       end
       % maintenant on ouvre le "fichier de sortie"
       tO.curFich =ouvreFichBatch(tO.listFichOUT{N});
-      if isempty(tO.curfich)
+      if isempty(tO.curFich)
       	reussi =false;
       else
       	reussi =true;

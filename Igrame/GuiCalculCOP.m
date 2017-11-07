@@ -1,19 +1,18 @@
 %
 % ***INTERFACE (GUI) POUR LE CALCUL DU CENTRE DE PRESSION***
 %
-function fig =GuiCalculCOP(Ppa)
-  hA =CAnalyse.getInstance();
-  Ofich =hA.findcurfich();
-  hdchnl =Ofich.Hdchnl;
-  vg =Ofich.Vg;
+function GuiCalculCOP(Ppa,Listadname)
+  BLANC =[1 1 1];
+  nad =length(Listadname);
   largeur =525; hauteur =575;
-  posfig =positionfen('G','C',largeur,hauteur,hA.OFig.fig);
+  posfig =positionfen('G','C',largeur,hauteur,gcf);
   fig =figure('Name', 'Calcul  COP-COG', 'Position',posfig, 'Resize', 'off', ...				
           'CloseRequestFcn',@Ppa.terminus, 'DefaultUIControlBackgroundColor',Ppa.couleurRef, ...
           'DefaultUIPanelBackgroundColor',Ppa.couleurRef, 'DefaultUIControlUnits','pixels', ...
           'DefaultUIPanelUnits','pixels', 'DefaultUIControlFontUnits','pixels', ...
           'DefaultUIControlFontSize',12, 'DefaultUIPanelTitlePosition','rightbottom', ...
           'DefaultUIControlFontName','MS Sans Serif', 'DefaultUITableFontName','FixedWidth');
+  Ppa.fig =fig;
   hbout =25; bordure =2*hbout; dx =15; dy =20; dy2 =dy-5; lbout =100;
   %------------------
   % Panel des onglets
@@ -49,7 +48,7 @@ function fig =GuiCalculCOP(Ppa)
     %-----------------
     % CHOIX DES CANAUX
     lesCanaux ={'aucun...'};
-    lesCanaux(2:length(hdchnl.Listadname)+1) =hdchnl.Listadname;
+    lesCanaux(2:nad+1) =Listadname;
     posx =dx; large =lpan-2*posx; haut =hbout; posy =posy-haut-dy;
     uicontrol('Parent',pan, 'FontWeight','bold', 'Position',[posx posy large haut],...
               'HorizontalAlignment','center', 'String','Choix des canaux', 'Style','text');
@@ -59,7 +58,7 @@ function fig =GuiCalculCOP(Ppa)
     posx =1; largeText =90; largeBox =lpan-2*largeText-posx; posy =posy-haut-dy2;
     uicontrol('Parent',pan, 'Style','text', 'position',[posx posy+1 largeText haut-2], ...
               'FontWeight','bold', 'String','Fx:  ', 'HorizontalAlignment','right');
-    cualCanal =(Ppa.getCanFx <= vg.nad)*Ppa.getCanFx+1;
+    cualCanal =(Ppa.getCanFx <= nad)*Ppa.getCanFx+1;
     uicontrol('Parent',pan, 'Style','popupmenu', 'Tag','CanauxFx', 'Position',[posx+largeText posy largeBox haut], ...
               'FontSize',10, 'String',lesCanaux, 'Value',cualCanal, 'Callback',@Ppa.changeCanFx);
     %---
@@ -67,7 +66,7 @@ function fig =GuiCalculCOP(Ppa)
     posy =posy-haut-dy2;
     uicontrol('Parent',pan, 'Style','text', 'position',[posx posy+1 largeText haut-2], ...
               'FontWeight','bold', 'String','Fy:  ', 'HorizontalAlignment','right');
-    cualCanal =(Ppa.getCanFy <= vg.nad)*Ppa.getCanFy+1;
+    cualCanal =(Ppa.getCanFy <= nad)*Ppa.getCanFy+1;
     uicontrol('Parent',pan, 'Style','popupmenu', 'Tag','CanauxFy', 'Position',[posx+largeText posy largeBox haut], ...
               'FontSize',10, 'String',lesCanaux, 'Value',cualCanal, 'Callback',@Ppa.changeCanFy);
     %---
@@ -75,7 +74,7 @@ function fig =GuiCalculCOP(Ppa)
     posy =posy-haut-dy2;
     uicontrol('Parent',pan, 'Style','text', 'position',[posx posy+1 largeText haut-2], ...
               'FontWeight','bold', 'String','Fz:  ', 'HorizontalAlignment','right');
-    cualCanal =(Ppa.getCanFz <= vg.nad)*Ppa.getCanFz+1;
+    cualCanal =(Ppa.getCanFz <= nad)*Ppa.getCanFz+1;
     uicontrol('Parent',pan, 'Style','popupmenu', 'Tag','CanauxFz', 'Position',[posx+largeText posy largeBox haut], ...
               'FontSize',10, 'String',lesCanaux, 'Value',cualCanal, 'Callback',@Ppa.changeCanFz);
     %---
@@ -83,7 +82,7 @@ function fig =GuiCalculCOP(Ppa)
     posy =posy-haut-dy2;
     uicontrol('Parent',pan, 'Style','text', 'position',[posx posy+1 largeText haut-2], ...
               'FontWeight','bold', 'String','Mx:  ', 'HorizontalAlignment','right');
-    cualCanal =(Ppa.getCanMx <= vg.nad)*Ppa.getCanMx+1;
+    cualCanal =(Ppa.getCanMx <= nad)*Ppa.getCanMx+1;
     uicontrol('Parent',pan, 'Style','popupmenu', 'Tag','CanauxMx', 'Position',[posx+largeText posy largeBox haut], ...
               'FontSize',10, 'String',lesCanaux, 'Value',cualCanal, 'Callback',@Ppa.changeCanMx);
     %---
@@ -91,7 +90,7 @@ function fig =GuiCalculCOP(Ppa)
     posy =posy-haut-dy2;
     uicontrol('Parent',pan, 'Style','text', 'position',[posx posy+1 largeText haut-2], ...
               'FontWeight','bold', 'String','My:  ', 'HorizontalAlignment','right');
-    cualCanal =(Ppa.getCanMy <= vg.nad)*Ppa.getCanMy+1;
+    cualCanal =(Ppa.getCanMy <= nad)*Ppa.getCanMy+1;
     uicontrol('Parent',pan, 'Style','popupmenu', 'Tag','CanauxMy', 'Position',[posx+largeText posy largeBox haut], ...
               'FontSize',10, 'String',lesCanaux, 'Value',cualCanal, 'Callback',@Ppa.changeCanMy);
     %---
@@ -99,7 +98,7 @@ function fig =GuiCalculCOP(Ppa)
     posy =posy-haut-dy2;
     uicontrol('Parent',pan, 'Style','text', 'position',[posx posy+1 largeText haut-2], ...
               'FontWeight','bold', 'String','Mz:  ', 'HorizontalAlignment','right');
-    cualCanal =(Ppa.getCanMz <= vg.nad)*Ppa.getCanMz+1;
+    cualCanal =(Ppa.getCanMz <= nad)*Ppa.getCanMz+1;
     uicontrol('Parent',pan, 'Style','popupmenu', 'Tag','CanauxMz', 'Position',[posx+largeText posy largeBox haut], ...
               'FontSize',10, 'String',lesCanaux, 'Value',cualCanal, 'Callback',@Ppa.changeCanMz);
     %-----------
@@ -181,7 +180,7 @@ function fig =GuiCalculCOP(Ppa)
                 'HorizontalAlignment','center', 'String',leTexte, 'Style','text');
       haut =hbout; posy =posy-haut; posx =posx+round((large-lbout)/2); large =lbout;
       uicontrol('Parent',pan, 'Position',[posx posy large haut], 'tag','EditZoff', ...
-                'BackGroundColor',[1 1 1], 'HorizontalAlignment','center', ...
+                'BackGroundColor',BLANC, 'HorizontalAlignment','center', ...
                 'String',num2str(Ppa.getZOff()), 'Style','edit', 'Callback',@Ppa.surveilleZOffset);
   end
   %------------------
@@ -212,7 +211,8 @@ function fig =GuiCalculCOP(Ppa)
       Ppa.afficheStatus();
   % AU TRAVAIL
   large =lbout; posx =round((lpan-large)/2); posy =2*haut;
-  uicontrol('Parent',fig, 'Position',[posx posy large haut], 'Callback',@Ppa.auTravail, 'String','Au travail');
+  uicontrol('Parent',fig,'tag','boutonTravail','Position',[posx posy large haut],...
+            'Callback',@Ppa.auTravail, 'String','Au travail');
   set(fig,'WindowStyle','modal');
 end
 

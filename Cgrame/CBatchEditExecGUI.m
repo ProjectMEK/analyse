@@ -28,7 +28,12 @@ classdef CBatchEditExecGUI < CBasePourFigureAnalyse & CBatchEditExecParam
     % Création du GUI
     %-------------------
     function initGui(tO)
-      tO.fig =GUIBatchEditExec(tO);
+      if isempty(tO.fig)
+        tO.fig =GUIBatchEditExec(tO);
+        tO.onVide();
+      else
+        figure(tO.fig);
+      end
     end
 
     %------------------------------------------------
@@ -123,21 +128,32 @@ classdef CBatchEditExecGUI < CBasePourFigureAnalyse & CBatchEditExecParam
       set(findobj('tag','choixfichier'),'value',1,'string',fnom);
     end
 
-    %--------------------------------------------------------------
-    % On choisi le dossier qui contient tous les fichiers à traiter
+    %-------------------------------------------------------------------
+    % On choisi le dossier qui contient tous les fichiers à traiter (IN)
     % et on inscrit le path du dossier dans la listbox.
-    %--------------------------------------------------------------
+    %-------------------------------------------------------------------
     function cok = afficheDossier(tO)
-      cok =true;
+      cok =false;
       lesmots ='Choix du dossier qui contient tous les fichiers à traiter';
-      pnom =uigetdir(lesmots);
-      % on est sortie en annulant la commande (aucun choix)
-      if ~ischar(pnom)
-        cok =false;
-        return;
+      P = tO.selectionDir(lesmots);
+      if ~isempty(P)
+        % on affiche dans la listbox
+        set(findobj('tag','choixfichier'),'value',1,'string',P);
+        cok =true;
       end
-      % on affiche dans la listbox
-      set(findobj('tag','choixfichier'),'value',1,'string',pnom);
+    end
+
+    %--------------------------------------------------------------------
+    % Sélection d'un dossier
+    % En entrée     T  -->  titre de la fenêtre
+    % En sortie  pnom  -->  [] si on annule, autrement le path du dossier
+    %--------------------------------------------------------------------
+    function pnom = selectionDir(tO, T)
+      pnom =uigetdir(pwd,T);
+      if ~ischar(pnom)
+        % on est sortie en annulant la commande (aucun choix)
+        pnom =[];
+      end
     end
 
     %------------------------------------------------
@@ -420,6 +436,17 @@ classdef CBatchEditExecGUI < CBasePourFigureAnalyse & CBatchEditExecParam
       tO.Nfich =length(foo);
     end
 
+    % Sélection du dossier de sortie
+    %
+    function choixDossierSortie(tO,varargin)
+      lesmots ='Choix du dossier pour la sauvegarde des fichiers à traiter';
+      P = tO.selectionDir(lesmots);
+      if ~isempty(P)
+        % on affiche dans la listbox
+        set(findobj('tag','editdossierfinal'),'value',1,'string',P);
+      end
+    end
+
     %--------------------------------------------------------
     % Vérification des infos du uipanel de fichier de sortie
     % En Entrée, hF  est le handle du radiobutton sélectionné
@@ -505,6 +532,30 @@ classdef CBatchEditExecGUI < CBasePourFigureAnalyse & CBatchEditExecParam
         end
       end
       tO.listFichOUT =Ltmp;
+      tO.setDossierTop(Ltmp);
+    end
+
+    % Détermination du dossier de sortie "top niveau"
+    % En entrée  liss  -->  liste des dossier\fichier de sortie
+    function setDossierTop(tO, liss)
+      if ~exist('liss')
+        liss =tO.listFichOUT;
+      end
+      [tO.pathOUT,fnom] =fileparts(liss{1});
+      for U =1:tO.Nfich
+        [pnom,fff] =fileparts(liss{U});
+        lemin =min(length(pnom),length(tO.pathOUT));
+        for V =1:lemin
+          if ~(pnom(V) == tO.pathOUT(V))
+            break;
+          end
+        end
+        tO.pathOUT =tO.pathOUT(1:V);
+      end
+      % au cas ou on aurait C:\dossier1\s001 etC:\dossier1\s002 etc.
+      while ~isdir(tO.pathOUT)
+        tO.pathOUT(end) =[];
+      end
     end
 
     %--------------------------------------------------------------------

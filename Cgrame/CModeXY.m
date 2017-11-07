@@ -131,10 +131,14 @@ classdef CModeXY < handle
       set(obj.IpmnuXy, 'checked','off');
     end
 
-    %---------------------------
+    %-------------------------------------
     % Si on Enlève un/des canaux
-    %--------------------------
-    function delcan(obj,lescan)
+    % Bat, si true(on est en mode batch)
+    %-------------------------------------
+    function delcan(obj,lescan,Bat)
+      if ~exist('Bat')
+        Bat =false;
+      end
       vg =obj.Fid.Vg;
       if ~isempty(lescan)
         if ~isempty(obj.XX)
@@ -174,15 +178,17 @@ classdef CModeXY < handle
               end
             end
           end
-          lesnoms =obj.listcanxy();
-          bidon =obj.cano.getValue();
-          if bidon > vg.nad
-            bidon =vg.nad;
+          if ~Bat
+            lesnoms =obj.listcanxy();
+            bidon =obj.cano.getValue();
+            if bidon > vg.nad
+              bidon =vg.nad;
+            end
+            obj.cano.setValue(bidon);
+            obj.cano.setString(obj.Fid.Hdchnl.Listadname);
+            obj.canoXY.setValue(1);
+            obj.canoXY.setString(lesnoms);
           end
-          obj.cano.setValue(bidon);
-          obj.cano.setString(obj.Fid.Hdchnl.Listadname);
-          obj.canoXY.setValue(1);
-          obj.canoXY.setString(lesnoms);
           if ~isempty(obj.YY)
             vg.x =obj.XX(1);
             vg.y =obj.YY(1);
@@ -192,7 +198,7 @@ classdef CModeXY < handle
           end
         end
       end
-      if vg.xy
+      if vg.xy & ~Bat
         obj.voircan();
       end
     end

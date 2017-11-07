@@ -24,12 +24,12 @@ classdef CLiranalyse < CFichierAnalyse
     %-------------------------------------------------------
     % lecture du fichier format Analyse
     % En entrée  -->     Y  --> CEFich('analyse')
-    %                batch  --> true si on est en mode batch
+    %                  Bat  --> true si on est en mode batch
     %-------------------------------------------------------
-    function Cok =lire(obj, Y, batch)
+    function Cok =lire(obj, Y, Bat)
       try
-      	if ~exist('batch')
-      		batch =false;
+      	if ~exist('Bat')
+      		Bat =false;
       	end
         Cok =false;
         fic =obj.Info;
@@ -65,7 +65,7 @@ classdef CLiranalyse < CFichierAnalyse
             end
             return;
           elseif ~etalors        % c'est à l'ancien format
-            finame =obj.correction(finame, dd, batch);
+            finame =obj.correction(finame, dd, Bat);
           end
           if isempty(finame)
             if delwb

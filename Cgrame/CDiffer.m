@@ -34,20 +34,19 @@ classdef CDiffer < handle
       OA =CAnalyse.getInstance();
       Ofich =OA.findcurfich();
       hdchnl =Ofich.Hdchnl;
-      vg =Ofich.Vg;
-      GUIDiffer(tO, vg.nad, hdchnl.Listadname);
+      GUIDiffer(tO, hdchnl.Listadname);
     end
 
     %--------------------------------------------------------------------
     % On procède au calcul à partir des valeurs de l'interface graphique.
     %--------------------------------------------------------------------
     function travail(tO,varargin)
-      OA =CAnalyse.getInstance();
-      hF =OA.findcurfich();
+      hA =CAnalyse.getInstance();
+      hF =hA.findcurfich();
       % lecture des paramètres du GUI
-      foo.nad =get(findobj('tag','ListeCan'),'Value')';            % canaux à différencier
-      foo.ovw =abs(get(findobj('tag','memeCan'),'Value')-1);    % on écrase le canal source
-      foo.lar =get(findobj('Tag','LargeurFenLissage'),'String');    % Nb de point pour le lissage en char
+      foo.nad =get(findobj('tag','ListeCan'),'Value')';           % canaux à différencier
+      foo.ovw =get(findobj('tag','memeCan'),'Value');             % on écrase le canal source
+      foo.lar =get(findobj('Tag','LargeurFenLissage'),'String');  % Nb de point pour le lissage en char
       % on appel la fonction qui va faire le travail
       tO.cParti(hF,foo);
     end
@@ -59,10 +58,11 @@ classdef CDiffer < handle
     %                S  --> structure des param du GUI
     %---------------------------------------------------
     function cParti(tO,Ofich,S)
+      OA =CAnalyse.getInstance();
       % paramètres du GUI
-      Vcan =S.nad
-      nouveau =S.ovw
-      fen =S.lar
+      Vcan =S.nad;
+      nouveau =~S.ovw;
+      fen =S.lar;
       % infos utiles du fichier
       hdchnl =Ofich.Hdchnl;
       vg =Ofich.Vg;
@@ -79,14 +79,23 @@ classdef CDiffer < handle
       else
       	Ncan =Vcan;
       end
-      hwb =waitbar(0.001, 'Travail en cours...');
-      aubout =nombre*vg.ess;
+      % gestion du waitbar
+      wbval =0;
+      wbstep =1/nombre;
+      wbstep2 =1/(nombre*vg.ess);
+      leTit ='Differ sur le canal: ';
+      tt =false;
+      hwb =findobj('type','figure','name',OA.wbnom);
+      if isempty(hwb)
+        hwb =waitbar(wbval, leTit, 'name',OA.wbnom);
+        tt =true;
+      end
       for U =1:nombre
      	  % on vérifie la grosseur en mémoire pour un canal complet
-       	% on permet 300 Mo max
+       	% on permet 400 Mo max
        	comodato =vg.ess*max(hdchnl.nsmpls(Vcan(U),:))*4/1024/1024;
-     	  if comodato > 300
-     	    disp(['Le canal ' num2str(U) ' dépasse 300 Mo en mémoire']);
+     	  if comodato > 400
+     	    disp(['Le canal ' num2str(U) ' dépasse 400 Mo en mémoire']);
      	  	continue;
      	  end
         Ofich.getcanal(dtchnl, Vcan(U));
@@ -94,8 +103,10 @@ classdef CDiffer < handle
             min(hdchnl.rate(Vcan(U),:)) ~= max(hdchnl.rate(Vcan(U),:)))
           hdchnl.adname{Ncan(U)} =['D.' deblank(hdchnl.adname{Ncan(U)})];
           for V =1:vg.ess
-          	waitbar(((U-1)*nombre+V)/aubout,hwb);
           	try
+              Ftit =[leTit num2str(Vcan(U)) ', essai: ' num2str(V)];
+              waitbar(wbval,hwb,Ftit);
+              wbval =wbval+wbstep2;
               lemoins =hdchnl.nsmpls(Vcan(U),V);
               auTravail(dtchnl, lemoins, V, window, hdchnl.rate(Vcan(U) ,V));
               hdchnl.comment{Ncan(U), V} =[hdchnl.comment{Ncan(U), V} ' Differ,Fen=' fen '//'];
@@ -107,11 +118,13 @@ classdef CDiffer < handle
             end
           end
         else
+          Ftit =[leTit num2str(Vcan(U))];
+          waitbar(wbval,hwb,Ftit);
+          wbval =wbval+wbstep;
           lemoins =hdchnl.nsmpls(Vcan(U),1);
           auTravail(dtchnl, lemoins, [1:vg.ess], window, hdchnl.rate(Vcan(U), 1));
           hdchnl.adname{Ncan(U)} =['D.' deblank(hdchnl.adname{Vcan(U)})];
           for V =1:vg.ess
-          	waitbar(((U-1)*nombre+V)/aubout,hwb);
             hdchnl.comment{Ncan(U), V} =[hdchnl.comment{Ncan(U), V} ' Differ,Fen=',fen,'//'];
             hdchnl.max(Ncan(U),V) =max(dtchnl.Dato.(dtchnl.Nom)(1:lemoins,V));
             hdchnl.min(Ncan(U),V) =min(dtchnl.Dato.(dtchnl.Nom)(1:lemoins,V));
@@ -120,7 +133,9 @@ classdef CDiffer < handle
         Ofich.setcanal(dtchnl, Ncan(U));
       end
       delete(dtchnl);
-      delete(hwb);
+      if tt
+        delete(hwb);
+      end
       delete(tO.fig);
       vg.sauve =1;
       if nouveau

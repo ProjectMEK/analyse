@@ -77,6 +77,7 @@ function IpMenu(obj)
   uimenu('Parent',mnu, 'Label',tt.editecheltemps, 'separator','on', 'Callback','appel(''EditEchelTps'')');
 % MODIFIER
   mnu =uimenu('Parent',elfig, 'tag', 'IpmnuModifier', 'Label',tt.modif, 'Enable','off');
+  uimenu('Parent',mnu, 'Label',tt.modifsuppcan, 'Callback','appel(''supprimecan'')');
   uimenu('Parent',mnu, 'Label',tt.modifcorriger, 'Callback','appel(''corrige'')');
   uimenu('Parent',mnu, 'Label',tt.modifcouper, 'Callback','appel(''couper'')');
   uimenu('Parent',mnu, 'Label',tt.modifdecouper, 'Callback','appel(''decouper'')');

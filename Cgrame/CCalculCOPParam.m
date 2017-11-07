@@ -1,5 +1,5 @@
 %
-% classdef CParamCalculCOP < handle
+% classdef CCalculCOPParam < handle
 %
 % METHODS
 %    V =getAmtiMC(tO)
@@ -17,7 +17,7 @@
 %       setGain(tO, V)
 %       setVext(tO, V)
 %
-classdef CParamCalculCOP < handle
+classdef CCalculCOPParam < handle
 
   properties (Access =protected)
     % Avec quelle plateforme on travaille
@@ -66,7 +66,7 @@ classdef CParamCalculCOP < handle
     %--------------------------
     function importation(tO, p)
       if isa(p,'struct')
-        obj =CParamCalculCOP();
+        obj =CCalculCOPParam();
         champ =fields(p);
         for u =1:length(champ)
           if ~isempty(obj.findprop(champ{u}))

@@ -19,7 +19,9 @@ function gaglobal(varargin)
     if nargin > 1
       lescan =varargin{2};
       if length(lescan)
-        ganaxe(lescan);
+        % a été retiré car on n'utilise plus les multi-axes.
+        % si on le replace, il faudra vérifier l'intéraction avec le mode batch.
+        % ganaxe(lescan);
         Ofich.Tpchnl.Delcan(lescan);
         gaglobal('editnom');
         OA.OFig.affiche();

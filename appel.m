@@ -24,8 +24,8 @@ function appel(varargin)
       ajoutFichAnalyse();
 
     case 'editbatch'                      % Exécuter des jobs en batch
-      % batchEditExec();
-      oTmp =CBatchEditExec.getInstance();
+      foo =CBatchEditExec.getInstance();
+      foo.initGui();
 
     case 'fermerfich'                     % Fermer le fichier courant
       OA.fermerfich();
@@ -52,7 +52,7 @@ function appel(varargin)
       mnouvre(letype, lequel);
 
     case 'lesPreferencias'                % Ouvrir le GUI des préférences
-      foo =CPreference();
+      moo =CPreference();
 
     case 'redemarrer'                     % on ferme et on ré-ouvre Analyse
       analyse('arcommence');
@@ -86,6 +86,10 @@ function appel(varargin)
     %_____________________________________________________________________________
     %------- MENU MODIFIER *****
 
+    case 'supprimecan'                    % Supprimer/Conserver canaux
+      foo =CSuppCan();
+      foo.guiSuppCan();
+
     case 'corrige'                        % Correction sur les datas
       Otmp =CCorrige();
 
@@ -114,13 +118,13 @@ function appel(varargin)
     %------- MENU MATH *****
 
     case 'filtre'                        % ButterWorth
-      filtreBW();
+      foo =CFiltreBW();
+      foo.guiFiltreBW();
 
     case 'sptoul'                        % Complément à SPTOOL
       fiFilt();
 
     case 'derive'                        % Le même DIFFER que dans DATAC.DOS
-      % fncDiffer();
       foo =CDiffer();
       foo.guiDiffer();
 
@@ -193,17 +197,21 @@ function appel(varargin)
     %     type: vielle plateforme(0),  Optima(1)
     %   manuel: call le GUI(1),  call un fichier(0)
 
-    case 'CentreDePressionManuel'      % Calcul la position du COP avec GUI
-      hDP =CCalculCOP(true);
+    case 'CentreDePressionManuel'      % Calcul la position du COP avec GUI (AMTI)
+      moo =CCalculCOP();
+      moo.guiCalculCOP(true);
 
-    case 'CentreDePressionFichier'     % Calcul la position du COP sans GUI
-      hDP =CCalculCOP(false);
+    case 'CentreDePressionFichier'     % Calcul la position du COP sans GUI (AMTI)
+      moo =CCalculCOP();
+      moo.guiCalculCOP(false);
 
     case 'COPoptimaManuel'             % Calcul la position du COP avec GUI (Optima)
-      hDP =CCalculCOPoptima(true);
+      foo =CCalculCOPoptima();
+      foo.guiCalculCOP(true);
 
     case 'COPoptimaFichier'            % Calcul la position du COP sans GUI (Optima)
-      hDP =CCalculCOPoptima(false);
+      foo =CCalculCOPoptima();
+      foo.guiCalculCOP(false);
 
     case 'statPourCOP'                 % Calcul statistique à partir du COP
       hDP =CStat4COP();

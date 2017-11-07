@@ -1,27 +1,23 @@
 %
-%  classdef CCalculCOPoptima < CGuiCalculCOP
+%  classdef CCalculCOPoptima < CCalculCOPGUI
 %  Gestion du calcul du COP pour la plateforme Optima
+%  La classe CCalculCOPGUI() gère les callback du GUI
 %
 % METHODS disponibles
 % tO = CCalculCOPoptima(conGUI)
 %      auTravail(tO, varargin)
+%      syncObjetConGui(tO)           overload de la classe CCalculCOPGUI()
+%      lireParam(tO)                 overload de la classe CCalculCOPGUI()
 %
-classdef CCalculCOPoptima < CGuiCalculCOP
+classdef CCalculCOPoptima < CCalculCOPGUI
 
   methods
 
-    %------------
+    %------------------------------
     % CONSTRUCTOR
-    % EN ENTRÉE on a conGUI une variable logique qui déterminera si:
-    %   false -->  on initialise les paramètres à partir d'un fichier
-    %   true  -->  se sera les valeurs par défauts.
-    %-------------------------------
-    function tO =CCalculCOPoptima(conGUI)
+    %------------------------------
+    function tO =CCalculCOPoptima()
       tO.newplt =true;
-      if ~conGUI
-        tO.lireParam();
-      end
-      tO.initGui();
     end
 
     %---------------------------------------------------------------------------
@@ -51,18 +47,8 @@ classdef CCalculCOPoptima < CGuiCalculCOP
       tO.terminus();
     end
 
-    %---------------------------------------------------------
-    % La fonction "cogline" a besoin en entrée de
-    % - un vecteur temps (sec)
-    % - un vecteur de force (Fx ou Fy)
-    % - un vecteur du CPx ou CPy qui fit avec la force ci-haut
-    % - la masse du sujet
-    %---------------------------------------------------------
-    function prepareCalculCOG(tO,REP)
-    end
-
     %--------------------------------------
-    % overload de la classe CGUICalculCOP()
+    % overload de la classe CCalculCOPGUI()
     % on synchronise les valeurs de FC (faceur de conversion)
     % avec celle du GUI
     %---------------------------

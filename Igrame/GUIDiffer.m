@@ -1,10 +1,11 @@
 %
 % DialogBox pour demander les infos relatives à la différenciation
 % puis on passe à l'action.
-% En entrée:  Ppa  --> objet de la classe CDiffer(Bat)
-%
-function GUIDiffer(Ppa, nad, Listadname)
-    if nad > 2;letop =nad;else letop =nad+1;end
+% En entrée:         Ppa  --> objet de la classe CDiffer(Bat)
+%             Listadname  --> liste des noms de canaux
+%-----------------------------------------------------------------
+function GUIDiffer(Ppa, Listadname)
+    letop =max(2,length(Listadname));
     BLANC =[1 1 1];
     lapos =positionfen('G','C',300,450);
     lafig =figure('Name','MENUDIFFER', 'Position',lapos, ...

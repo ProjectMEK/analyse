@@ -21,7 +21,6 @@ classdef (Sealed) CBatchEditExec < CBatchEditExecGUI
     %-----------------------------
     function tO = CBatchEditExec()
       tO.listChoixActions =infoActions();
-      tO.initGui();
     end
 
   end
@@ -51,6 +50,18 @@ classdef (Sealed) CBatchEditExec < CBatchEditExecGUI
       end
       if ~isempty(tO.fig)
         delete(tO.fig);
+        tO.fig =[];
+      end
+    end
+
+    %----------------------------------
+    % On ferme la figure
+    % On overload la méthode "terminus"
+    %----------------------------------
+    function terminus(tO, src, event)
+      if ~isempty(tO.fig)
+        delete(tO.fig);
+        tO.fig =[];
       end
     end
 

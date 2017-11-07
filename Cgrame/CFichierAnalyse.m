@@ -180,13 +180,17 @@ classdef CFichierAnalyse < CFichier
 
     %------------------------------------
     % Enlever/effacer les canaux "lescan"
-    %----------------------------
-    function suppcan(obj, lescan)
+    %------------------------------------
+    function suppcan(obj, lescan, Bat)
+      disp('aalldd')
+      if ~exist('Bat')
+        Bat =false;
+      end
       hA =CAnalyse.getInstance();
+      set(hA.OFig.fig,'Pointer','custom');
       hdchnl =obj.Hdchnl;
       vg =obj.Vg;
       tpchnl =obj.Tpchnl;
-      set(hA.OFig.fig,'Pointer','custom');
       nbcan =length(lescan);
       if vg.nad > 1 && nbcan < vg.nad
     		obj.delcan(lescan);            % on vide les datas (dtchnl)
@@ -194,11 +198,18 @@ classdef CFichierAnalyse < CFichier
         vg.nad =vg.nad-nbcan;
         vg.can =lescan(1);
         vg.sauve =1;
-        obj.editcan();
-        if ~isempty(obj.ModeXY)
-          obj.ModeXY.delcan(lescan);
+        if ~Bat
+          obj.editcan();
         end
-        gaglobal('delcan',lescan);
+        if ~isempty(obj.ModeXY)
+          obj.ModeXY.delcan(lescan,Bat);
+        end
+        if Bat
+          obj.Tpchnl.Delcan(lescan);
+          hdchnl.ResetListAdname();
+        else
+          gaglobal('delcan',lescan);
+        end
       end
       set(hA.OFig.fig,'Pointer','arrow');
     end

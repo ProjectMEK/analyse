@@ -48,6 +48,7 @@ classdef CMenuMLIp < CBaseStringGUI
 
     %modifier
     modif ='&Modifier';
+    modifsuppcan ='Supprimer canaux';
     modifcorriger ='Corriger';
     modifcouper ='&Couper';
     modifdecouper ='&Découper';

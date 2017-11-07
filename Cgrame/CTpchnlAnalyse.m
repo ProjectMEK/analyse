@@ -210,8 +210,11 @@ classdef CTpchnlAnalyse < CTpchnl
       end
     end
 
-    %---------------------------
-    function Delcan(obj, lescan)
+    %----------------------------------
+    function Delcan(obj, lescan, Bat)
+      if ~exist('Bat')
+        Bat =false;
+      end
       if obj.nbech & length(lescan)
         for U =length(lescan):-1:1
           combien =obj.nbech;
@@ -223,7 +226,9 @@ classdef CTpchnlAnalyse < CTpchnl
             end
           end
         end
-        obj.ResetMenu();
+        if ~Bat
+          obj.ResetMenu();
+        end
       end
     end
 

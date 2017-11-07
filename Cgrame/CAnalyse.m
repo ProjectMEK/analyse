@@ -41,13 +41,14 @@
 classdef (Sealed) CAnalyse < handle
 
   properties
-    couleur =[];          % cellule contenant l'ordre des couleurs pour l'affichage de courbes
-    Fic =[];              % handle sur un objet CFic()
-    Vg =[];               % handle sur un objet CVgBase()
+    couleur =[];              % cellule contenant l'ordre des couleurs pour l'affichage de courbes
+    Fic =[];                  % handle sur un objet CFic()
+    Vg =[];                   % handle sur un objet CVgBase()
     laPosXY =[];
-    Hautaxe =[];          % hauteur initial de l'axe
-    OFig =[];             % Handle de l'object CDessine
-    OPG =[];              % handle sur l'objet CParamGlobal()
+    Hautaxe =[];              % hauteur initial de l'axe
+    OFig =[];                 % Handle de l'object CDessine
+    OPG =[];                  % handle sur l'objet CParamGlobal()
+    wbnom ='WB-Progression';  % nom pour la waitbar
   end  %properties
 
   methods (Access =private)

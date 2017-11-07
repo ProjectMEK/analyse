@@ -1,12 +1,12 @@
 %
-% classdef CCalculCOP < CGuiCalculCOP
+% classdef CCalculCOP < CCalculCOPGUI
 %  Gestion du calcul du COP pour la plateforme Amti
 %
 % METHODS disponibles
 % tO = CCalculCOP(conGUI)
 %      auTravail(tO, varargin)
 %
-classdef CCalculCOP < CGuiCalculCOP
+classdef CCalculCOP < CCalculCOPGUI
 
   methods
 
@@ -17,10 +17,7 @@ classdef CCalculCOP < CGuiCalculCOP
     %   true  -->  se sera les valeurs par défauts.
     %-------------------------------
     function tO = CCalculCOP(conGUI)
-      if ~conGUI
-        tO.lireParam();
-      end
-      tO.initGui();
+      % plus rien à faire pour l'instant
     end
 
     %------------------------------------------------------------

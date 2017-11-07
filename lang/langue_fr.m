@@ -58,6 +58,7 @@ function varargout =langue_fr(varargin)
     S.mnuip.editecheltemps ='Échelle de &temps';
 
     S.mnuip.modif ='&Modifier';
+    S.mnuip.modifsuppcan ='Supprimer canaux';
     S.mnuip.modifcorriger ='Corriger';
     S.mnuip.modifcouper ='&Couper';
     S.mnuip.modifdecouper ='&Découper';
