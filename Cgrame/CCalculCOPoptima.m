@@ -42,9 +42,25 @@ classdef CCalculCOPoptima < CCalculCOPGUI
         tO.afficheStatus('Il faut sélectionner un canal pour Fx et/ou Fy');
         return;
       end
-      fpltOptima(tO, R);
+      OA =CAnalyse.getInstance();
+      Fhnd =OA.findcurfich();
+      tO.cParti(Fhnd, R);
       gaglobal('editnom');
       tO.terminus();
+    end
+
+    %-------------------------------------------------------
+    % Ici on effectue le travail pour la fonction fpltOptima
+    % même chose en mode batch
+    % En entrée  Ofich  --> handle du fichier à traiter
+    %                S  --> structure des param du GUI
+    %              Bat  --> true si on est en mode batch
+    %-------------------------------------------------------
+    function cParti(tO,Ofich,S,Bat)
+      if ~exist('Bat','var')
+      	Bat =false;
+      end
+      fpltOptima(tO, Ofich, S);
     end
 
     %--------------------------------------

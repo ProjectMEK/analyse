@@ -24,9 +24,7 @@
 % Ajout du calcul COG (mfile "gline.m" de:  Marcos Duarte  mduarte@usp.br 11oct1998)
 % juillet 2017
 %
-function fpltOptima(hObj, R)
-  oA =CAnalyse.getInstance();
-  oF =oA.findcurfich();
+function fpltOptima(hObj, oF, R)
   hdchnl =oF.Hdchnl;
   vg =oF.Vg;
   canal =R.lesCan;

@@ -10,9 +10,10 @@
 % METHODS
 %         tO = CCalculCOPoptimaBat()  % CONSTRUCTOR
 %              aFaire(tO,queHacer,H1)
+%          V = lectureTotalProp(tO)
 %              onDessine(tO,N,L)
 %              reagirSiModifMajeur(tO,N)
-%              reInitGUI(tO,S)
+%              reInitProp(tO,S)
 %              sauveGUI(tO,varargin)
 %
 classdef CCalculCOPoptimaBat < CCalculCOPoptima
@@ -89,27 +90,18 @@ classdef CCalculCOPoptimaBat < CCalculCOPoptima
       end
     end
 
-    %---------------------------------------------------------
-    % On initialise les valeurs du GUI avec celles sauvegardés
-    % En entrée  S  --> structure contenant les params du GUI
-    %---------------------------------------------------------
-    function reInitGUI(tO,S)
+    %------------------------------------------------------------------
+    % On initialise les propriétés avec celles sauvegardés
+    % En entrée  S  --> structure contenant les propriétés de la classe
+    %------------------------------------------------------------------
+    function reInitProp(tO,S)
       if isstruct(S)
-        % on s'assure que les canaux choisis existent
-        can =get(findobj('tag','ChoixCanFiltre'),'string');
-        % on supprime ceux qui exèdent
-        S.lescan(S.lescan>length(can)) =[];
-        % choix du type de filtre
-        set(findobj('tag','QuelFiltre'),'Value',S.afaire);
-        % sélection des canaux
-        set(findobj('tag','ChoixCanFiltre'),'value',S.lescan);
-        % on écrit ou non sur le canal source
-        set(findobj('tag','memeCan'),'value',S.nouveau);
-        % ordre du filtre
-        set(findobj('tag','EditOrdreFiltre'),'String',S.ord);
-        % fréquence de coupure en fonction du type de filtrage à faire
-        set(findobj('tag','EditFreqCoupe1'),'String',S.frc1);
-        set(findobj('tag','EditFreqCoupe2'),'String',S.frc2);
+      	P =fieldnames(tO);
+      	for U =1:length(P)
+      	  if isfield(S,P{U})
+      	  	tO.(P{U}) =S.(P{U});
+      	  end
+      	end
       end
     end
 
@@ -147,7 +139,7 @@ classdef CCalculCOPoptimaBat < CCalculCOPoptima
       nbcan =length(canal)+2;
       nCanal =nbcan-1;             % en fait c'est: length(canal)+2-1
       suivant =vg.nad+1;
-      %---         Do.. pour Data Output
+      % Nouveau canaux
       if length(canal) == 6
         hdchnl.adname{end-nCanal} ='New_Fx'; nCanal =nCanal-1; suivant =suivant+1;
         hdchnl.adname{end-nCanal} ='New_Fy'; nCanal =nCanal-1; suivant =suivant+1;
@@ -182,11 +174,51 @@ classdef CCalculCOPoptimaBat < CCalculCOPoptima
       hdchnl.ResetListAdname();
       % Vérification si c'est une modification au lieu d'une configuration
       tO.reagirSiModifMajeur(foo);
-      % on sauvegarde les infos dans l'objet CAction associé
+      % Relecture du GUI et on sauvegarde les infos dans l'objet CAction associé
+      foo.par =tO.lectureTotalProp();
       tO.hAct.sauveConfig(foo);
       % avant de quitter, on efface le GUI
       delete(tO.fig);
       tO.fig =[];
+    end
+
+    %------------------------------------------------------------------------------
+    % Lecture complète des propriétés concernant le GUI afin de le remettre intacte
+    % si besoin est (pas de handle dans ces infos)
+    % En sortie  V  -->  une structure contenant tout les properties
+    %------------------------------------------------------------------------------
+    function V = lectureTotalProp(tO)
+      % Avec quelle plateforme on travaille
+      V.newplt =tO.newplt;
+      % Calcul du COP seulement
+      V.COPseul =tO.COPseul;
+      % Numéro des canaux lus
+      V.canFx =tO.canFx;
+      V.canFy =tO.canFy;
+      V.canFz =tO.canFz;
+      V.canMx =tO.canMx;
+      V.canMy =tO.canMy;
+      V.canMz =tO.canMz;
+      % Matrice de calibration de la AMTI
+      V.amtiMC =tO.amtiMC;
+      % Matrice des facteurs de conversion (Optima). (dans la doc: Analog Scale Factor)
+      V.optimaFC =tO.optimaFC;
+      % --- Paramètre amplificateur MSA-6
+      V.vFx =tO.vFx;
+      V.vFy =tO.vFy;
+      V.vFz =tO.vFz;
+      V.vMx =tO.vMx;
+      V.vMy =tO.vMy; 
+      V.vMz =tO.vMz;
+      % GAIN
+      V.gainFx =tO.gainFx;
+      V.gainFy =tO.gainFy;
+      V.gainFz =tO.gainFz;
+      V.gainMx =tO.gainMx;
+      V.gainMy =tO.gainMy;
+      V.gainMz =tO.gainMz;
+      % --- Offset sur l'axe Z
+      V.zOff =tO.zOff;
     end
 
   end  % methods
