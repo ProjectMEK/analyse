@@ -17,14 +17,15 @@ classdef CCalculCOPoptima < CCalculCOPGUI
     % CONSTRUCTOR
     %------------------------------
     function tO =CCalculCOPoptima()
+      % par défaut, newplt = false: pour la AMTI
       tO.newplt =true;
     end
 
-    %---------------------------------------------------------------------------
-    % Comme on utilise les mêmes classes que CCalculCOP(), on va "overloader"
+    %----------------------------------------------------------------------------
+    % Comme on utilise les mêmes classes que CCalculCOPamti(), on va "overloader"
     % certaines fonctions plutôt que de recopier toutes les fonctions
     % en n'en changeant que quelques unes.
-    %---------------------------------------------------------------------------
+    %----------------------------------------------------------------------------
 
     % -------------------------------------
     % overload de la classe CGUICalculCOP()

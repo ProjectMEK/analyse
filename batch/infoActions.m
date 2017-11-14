@@ -12,10 +12,13 @@
 function varargout = infoActions(lechoix)
 
   % Liste des actions implémentées et la classe de l'objet qui l'exécutera
+  % Observation, je place les noms de fonction en ordre alphabétique. Les numéros ne
+  % seront donc pas en ordre d'une ligne à l'autre.
   Li ={'ButterWorth','CFiltreBWBat', 3;...
        'Calcul COP "Optima"','CCalculCOPoptimaBat', 4;...
+       'Calcul COP "Amti"','CCalculCOPamtiBat', 5;...
        'Differ', 'CDifferBat', 1;...
-       'Supprimer canaux', 'CSuppCanBat', 2};
+       'Supprimer canaux', 'CSuppCanBat', 2};  %  {Le prochain numéro: 6 }
 
   if exist('lechoix')
     qui =[];

@@ -182,7 +182,6 @@ classdef CFichierAnalyse < CFichier
     % Enlever/effacer les canaux "lescan"
     %------------------------------------
     function suppcan(obj, lescan, Bat)
-      disp('aalldd')
       if ~exist('Bat')
         Bat =false;
       end

@@ -5,20 +5,38 @@
 % prendra en charge tous les callback du GUI
 %
 % METHODS
-%       initGui(tO)
-%       changePosteRadio(tO, src, varargin)
-%       resetPosteRadio(tO, src, varargin)
-%       dossierFichierEntree(tO, src, varargin)
-% cok = afficheFichierManuel(tO)
-% cok = afficheDossier(tO)
-%       dossierFichierSortie(tO, src, varargin)
-%       afficheModifDossier(tO,S)
-%       afficheModifFichier(tO,S)
-%       ajouterAction(tO, varargin)
-%       ajoutAction(tO, meschoix)
-%       effacerAction(tO, varargin)
-%       monterAction(tO, varargin)
-%       descendreAction(tO, varargin)
+%          initGui(tO)
+%          ouvrirParamBatch(tO, src, varargin)
+%          sauveParamBatch(tO, src, varargin)
+%      V = prepareInfoBatchGUI(tO)
+%          ecraseInfoBatchGUI(tO, V)
+%          afficheSelectionFichIN(tO)
+%          changePosteRadio(tO, src, varargin)
+%          resetPosteRadio(tO, src, varargin)
+%          dossierFichierEntree(tO, src, varargin)
+%    cok = afficheFichierManuel(tO)
+%    cok = afficheDossier(tO)
+%   pnom = selectionDir(tO, T)
+%          dossierFichierSortie(tO, src, varargin)
+%          afficheModifDossier(tO,S)
+%          afficheModifFichier(tO,S)
+%          ajouterAction(tO, varargin)
+%          ajoutAction(tO, meschoix)
+%          effacerAction(tO, varargin)
+%          monterAction(tO, varargin)
+%          descendreAction(tO, varargin)
+%          modifierAction(tO, varargin)
+%          resetApres(tO)
+%          afficheListAction(tO,ordre)
+%          auTravail(tO, varargin)
+%     OK = verifGUI(tO, J)
+%      V = getSelectedObject(tO)
+%          fabricListFichierIn(tO,FIN)
+%          choixDossierSortie(tO,varargin)
+%    rep = verifFsortie(tO,hF,hL)
+%          fabricListFichierOut(tO,hFo,hFi)
+%          setDossierTop(tO, liss)
+%    rep = listFichRecursif(tO,lepath,rep)
 %
 classdef CBatchEditExecGUI < CBasePourFigureAnalyse & CBatchEditExecParam
 
@@ -34,6 +52,108 @@ classdef CBatchEditExecGUI < CBasePourFigureAnalyse & CBatchEditExecParam
       else
         figure(tO.fig);
       end
+    end
+
+    %-----------------------------------------------
+    % RÉCUPÈRE LA SAUVEGARDE POUR UNE RÉ-UTILISATION
+    % src  est le handle du menu
+    %-----------------------------------------------
+    function ouvrirParamBatch(tO, src, varargin)
+      % quel est le fichier contenant les paramètres du travail à faire?
+      [Fnom, Fpath] =uigetfile('*.mat','Choisissez un fichier contenant les paramètres');
+      if isequal(Fnom,0) || isequal(Fpath,0)
+        return;
+      end
+      % lecture du fichier contenant la structure
+      foo =load([Fpath Fnom], 'Info');
+      % application de la partie "properties" de l'objet
+      tO.ecraseInfoBatch(foo.Info.Bprop);
+      % application de la partie "GUI"
+      tO.ecraseInfoBatchGUI(foo.Info.Bgui);
+    end
+
+    %-----------------------------------------------
+    % SAUVEGARDE TOUS POUR UNE PROCHAINE UTILISATION
+    % src  est le handle du menu
+    %-----------------------------------------------
+    function sauveParamBatch(tO, src, varargin)
+      % dans quel fichier on place tout cela?
+      [Fnom, Fpath] =uiputfile('batch.mat','Entrez un nom de fichier pour sauvegarder les paramètres');
+      if isequal(Fnom,0) || isequal(Fpath,0)
+        return;
+      end
+      % Préparation des informations du GUI à sauvegarder
+      Info.Bgui =tO.prepareInfoBatchGUI();
+      % préparation des propriétés de la classe CBatchEditExecParam()
+      Info.Bprop =tO.prepareInfoBatch();
+      save([Fpath Fnom], 'Info');
+    end
+
+    %---------------------------------------------------------
+    % On retourne les valeurs et string du GUI afin de pouvoir
+    % revenir au même point dans une séance subséquente
+    %---------------------------------------------------------
+    function V = prepareInfoBatchGUI(tO)
+      % nom du tag des propriétés où on sauvegarde une valeur
+      propval ={'fichiermanuel','undosstousfich','dossousdoss','ecrase','changfich',...
+                'changdoss','changtout','prefix','suffix'};
+      % lecture de chacune de ces propriétés et sauvegarde dans une structure
+      for U =1:length(propval)
+        V.(propval{U}) =get(findobj('tag',propval{U}),'value');
+      end
+      % nom du tag des propriétés où on sauvegarde une string
+      propstr ={'choixfichier','editdossierfinal','editfichierpresuf','batchafaire'};
+      % lecture de chacune de ces propriétés et sauvegarde dans une structure
+      for U =1:length(propstr)
+        V.(propstr{U}) =get(findobj('tag',propstr{U}),'string');
+      end
+    end
+
+    %---------------------------------------------------------
+    % On ré-écrit par dessus les valeurs et string du GUI avec
+    % les infos recueillis dans une séance précédante
+    %---------------------------------------------------------
+    function ecraseInfoBatchGUI(tO, V)
+      % nom du tag des propriétés où on sauvegarde une valeur
+      propval ={'fichiermanuel','undosstousfich','dossousdoss','ecrase','changfich',...
+                'changdoss','changtout','prefix','suffix'};
+      % lecture de chacune de ces propriétés et sauvegarde dans une structure
+      for U =1:length(propval)
+        if isfield(V, propval{U})
+          set(findobj('tag',propval{U}),'value',V.(propval{U}));
+        end
+      end
+      % nom du tag des propriétés où on sauvegarde une string
+      propstr ={'choixfichier','editdossierfinal','editfichierpresuf','batchafaire'};
+      % lecture de chacune de ces propriétés et sauvegarde dans une structure
+      for U =1:length(propstr)
+        if isfield(V, propstr{U})
+          set(findobj('tag',propstr{U}),'string',V.(propstr{U}));
+        end
+      end
+      % On fait afficher les sélections avec "flèche" pour les dossiers --> IN
+      tO.afficheSelectionFichIN();
+      % On fait afficher les sélections avec "flèche" pour les dossiers --> OUT
+      tO.dossierFichierSortie(findobj('tag','BGfichOUT'));
+      % On fait afficher les sélections avec "flèche" pour Préfixe/Sufixe du nouveau nom
+      tO.changePosteRadio(findobj('tag','BGnomfichOUT'));
+    end
+
+    %----------------------------------------------------------
+    % AFFICHE LA FLÈCHE SUR LA SÉLECTION DANS LE PSEUDO-UIGROUP
+    % une petite flèche indiquera la sélection.
+    %----------------------------------------------------------
+    function afficheSelectionFichIN(tO)
+      % on recherche les radiobutton qui appartiennent au groupe
+      hBG =findobj('tag','BGfichIN');
+      tmp =findobj('style','radiobutton', 'parent',hBG);
+      % on flush le CDATA de tous les radiobutton
+      set(tmp, 'cdata',[]);
+      % on load l'image et on l'affiche pour le radiobutton sélectionné
+      ico =imread('ptiteflechdrte.bmp','BMP');
+      set(tO.getSelectedObject(), 'cdata',ico);
+      % sous le uiButtonGroup, on affiche le nombre de fichier à traiter
+      set(hBG,'title',[num2str(tO.Nfich) ' fichiers à traiter'])
     end
 
     %------------------------------------------------
@@ -100,7 +220,7 @@ classdef CBatchEditExecGUI < CBasePourFigureAnalyse & CBatchEditExecParam
       else
         tO.fabricListFichierIn(src);
       end
-      set(ppa,'title',[num2str(tO.Nfich) ' fichiers à traiter'])
+      set(ppa,'title',[num2str(tO.Nfich) ' fichiers à traiter']);
     end
 
     %----------------------------------------------------------
@@ -565,7 +685,7 @@ classdef CBatchEditExecGUI < CBasePourFigureAnalyse & CBatchEditExecParam
     %             rep     est la liste des fichiers "dossier\fichier.mat"
     % En sortie   rep      "   "
     %--------------------------------------------------------------------
-    function rep =listFichRecursif(tO,lepath,rep)
+    function rep = listFichRecursif(tO,lepath,rep)
       % on conserve le dossier de départ
       pIN =pwd();
       % on se place dans le dossier à inspecter

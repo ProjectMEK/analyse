@@ -5,8 +5,13 @@
 % étant constamment interrompu pour différents ajouts/pépins,
 % ça n'a pas évolué trop trop.
 %
+% METHODS (Access =private)
+%         CBatchEditExec()                    CONSTRUCTOR
+% METHODS (Static)
+%  sObj = getInstance
 % METHODS
-%       CBatchEditExec()                    CONSTRUCTOR
+%         delete(tO)                          DESTRUCTOR
+%         terminus(tO, src, event)
 %
 % Pour maintenir une "compatibilité" lors de l'évolution de cette fonction
 % version 1.01       première essai de traitement en batch
@@ -32,11 +37,14 @@ classdef (Sealed) CBatchEditExec < CBatchEditExecGUI
     % Si aucun objet CBatchEditExec existe, il appelle le constructeur
     % autrement il retourne le handle sur l'objet existant.
     %-----------------------------------------------------------------
-    function sObj =getInstance
+    function sObj = getInstance
       persistent localObj;
       if isempty(localObj) || ~isa(localObj, 'CBatchEditExec')
         localObj =CBatchEditExec();
       end
+      % on fait appel à l'objet CJournal
+      hJ =CJournal.getInstance();
+      % on retourne le handle de l'objet CBatchEditExec
       sObj =localObj;
     end
 

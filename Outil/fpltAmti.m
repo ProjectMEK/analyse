@@ -1,5 +1,5 @@
 %%
-%  fpltAmti(V, sies)  en entrée on aura un objet CCalculCOP
+%  fpltAmti(V, sies)  en entrée on aura un objet CCalculCOPamti
 % 
 %% Ce programme permet de calculer le centre de pression à partir d'une ou
 % des force(s) [N] et des moments de forces [Nm] pour la plate forme de
@@ -21,9 +21,7 @@
 % Ajout du calcul COG (mfile "gline.m" de:  Marcos Duarte  mduarte@usp.br 11oct1998)
 % juillet 2017
 %
-function fpltAmti(hObj, R)
-  oA =CAnalyse.getInstance();
-  oF =oA.findcurfich();
+function fpltAmti(hObj, oF, R)
   hdchnl =oF.Hdchnl;
   vg =oF.Vg;
   canal =R.lesCan;

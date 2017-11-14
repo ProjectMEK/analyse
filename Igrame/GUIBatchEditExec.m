@@ -19,8 +19,8 @@ function fig = GUIBatchEditExec(Ppa)
                  'DefaultUIPanelBackgroundColor',GRIS,'DefaultUIPanelTitlePosition','centertop',...
                  'defaultUIControlFontSize',10);
     lemnu =uimenu('parent',fig, 'Label','&Fichier','enable','on');
-    uimenu('parent',lemnu, 'Label','&Ouvrir fichier batch','callback','batchEditExec(''BOuvrir'')');
-    uimenu('parent',lemnu, 'Label','&Sauvegarder fichier batch','callback','batchEditExec(''BSauve'')');
+    uimenu('parent',lemnu, 'Label','&Ouvrir fichier batch','callback',@Ppa.ouvrirParamBatch);
+    uimenu('parent',lemnu, 'Label','&Sauvegarder fichier batch','callback',@Ppa.sauveParamBatch);
   % position des uipanel
     A.posx=0.01;Lpan=1-2*A.posx;A.large=Lpan;dy=0.005;A.posy=0.06;hpan3=0.315;hpan2=0.255;hpan1=0.35;A.haut=hpan3;
     panAction =A.pos;

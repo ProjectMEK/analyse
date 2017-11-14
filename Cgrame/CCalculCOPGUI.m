@@ -13,13 +13,13 @@
 %       changeCOPseul(tO, src, event)
 %       exportParam(tO, src, event)
 %       formatDataUITable(tO, src, event)
-%    V =getCurPan(tO)
 %       lireParam(tO)
-%       initGui(tO)
+%       guiCalculCOP(tO, conGUI)
 %       importParam(tO, src, event)
 %       setCurPan(tO, V)
 %       showPanel(tO, src, event)
 %       surveilleZOffset(tO, src, event)
+%   V = lectureTotalProp(tO)
 %
 classdef CCalculCOPGUI < CBasePourFigureAnalyse & COngletUtil & CCalculCOPParam
 
@@ -47,7 +47,7 @@ classdef CCalculCOPGUI < CBasePourFigureAnalyse & COngletUtil & CCalculCOPParam
 
     %---------------------------------
     function auTravail(tO, src, event)
-      % On fait rien ici, on laisse le parent travailler (peut-être CCalculCOP)
+      % On fait rien ici, on laisse le parent travailler (peut-être CCalculCOP...)
     end
 
     %-------------------------------------------------
@@ -200,6 +200,45 @@ classdef CCalculCOPGUI < CBasePourFigureAnalyse & COngletUtil & CCalculCOPParam
     %-----------------------------------
     function changeCOPseul(tO, src, event)
       tO.COPseul =get(src, 'Value');
+    end
+
+    %------------------------------------------------------------------------------
+    % Lecture complète des propriétés concernant le GUI afin de le remettre intacte
+    % si besoin est (pas de handle dans ces infos)
+    % En sortie  V  -->  une structure contenant toutes les properties utiles
+    %------------------------------------------------------------------------------
+    function V = lectureTotalProp(tO)
+      % Avec quelle plateforme on travaille
+      V.newplt =tO.newplt;
+      % Calcul du COP seulement
+      V.COPseul =tO.COPseul;
+      % Numéro des canaux lus
+      V.canFx =tO.canFx;
+      V.canFy =tO.canFy;
+      V.canFz =tO.canFz;
+      V.canMx =tO.canMx;
+      V.canMy =tO.canMy;
+      V.canMz =tO.canMz;
+      % Matrice de calibration de la AMTI
+      V.amtiMC =tO.amtiMC;
+      % Matrice des facteurs de conversion (Optima). (dans la doc: Analog Scale Factor)
+      V.optimaFC =tO.optimaFC;
+      % --- Paramètre amplificateur MSA-6
+      V.vFx =tO.vFx;
+      V.vFy =tO.vFy;
+      V.vFz =tO.vFz;
+      V.vMx =tO.vMx;
+      V.vMy =tO.vMy; 
+      V.vMz =tO.vMz;
+      % GAIN
+      V.gainFx =tO.gainFx;
+      V.gainFy =tO.gainFy;
+      V.gainFz =tO.gainFz;
+      V.gainMx =tO.gainMx;
+      V.gainMy =tO.gainMy;
+      V.gainMz =tO.gainMz;
+      % --- Offset sur l'axe Z
+      V.zOff =tO.zOff;
     end
 
   end % methods

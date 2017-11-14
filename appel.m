@@ -198,11 +198,11 @@ function appel(varargin)
     %   manuel: call le GUI(1),  call un fichier(0)
 
     case 'CentreDePressionManuel'      % Calcul la position du COP avec GUI (AMTI)
-      moo =CCalculCOP();
+      moo =CCalculCOPamti();
       moo.guiCalculCOP(true);
 
     case 'CentreDePressionFichier'     % Calcul la position du COP sans GUI (AMTI)
-      moo =CCalculCOP();
+      moo =CCalculCOPamti();
       moo.guiCalculCOP(false);
 
     case 'COPoptimaManuel'             % Calcul la position du COP avec GUI (Optima)

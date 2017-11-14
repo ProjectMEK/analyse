@@ -2,10 +2,23 @@
 % classdef CBatchEditExecParam < handle
 %
 % METHODS
-%         varargout = creerNouvelAction(tO)
+%                 V = prepareInfoBatch(tO)
+%                     ecraseInfoBatch(tO, V)
+%                     onVide(tO)
+%         varargout = creerNouvelAction(tO,nom)
 %                 L = genereListAction(tO)
 %                     effaceTouteAction(tO)
 %                     effaceAction(tO,N)
+%                     remonte(tO,N)
+%                     redescend(tO,N)
+%               cOk = isActionsPretes(tO)
+%                 K = verifieListFichierIn(tO)
+%                     fabricListFichierIn(tO,FIN)     à être défini par le parent
+%               cOK = isActionAvantPret(tO,A)
+%                     mazPret(tO,A)
+%            retour = setTmpFichVirt(tO, V)
+%                     tournezLaManivelle(tO,hJ)
+%            reussi = ouvrirFichier(tO,N)
 %
 classdef CBatchEditExecParam < handle
 
@@ -35,9 +48,40 @@ classdef CBatchEditExecParam < handle
       % fichier en traitement
       curFich =[];
       %
-  end  %properties
+  end % properties
 
   methods
+
+    %-------------------------------------------------------------
+    % On prépare les infos afin de les sauvegarder dans le but de
+    % pouvoir les ré-utiliser lors d'une autre session de travail.
+    % Il faut faire attention avec les handle de figure...
+    %-------------------------------------------------------------
+    function V = prepareInfoBatch(tO)
+      % liste des propriétés à sauvegarder
+      pp ={'ver','Nfich','listFichIN','listFichOUT','pathOUT','listAction','Naction','listFichVirt'};
+      % sauvegarde dans la structure V
+      for U =1:length(pp)
+        V.(pp{U}) =tO.(pp{U});
+      end
+    end
+
+    %------------------------------------------------------------------------------
+    % On écrase les infos avec celles récupérer lors d'une sauvegarde
+    % ultérieure. On doit au préalable vider le présent objet des vieilles valeurs.
+    %------------------------------------------------------------------------------
+    function ecraseInfoBatch(tO, V)
+      % liste des propriétés à sauvegarder
+      pp ={'ver','Nfich','listFichIN','listFichOUT','pathOUT','listAction','Naction','listFichVirt'};
+      % on vide les propriétés actuelles (mise à zéro des possibles objets)
+      tO.onVide();
+      % On écrase les propriétés à partir de la structure V
+      for U =1:length(pp)
+        if isfield(V, pp{U})
+          tO.(pp{U}) =V.(pp{U});
+        end
+      end
+    end
 
     % Remise à zéro de toutes les propriétés
     function onVide(tO)
@@ -45,6 +89,9 @@ classdef CBatchEditExecParam < handle
       tO.S =0;
       % Info sur les fichiers à traiter
       tO.Nfich =0;
+      tO.listFichIN ={'aucun fichier à traiter'};
+      tO.listFichOUT =[];
+      tO.pathOUT =[];
       % Liste des actions possibles
       tO.effaceTouteAction();
     end

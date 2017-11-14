@@ -1,12 +1,12 @@
 %
-% classdef CCalculCOP < CCalculCOPGUI
+% classdef CCalculCOPamti < CCalculCOPGUI
 %  Gestion du calcul du COP pour la plateforme Amti
 %
 % METHODS disponibles
-% tO = CCalculCOP(conGUI)
+% tO = CCalculCOPamti(conGUI)
 %      auTravail(tO, varargin)
 %
-classdef CCalculCOP < CCalculCOPGUI
+classdef CCalculCOPamti < CCalculCOPGUI
 
   methods
 
@@ -16,7 +16,7 @@ classdef CCalculCOP < CCalculCOPGUI
     %   false -->  on initialise les paramètres à partir d'un fichier
     %   true  -->  se sera les valeurs par défauts.
     %-------------------------------
-    function tO = CCalculCOP(conGUI)
+    function tO = CCalculCOPamti()
       % plus rien à faire pour l'instant
     end
 
@@ -36,9 +36,28 @@ classdef CCalculCOP < CCalculCOPGUI
         tO.afficheStatus('Pour le calcul du COG, il faut sélectionner les six canaux.');
         return;
       end
-      fpltAmti(tO, R);
+      OA =CAnalyse.getInstance();
+      Fhnd =OA.findcurfich();
+      tO.cParti(Fhnd, R);
       gaglobal('editnom');
       tO.terminus();
     end
+
+    %-------------------------------------------------------
+    % Ici on effectue le travail pour la fonction fpltAmti
+    % même chose en mode batch
+    % En entrée  Ofich  --> handle du fichier à traiter
+    %                S  --> structure des param du GUI
+    %              Bat  --> true si on est en mode batch
+    %-------------------------------------------------------
+    function cParti(tO,Ofich,S,Bat)
+      if ~exist('Bat','var')
+      	Bat =false;
+      end
+      fpltAmti(tO, Ofich, S);
+    end
+
+
+
   end
 end
