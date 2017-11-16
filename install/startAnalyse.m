@@ -21,13 +21,19 @@
 % Faites-en une copie dans le dossier "src"
 % pour lancer "startAnalyse", placez-vous dans le dossier "src"
 %
-function startAnalyse(varargin)
+% Si l'affichage des caractère accentués se fait mal, appelez "startAnalyse" avec le
+% paramètre "1", soit
+%     startAnalyse(1)
+% Ceci aura pour effet de recréer les fichiers contenant la structure des strings pour
+% les différentes langues dans l'environnement que vous utilisez.
+%
+function startAnalyse(LANGUE, varargin)
 
   % Comme on va travailler avec les paths, il faut savoir dans quel OS on travaille
   % le caractère pour Séparer les Dossiers sera
   SD =filesep();
 
-  % On va récupérer le path complet du fichier "setAnalyse.m"
+  % On va récupérer le path complet du fichier "startAnalyse.m"
   moi =which('startAnalyse');
 
   % On va en extirper le path
@@ -47,9 +53,10 @@ function startAnalyse(varargin)
   bpath_anEmg =[bpath SD 'analyse' SD 'emg;'];
   bpath_anIg =[bpath SD 'analyse' SD 'Igrame;'];
   bpath_anOu =[bpath SD 'analyse' SD 'Outil;'];
+  bpath_anBat =[bpath SD 'analyse' SD 'batch;'];
   bpath_com =[bpath SD 'communs;'];
   bpath_comCG =[bpath SD 'communs' SD 'CGrame;'];
-  An_path =[bpath_an bpath_anCg bpath_anIg bpath_anCml bpath_anEmg bpath_anOu bpath_com bpath_comCG];
+  An_path =[bpath_an bpath_anCg bpath_anIg bpath_anCml bpath_anEmg bpath_anOu bpath_anBat bpath_com bpath_comCG];
 
   % Maintenant il faut savoir si on est en Matlab ou en Octave
   % les deux environnements utilisent la fonction ver()
@@ -80,10 +87,29 @@ function startAnalyse(varargin)
 
   end
 
+  if exist('LANGUE','var')
+    reInitLangue([bpath SD 'analyse' SD 'lang'], [bpath SD 'analyse' SD 'doc' SD]);
+    mots =sprintf('Les base de données multi-langues sont recrées.\n');
+    disp(mots);
+  end
+
   % On peut maintenant démarrer Analyse
   mots =sprintf('Les paths sont définis.\nLancement d''Analyse...');
   disp(mots);
 
   analyse();
 
+end
+
+function reInitLangue(lePathSrc, lePathDest)
+  % pour revenir dans le path original, on sauvegarde où on est.
+  lePath =pwd();
+  % on se transporte dans le dossier qui a les mfiles utiles pour recréer les bd
+  cd(lePathSrc);
+  % on va lancer les fonction "langue_xx.m" ou le xx sera: fr, en, es ...
+  langue_fr([lePathDest 'fr.mat']);
+  langue_en([lePathDest 'en.mat']);
+  langue_es([lePathDest 'es.mat']);
+  % le trvail est fini, on retourne dans le dossier de départ
+  cd(lePath);
 end

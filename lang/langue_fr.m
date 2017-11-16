@@ -539,6 +539,6 @@ function varargout =langue_fr(varargin)
     end
   else
   	disp({'Donnez un nom de fichier en entrée ou une variable pour la sortie';...
-  	      'Ex.'; 'langue(''fr.mat'') ou bien';'test =langue'});
+  	      'Ex.'; 'langue_fr(''fr.mat'') ou bien';'test =langue_fr'});
   end
 end

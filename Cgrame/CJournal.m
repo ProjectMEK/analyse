@@ -1,5 +1,5 @@
 %
-% Classe CJournal < CGUIJournal       (Sealed)
+% Classe CJournal < CJournalGUI       (Sealed)
 %
 % CJournal gère la journalisation d'Analyse.
 %
@@ -20,7 +20,7 @@
 %         delete(tO)     % DESTRUCTOR
 %         initLesmots(tO)
 %
-classdef (Sealed) CJournal < CGUIJournal
+classdef (Sealed) CJournal < CJournalGUI
 
   methods (Access =private)
 
