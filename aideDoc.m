@@ -25,7 +25,11 @@ function varargout = aideDoc(varargin)
       vermot =quelver(vg.laver);
       lesmots{end+1} ={['(Dernière sauvegarde: Version ' vermot ')'], 1, 7};
     end
-    lesmots{end+1} ={'Matlab R2013b', 1, 0};
+    if OA.OPG.getMatlab()
+      lesmots{end+1} ={'Testé avec Matlab R2013b', 1, 0};
+    else
+      lesmots{end+1} ={'Testé avec Octave 4.2.1', 1, 0};
+    end
     lesmots{end+1} ={[char(169) ' 1998-2017'], 2, 8};
     lesmots{end+1} ={'** Prenez note que Analyse ne sera', 2, 8};
     lesmots{end+1} ={'jamais une version finale. Pour les', 0, 8};

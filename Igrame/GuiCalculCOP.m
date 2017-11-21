@@ -6,12 +6,13 @@ function GuiCalculCOP(Ppa,Listadname)
   nad =length(Listadname);
   largeur =525; hauteur =575;
   posfig =positionfen('G','C',largeur,hauteur,gcf);
-  fig =figure('Name', 'Calcul  COP-COG', 'Position',posfig, 'Resize', 'off', ...				
-          'CloseRequestFcn',@Ppa.terminus, 'DefaultUIControlBackgroundColor',Ppa.couleurRef, ...
+  fig =figure('Name', 'Calcul  COP-COG', 'Position',posfig, 'resize', 'off', ...				
+          'CloseRequestFcn',{@quienllama,'terminus'}, 'DefaultUIControlBackgroundColor',Ppa.couleurRef, ...
           'DefaultUIPanelBackgroundColor',Ppa.couleurRef, 'DefaultUIControlUnits','pixels', ...
           'DefaultUIPanelUnits','pixels', 'DefaultUIControlFontUnits','pixels', ...
           'DefaultUIControlFontSize',12, 'DefaultUIPanelTitlePosition','rightbottom', ...
           'DefaultUIControlFontName','MS Sans Serif', 'DefaultUITableFontName','FixedWidth');
+  setappdata(fig,'Ppa',Ppa);
   Ppa.fig =fig;
   hbout =25; bordure =2*hbout; dx =15; dy =20; dy2 =dy-5; lbout =100;
   %------------------
@@ -22,17 +23,17 @@ function GuiCalculCOP(Ppa,Listadname)
       % onglet Canaux
       letit ='Canaux'; posx =0; posy =0; large =length(letit')*6+30; haut =hpan-2;
       o1 =uicontrol('Parent',pan, 'Tag','BoutonOnglet', 'Position',[posx posy large haut], 'String',letit, ...
-                    'Callback',@Ppa.showPanel);
+                    'callback',{@quienllama,'showPanel'});
       %-------------------
       % onglet Calibration
       letit ='Calibration'; posx =posx+large-1; large =length(letit')*6+30;
       o2 =uicontrol('Parent',pan, 'Tag','BoutonOnglet', 'Position',[posx posy large haut], 'String',letit, ...
-                    'Callback',@Ppa.showPanel, 'BackgroundColor',Ppa.couleurPan);
+                    'callback',{@quienllama,'showPanel'}, 'BackgroundColor',Ppa.couleurPan);
       %-------------
       % onglet Autre
       letit ='Un poco mas lejos'; posx =posx+large-1; large =length(letit')*6+30;
       o3 =uicontrol('Parent',pan, 'Tag','BoutonOnglet', 'Position',[posx posy large haut], 'String',letit, ...
-                    'TooltipString','Un peu plus loin...', 'Callback',@Ppa.showPanel);
+                    'TooltipString','Un peu plus loin...', 'callback',{@quienllama,'showPanel'});
   posx =2; lpan =largeur-2*posx+1; posy =2*bordure; hpan =hauteur-posy-ppan(4); posPan =[posx posy lpan hpan];
   %-------------
   % Panel Canaux
@@ -43,7 +44,7 @@ function GuiCalculCOP(Ppa,Listadname)
     % IMPORTER PARAMÈTRES
     large =2*lbout; posx =round((lpan-large)/2); haut =hbout; posy =posy-haut-2*dy;
     lesInfos ='Vous pouvez importer les paramètres que vous avez déjà exporté auparavent';
-    uicontrol('Parent',pan, 'Position',[posx posy large haut], 'Callback',@Ppa.importParam, ...
+    uicontrol('Parent',pan, 'Position',[posx posy large haut], 'callback',{@quienllama,'importParam'}, ...
               'ToolTipString',lesInfos, 'String','Importer param.');
     %-----------------
     % CHOIX DES CANAUX
@@ -60,7 +61,7 @@ function GuiCalculCOP(Ppa,Listadname)
               'FontWeight','bold', 'String','Fx:  ', 'HorizontalAlignment','right');
     cualCanal =(Ppa.getCanFx <= nad)*Ppa.getCanFx+1;
     uicontrol('Parent',pan, 'Style','popupmenu', 'Tag','CanauxFx', 'Position',[posx+largeText posy largeBox haut], ...
-              'FontSize',10, 'String',lesCanaux, 'Value',cualCanal, 'Callback',@Ppa.changeCanFx);
+              'FontSize',10, 'String',lesCanaux, 'Value',cualCanal, 'callback',{@quienllama,'changeCanFx'});
     %---
     % Fy
     posy =posy-haut-dy2;
@@ -68,7 +69,7 @@ function GuiCalculCOP(Ppa,Listadname)
               'FontWeight','bold', 'String','Fy:  ', 'HorizontalAlignment','right');
     cualCanal =(Ppa.getCanFy <= nad)*Ppa.getCanFy+1;
     uicontrol('Parent',pan, 'Style','popupmenu', 'Tag','CanauxFy', 'Position',[posx+largeText posy largeBox haut], ...
-              'FontSize',10, 'String',lesCanaux, 'Value',cualCanal, 'Callback',@Ppa.changeCanFy);
+              'FontSize',10, 'String',lesCanaux, 'Value',cualCanal, 'callback',{@quienllama,'changeCanFy'});
     %---
     % Fz
     posy =posy-haut-dy2;
@@ -76,7 +77,7 @@ function GuiCalculCOP(Ppa,Listadname)
               'FontWeight','bold', 'String','Fz:  ', 'HorizontalAlignment','right');
     cualCanal =(Ppa.getCanFz <= nad)*Ppa.getCanFz+1;
     uicontrol('Parent',pan, 'Style','popupmenu', 'Tag','CanauxFz', 'Position',[posx+largeText posy largeBox haut], ...
-              'FontSize',10, 'String',lesCanaux, 'Value',cualCanal, 'Callback',@Ppa.changeCanFz);
+              'FontSize',10, 'String',lesCanaux, 'Value',cualCanal, 'callback',{@quienllama,'changeCanFz'});
     %---
     % Mx
     posy =posy-haut-dy2;
@@ -84,7 +85,7 @@ function GuiCalculCOP(Ppa,Listadname)
               'FontWeight','bold', 'String','Mx:  ', 'HorizontalAlignment','right');
     cualCanal =(Ppa.getCanMx <= nad)*Ppa.getCanMx+1;
     uicontrol('Parent',pan, 'Style','popupmenu', 'Tag','CanauxMx', 'Position',[posx+largeText posy largeBox haut], ...
-              'FontSize',10, 'String',lesCanaux, 'Value',cualCanal, 'Callback',@Ppa.changeCanMx);
+              'FontSize',10, 'String',lesCanaux, 'Value',cualCanal, 'callback',{@quienllama,'changeCanMx'});
     %---
     % My
     posy =posy-haut-dy2;
@@ -92,7 +93,7 @@ function GuiCalculCOP(Ppa,Listadname)
               'FontWeight','bold', 'String','My:  ', 'HorizontalAlignment','right');
     cualCanal =(Ppa.getCanMy <= nad)*Ppa.getCanMy+1;
     uicontrol('Parent',pan, 'Style','popupmenu', 'Tag','CanauxMy', 'Position',[posx+largeText posy largeBox haut], ...
-              'FontSize',10, 'String',lesCanaux, 'Value',cualCanal, 'Callback',@Ppa.changeCanMy);
+              'FontSize',10, 'String',lesCanaux, 'Value',cualCanal, 'callback',{@quienllama,'changeCanMy'});
     %---
     % Mz
     posy =posy-haut-dy2;
@@ -100,17 +101,17 @@ function GuiCalculCOP(Ppa,Listadname)
               'FontWeight','bold', 'String','Mz:  ', 'HorizontalAlignment','right');
     cualCanal =(Ppa.getCanMz <= nad)*Ppa.getCanMz+1;
     uicontrol('Parent',pan, 'Style','popupmenu', 'Tag','CanauxMz', 'Position',[posx+largeText posy largeBox haut], ...
-              'FontSize',10, 'String',lesCanaux, 'Value',cualCanal, 'Callback',@Ppa.changeCanMz);
+              'FontSize',10, 'String',lesCanaux, 'Value',cualCanal, 'callback',{@quienllama,'changeCanMz'});
     %-----------
     % Calcul COG
     posy =posy-haut-dy2;
     uicontrol('Parent',pan, 'Style','radiobutton', 'position',[posx+largeText posy largeBox haut], ...
-              'Callback',@Ppa.changeCOPseul, 'String','Calculer seulement le COP', 'value',Ppa.getCOPseul, ...
+              'callback',{@quienllama,'changeCOPseul'}, 'String','Calculer seulement le COP', 'value',Ppa.getCOPseul, ...
               'tooltipstring','Si non coché, on calcul le COP et le COG', 'tag','COPseul');
     % EXPORTER PARAMÈTRES
     large =2*lbout; posx =round((lpan-large)/2); haut =hbout; posy =posy-haut-dy;
     lesInfos ='Vous pouvez exporter les paramètres afin de les utiliser dans une prochaîne session de travail';
-    uicontrol('Parent',pan, 'Position',[posx posy large haut], 'Callback',@Ppa.exportParam, ...
+    uicontrol('Parent',pan, 'Position',[posx posy large haut], 'callback',{@quienllama,'exportParam'}, ...
               'ToolTipString',lesInfos, 'String','Exporter param.');
 
   %------------------
@@ -181,7 +182,7 @@ function GuiCalculCOP(Ppa,Listadname)
       haut =hbout; posy =posy-haut; posx =posx+round((large-lbout)/2); large =lbout;
       uicontrol('Parent',pan, 'Position',[posx posy large haut], 'tag','EditZoff', ...
                 'BackGroundColor',BLANC, 'HorizontalAlignment','center', ...
-                'String',num2str(Ppa.getZOff()), 'Style','edit', 'Callback',@Ppa.surveilleZOffset);
+                'String',num2str(Ppa.getZOff()), 'Style','edit', 'callback',{@quienllama,'surveilleZOffset'});
   end
   %------------------
   % Panel un poco mas
@@ -212,8 +213,43 @@ function GuiCalculCOP(Ppa,Listadname)
   % AU TRAVAIL
   large =lbout; posx =round((lpan-large)/2); posy =2*haut;
   uicontrol('Parent',fig,'tag','boutonTravail','Position',[posx posy large haut],...
-            'Callback',@Ppa.auTravail, 'String','Au travail');
+            'callback',@Ppa.auTravail, 'String','Au travail');
   set(fig,'WindowStyle','modal');
+end
+
+%
+% on call la method "Ppa.(autre)"
+%
+function quienllama(src,evt, autre)
+  Ppa =getappdata(gcf,'Ppa');
+  switch autre
+  case 'terminus'
+    Ppa.terminus();
+  case 'showPanel'
+    Ppa.showPanel(src);
+  case 'importParam'
+    Ppa.importParam();
+  case 'changeCanFx'
+    Ppa.changeCanFx(src);
+  case 'changeCanFy'
+    Ppa.changeCanFy(src);
+  case 'changeCanFz'
+    Ppa.changeCanFz(src);
+  case 'changeCanMx'
+    Ppa.changeCanMx(src);
+  case 'changeCanMy'
+    Ppa.changeCanMy(src);
+  case 'changeCanMz'
+    Ppa.changeCanMz(src);
+  case 'changeCOPseul'
+    Ppa.changeCOPseul(src);
+  case 'exportParam'
+    Ppa.exportParam();
+  case 'surveilleZOffset'
+    Ppa.surveilleZOffset(src);
+  case 'auTravail'
+    Ppa.auTravail();
+  end
 end
 
 %--------------------------------------%

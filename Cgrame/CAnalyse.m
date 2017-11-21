@@ -116,6 +116,8 @@ classdef (Sealed) CAnalyse < handle
       V =get(src, 'UserData');     % peut être le handle d'un objet
       if ~isempty(V)
         delete(V);
+      end
+      if ishandle(src)
         delete(src);
       end
     end

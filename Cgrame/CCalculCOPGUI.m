@@ -17,7 +17,6 @@
 %       guiCalculCOP(tO, conGUI)
 %       importParam(tO, src, event)
 %       setCurPan(tO, V)
-%       showPanel(tO, src, event)
 %       surveilleZOffset(tO, src, event)
 %   V = lectureTotalProp(tO)
 %
