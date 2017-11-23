@@ -150,7 +150,7 @@ classdef CBatchEditExecGUI < CBasePourFigureAnalyse & CBatchEditExecParam
       % on flush le CDATA de tous les radiobutton
       set(tmp, 'cdata',[]);
       % on load l'image et on l'affiche pour le radiobutton sélectionné
-      ico =imread('ptiteflechdrte.bmp','BMP');
+      ico =imread(which('ptiteflechdrte.bmp'),'BMP');
       set(tO.getSelectedObject(), 'cdata',ico);
       % sous le uiButtonGroup, on affiche le nombre de fichier à traiter
       set(hBG,'title',[num2str(tO.Nfich) ' fichiers à traiter'])
@@ -167,7 +167,7 @@ classdef CBatchEditExecGUI < CBasePourFigureAnalyse & CBatchEditExecParam
       % on flush le CDATA de tous les radiobutton
       set(tmp, 'cdata',[]);
       % on load l'image et on l'affiche
-      ico =imread('ptiteflechdrte.bmp','BMP');
+      ico =imread(which('ptiteflechdrte.bmp'),'BMP');
       set(get(src,'SelectedObject'), 'cdata',ico);
     end
 
@@ -197,7 +197,7 @@ classdef CBatchEditExecGUI < CBasePourFigureAnalyse & CBatchEditExecParam
       % on flush le CDATA de tous les radiobutton
       set(tmp,'value',0,'cdata',[]);
       % on load l'image et on l'affiche
-      ico =imread('ptiteflechdrte.bmp','BMP');
+      ico =imread(which('ptiteflechdrte.bmp'),'BMP');
       set(src,'value',1,'cdata',ico);
       % on vide la listbox de son contenu
       set(findobj('tag','choixfichier'),'value',1,'string','');

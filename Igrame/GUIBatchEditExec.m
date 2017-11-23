@@ -72,13 +72,21 @@ function fig = GUIBatchEditExec(Ppa)
     hbout=0.128;
   % BUTTONGROUP (MÊME/NOUVEAU DOSSIER)
     A.posx=margex;A.large=lcol1;A.haut=0.8;A.posy=(1-A.haut)/2;memy=A.posy;
-    uibg =uibuttongroup('parent',pan,'tag','BGfichOUT','backgroundColor',GRIS,...
-                        'selectionchangefcn',@dossierFichierSortie,'position',A.pos);
+    try
+      % 'selectionchangefcn' pour Matlab
+      uibg =uibuttongroup('parent',pan,'tag','BGfichOUT','backgroundColor',GRIS,...
+                          'selectionchangefcn',@dossierFichierSortie,'position',A.pos);
+    catch sss;
+      % 'selectionchangedfcn' pour Octave
+      uibg =uibuttongroup('parent',pan,'tag','BGfichOUT','backgroundColor',GRIS,...
+                          'selectionchangedfcn',@dossierFichierSortie,'position',A.pos);
+    end
     A.large=1-1.25*A.posx;A.haut=1/9;A.posy=1-2*A.haut;membg=uibg;
-    ico =imread('ptiteflechdrte.bmp','BMP');FO=9;
+    ico =imread(which('ptiteflechdrte.bmp'),'BMP');FO=9;
     uicontrol('parent',uibg,'style','radiobutton','position',A.pos,'fontsize',FO,...
               'string','Ré-écrire sur le fichier d''entrée','Value',0,'tag','ecrase');
     A.posy=A.posy-2*A.haut;
+    % Valeur par défaut
     uicontrol('parent',uibg,'style','radiobutton','position',A.pos,'Value',1,'fontsize',FO,...
               'string','Même dossier, changer le nom de fichier','cdata',ico,'tag','changfich');
     A.posy=A.posy-2*A.haut;
@@ -111,7 +119,7 @@ function fig = GUIBatchEditExec(Ppa)
     uibg =uibuttongroup('parent',pan,'tag','BGnomfichOUT','backgroundColor',GRIS,...
                         'selectionchangefcn',@changePosteRadio,'position',A.pos);
     A.posx=margex;A.large=1-2*A.posx;A.haut=1/5;A.posy=1-2*A.haut;
-    ico =imread('ptiteflechdrte.bmp','BMP');
+    ico =imread(which('ptiteflechdrte.bmp'),'BMP');
     uicontrol('parent',uibg,'style','radiobutton','position',A.pos,...
               'string','Comme préfixe','Value',0,'tag','prefix');
     A.posy=A.posy-2*A.haut;
@@ -131,7 +139,7 @@ function fig = GUIBatchEditExec(Ppa)
               'Position',A.pos,'String',Ppa.listChoixActions,'max',lemax,'value',1);
   % BOUTON FLÈCHE: AJOUT D'UNE ACTION À FAIRE
     A.posx=A.posx+A.large+0.5*margex;A.large=lcol2;A.haut=hy;A.posy=lapos(2)+lapos(4)/2;
-    ico =imread('longflechdrte.bmp','BMP');
+    ico =imread(which('longflechdrte.bmp'),'BMP');
     uicontrol('parent',pan,'Callback',@ajouterAction,'Position',A.pos,'cdata',ico,...
   	          'tooltipstring','Ajouter l''action sélectionnée');
   % LISTBOX DES ACTIONS SÉLECTIONNÉES

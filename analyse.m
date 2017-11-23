@@ -80,7 +80,7 @@ function analyse(varargin)
   	try
       analyse('terminus');
   	  analyse();
-  	catch fuu
+  	catch fuu;
   	  parleMoiDe(fuu);
   	end
 
