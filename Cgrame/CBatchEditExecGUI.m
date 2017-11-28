@@ -150,8 +150,12 @@ classdef CBatchEditExecGUI < CBasePourFigureAnalyse & CBatchEditExecParam
       % on flush le CDATA de tous les radiobutton
       set(tmp, 'cdata',[]);
       % on load l'image et on l'affiche pour le radiobutton sélectionné
-      ico =imread(which('ptiteflechdrte.bmp'),'BMP');
-      set(tO.getSelectedObject(), 'cdata',ico);
+      try
+        ico =imread(which('ptiteflechdrte.bmp'),'BMP');
+        set(tO.getSelectedObject(), 'cdata',ico);
+      catch sss;
+        % rien à faire pour Octave
+      end
       % sous le uiButtonGroup, on affiche le nombre de fichier à traiter
       set(hBG,'title',[num2str(tO.Nfich) ' fichiers à traiter'])
     end
@@ -164,11 +168,15 @@ classdef CBatchEditExecGUI < CBasePourFigureAnalyse & CBatchEditExecParam
     function changePosteRadio(tO, src, varargin)
       % on recherche les radiobutton qui appartiennent au groupe
       tmp =findobj('style','radiobutton', 'parent',src);
-      % on flush le CDATA de tous les radiobutton
-      set(tmp, 'cdata',[]);
-      % on load l'image et on l'affiche
-      ico =imread(which('ptiteflechdrte.bmp'),'BMP');
-      set(get(src,'SelectedObject'), 'cdata',ico);
+      try
+        % on flush le CDATA de tous les radiobutton
+        set(tmp, 'cdata',[]);
+        % on load l'image et on l'affiche
+        ico =imread('ptiteflechdrte.bmp','BMP');
+        set(get(src,'SelectedObject'), 'cdata',ico);
+      catch sss;
+        % rien à faire car Octave ne supporte pas encore le "cdata"
+      end
     end
 
     %----------------------------------------------
@@ -194,11 +202,17 @@ classdef CBatchEditExecGUI < CBasePourFigureAnalyse & CBatchEditExecParam
       ppa =get(src,'parent');
       % on recherche les radiobutton qui appartiennent au groupe
       tmp =findobj('style','radiobutton', 'parent',ppa);
-      % on flush le CDATA de tous les radiobutton
-      set(tmp,'value',0,'cdata',[]);
-      % on load l'image et on l'affiche
-      ico =imread(which('ptiteflechdrte.bmp'),'BMP');
-      set(src,'value',1,'cdata',ico);
+      try
+        % pour Matlab
+        % on flush le CDATA de tous les radiobutton
+        set(tmp,'value',0,'cdata',[]);
+        % on load l'image et on l'affiche
+        ico =imread(which('ptiteflechdrte.bmp'),'BMP');
+        set(src,'value',1,'cdata',ico);
+      catch sss;
+        % pour Octave
+        set(src,'value',1);
+      end
       % on vide la listbox de son contenu
       set(findobj('tag','choixfichier'),'value',1,'string','');
       tO.Nfich =0;
@@ -282,7 +296,8 @@ classdef CBatchEditExecGUI < CBasePourFigureAnalyse & CBatchEditExecParam
     function dossierFichierSortie(tO, src, varargin)
       tO.changePosteRadio(src);
       % il faut afficher ou cacher certain uicontrol
-      switch get(get(src,'SelectedObject'),'tag')
+      fiou =get(get(src,'SelectedObject'),'tag');
+      switch fiou
       case 'ecrase'
         tO.afficheModifDossier('off');
         tO.afficheModifFichier('off');
@@ -313,7 +328,15 @@ classdef CBatchEditExecGUI < CBasePourFigureAnalyse & CBatchEditExecParam
     %--------------------------------------------------
     function afficheModifFichier(tO,S)
       set(findobj('tag','editfichierpresuf'),'enable',S);
-      set(get(findobj('tag','BGnomfichOUT'),'children'),'enable',S);
+      % on cherche les "enfants" à modifier
+      fafo =get(findobj('tag','BGnomfichOUT'),'children');
+      try
+        % Matlab veut une cellule
+        set(fafo,'enable',S);
+      catch sss;
+        % Octave veut une matrice
+        set(cell2mat(fafo),'enable',S);
+      end
     end
 
     %------------------------------------------

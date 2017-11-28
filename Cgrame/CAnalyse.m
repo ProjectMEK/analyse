@@ -95,14 +95,14 @@ classdef (Sealed) CAnalyse < handle
     % DESTRUCTOR
     %------------------
     function delete(tO)
+      Oj =CJournal.getInstance();
+      delete(Oj);
       delete(tO.OPG);
       tO.OPG =[];
       delete(tO.Fic);
       tO.Fic =[];
       delete(tO.Vg);
       tO.Vg =[];
-      Oj =CJournal.getInstance();
-      delete(Oj);
       if ~isempty(tO.OFig)
         delete(tO.OFig);
       end

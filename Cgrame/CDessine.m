@@ -935,8 +935,7 @@ classdef CDessine < handle
           gr.x =lestri(ligne,6);
           fs =hdchnl.rate(gr.y,gr.tri);
           lix.Nom ='temps';
-          lix.Dato.(lix.Nom) =(hdchnl.frontcut(gr.y,gr.tri) +1/fs):(1/fs)...
-                :hdchnl.frontcut(gr.y,gr.tri)+(single(hdchnl.nsmpls(gr.y,gr.tri))/fs);
+          lix.Dato.(lix.Nom) =([1:single(hdchnl.nsmpls(gr.y,gr.tri))]/fs)+hdchnl.frontcut(gr.y,gr.tri);
 
           if vg.letemps > 0
             fs1 =hdchnl.rate(tpchnl.Dato{vg.letemps}.canal,gr.tri);

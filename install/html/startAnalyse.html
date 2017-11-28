@@ -1,0 +1,278 @@
+
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html><head>
+      <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+   <!--
+This HTML was auto-generated from MATLAB code.
+To make changes, update the MATLAB code and republish this document.
+      --><title>startAnalyse</title><meta name="generator" content="MATLAB 8.2"><link rel="schema.DC" href="http://purl.org/dc/elements/1.1/"><meta name="DC.date" content="2017-11-24"><meta name="DC.source" content="startAnalyse.m"><style type="text/css">
+html,body,div,span,applet,object,iframe,h1,h2,h3,h4,h5,h6,p,blockquote,pre,a,abbr,acronym,address,big,cite,code,del,dfn,em,font,img,ins,kbd,q,s,samp,small,strike,strong,sub,sup,tt,var,b,u,i,center,dl,dt,dd,ol,ul,li,fieldset,form,label,legend,table,caption,tbody,tfoot,thead,tr,th,td{margin:0;padding:0;border:0;outline:0;font-size:100%;vertical-align:baseline;background:transparent}body{line-height:1}ol,ul{list-style:none}blockquote,q{quotes:none}blockquote:before,blockquote:after,q:before,q:after{content:'';content:none}:focus{outine:0}ins{text-decoration:none}del{text-decoration:line-through}table{border-collapse:collapse;border-spacing:0}
+
+html { min-height:100%; margin-bottom:1px; }
+html body { height:100%; margin:0px; font-family:Arial, Helvetica, sans-serif; font-size:10px; color:#000; line-height:140%; background:#fff none; overflow-y:scroll; }
+html body td { vertical-align:top; text-align:left; }
+
+h1 { padding:0px; margin:0px 0px 25px; font-family:Arial, Helvetica, sans-serif; font-size:1.5em; color:#d55000; line-height:100%; font-weight:normal; }
+h2 { padding:0px; margin:0px 0px 8px; font-family:Arial, Helvetica, sans-serif; font-size:1.2em; color:#000; font-weight:bold; line-height:140%; border-bottom:1px solid #d6d4d4; display:block; }
+h3 { padding:0px; margin:0px 0px 5px; font-family:Arial, Helvetica, sans-serif; font-size:1.1em; color:#000; font-weight:bold; line-height:140%; }
+
+a { color:#005fce; text-decoration:none; }
+a:hover { color:#005fce; text-decoration:underline; }
+a:visited { color:#004aa0; text-decoration:none; }
+
+p { padding:0px; margin:0px 0px 20px; }
+img { padding:0px; margin:0px 0px 20px; border:none; }
+p img, pre img, tt img, li img { margin-bottom:0px; } 
+
+ul { padding:0px; margin:0px 0px 20px 23px; list-style:square; }
+ul li { padding:0px; margin:0px 0px 7px 0px; }
+ul li ul { padding:5px 0px 0px; margin:0px 0px 7px 23px; }
+ul li ol li { list-style:decimal; }
+ol { padding:0px; margin:0px 0px 20px 0px; list-style:decimal; }
+ol li { padding:0px; margin:0px 0px 7px 23px; list-style-type:decimal; }
+ol li ol { padding:5px 0px 0px; margin:0px 0px 7px 0px; }
+ol li ol li { list-style-type:lower-alpha; }
+ol li ul { padding-top:7px; }
+ol li ul li { list-style:square; }
+
+.content { font-size:1.2em; line-height:140%; padding: 20px; }
+
+pre, tt, code { font-size:12px; }
+pre { margin:0px 0px 20px; }
+pre.error { color:red; }
+pre.codeinput { padding:10px; border:1px solid #d3d3d3; background:#f7f7f7; }
+pre.codeoutput { padding:10px 11px; margin:0px 0px 20px; color:#4c4c4c; }
+
+@media print { pre.codeinput, pre.codeoutput { word-wrap:break-word; width:100%; } }
+
+span.keyword { color:#0000FF }
+span.comment { color:#228B22 }
+span.string { color:#A020F0 }
+span.untermstring { color:#B20000 }
+span.syscmd { color:#B28C00 }
+
+.footer { width:auto; padding:10px 0px; margin:25px 0px 0px; border-top:1px dotted #878787; font-size:0.8em; line-height:140%; font-style:italic; color:#878787; text-align:left; float:none; }
+.footer p { margin:0px; }
+.footer a { color:#878787; }
+.footer a:hover { color:#878787; text-decoration:underline; }
+.footer a:visited { color:#878787; }
+
+table th { padding:7px 5px; text-align:left; vertical-align:middle; border: 1px solid #d6d4d4; font-weight:bold; }
+table td { padding:7px 5px; text-align:left; vertical-align:top; border:1px solid #d6d4d4; }
+
+
+
+
+
+  </style></head><body><div class="content"><h1></h1><!--introduction--><!--/introduction--><p>Cette fonction va d&eacute;finir les path utiles pour travailler avec Analyse puis va d&eacute;marrer Analyse. Mais avant tout, il faut avoir download&eacute; les dossiers n&eacute;cessaires comme suit, soit que l'ensemble des dossiers est regroupp&eacute; dans "src"</p><p>src/ src/startAnalyse.m     analyse/             Cgrame/             Cml/             doc/             emg/             Igrame/             install/             lang/             Outil/     communs/             CGrame/</p><p>Le fichier "startAnalyse.m" se trouve dans "src/analyse/install" Faites-en une copie dans le dossier "src" pour lancer "startAnalyse", placez-vous dans le dossier "src"</p><p>Si l'affichage des caract&egrave;re accentu&eacute;s se fait mal, appelez "startAnalyse" avec le param&egrave;tre "1", soit     startAnalyse(1) Ceci aura pour effet de recr&eacute;er les fichiers contenant la structure des strings pour les diff&eacute;rentes langues dans l'environnement que vous utilisez.</p><pre class="codeinput"><span class="keyword">function</span> startAnalyse(LANGUE, varargin)
+
+  <span class="comment">% Comme on va travailler avec les paths, il faut savoir dans quel OS on travaille</span>
+  <span class="comment">% le caract&egrave;re pour S&eacute;parer les Dossiers sera</span>
+  SD =filesep();
+
+  <span class="comment">% On va r&eacute;cup&eacute;rer le path complet du fichier "startAnalyse.m"</span>
+  moi =which(<span class="string">'startAnalyse'</span>);
+
+  <span class="comment">% On va en extirper le path</span>
+  [bpath, fnom] =fileparts(moi);
+
+  <span class="comment">% Au cas ou 'startAnalyse' serait encore dans "src/analyse/install"</span>
+  txtpath =[SD <span class="string">'analyse'</span> SD <span class="string">'install'</span>];
+  ltxt =length(txtpath);
+  <span class="keyword">if</span> strcmp(bpath(end-ltxt+1:end), txtpath)
+    bpath(end-ltxt+1:end) =[];
+  <span class="keyword">end</span>
+
+  <span class="comment">% fabrication du path &agrave; ajouter</span>
+  bpath_an =[bpath SD <span class="string">'analyse;'</span>];
+  bpath_anCg =[bpath SD <span class="string">'analyse'</span> SD <span class="string">'Cgrame;'</span>];
+  bpath_anCml =[bpath SD <span class="string">'analyse'</span> SD <span class="string">'Cml;'</span>];
+  bpath_anEmg =[bpath SD <span class="string">'analyse'</span> SD <span class="string">'emg;'</span>];
+  bpath_anIg =[bpath SD <span class="string">'analyse'</span> SD <span class="string">'Igrame;'</span>];
+  bpath_anOu =[bpath SD <span class="string">'analyse'</span> SD <span class="string">'Outil;'</span>];
+  bpath_anBat =[bpath SD <span class="string">'analyse'</span> SD <span class="string">'batch;'</span>];
+  bpath_com =[bpath SD <span class="string">'communs;'</span>];
+  bpath_comCG =[bpath SD <span class="string">'communs'</span> SD <span class="string">'CGrame;'</span>];
+  An_path =[bpath_an bpath_anCg bpath_anIg bpath_anCml bpath_anEmg bpath_anOu bpath_anBat bpath_com bpath_comCG];
+
+  <span class="comment">% Maintenant il faut savoir si on est en Matlab ou en Octave</span>
+  <span class="comment">% les deux environnements utilisent la fonction ver()</span>
+  matlab =isempty(ver(<span class="string">'Octave'</span>));
+
+  <span class="comment">%-------------------------------------------------------------------</span>
+  <span class="comment">% Pour ceux qui ne veulent pas faire un reset des Paths d&eacute;j&agrave; &eacute;tablis</span>
+  <span class="comment">% conserver uniquement les lignes "addpath..." ci-bas</span>
+  <span class="comment">%-------------------------------------------------------------------</span>
+
+  <span class="keyword">if</span> matlab  <span class="comment">% on travaille avec Matlab</span>
+
+    <span class="comment">% le path par d&eacute;faut sera r&eacute;-install&eacute; par restoredefaultpath()</span>
+    restoredefaultpath();
+    <span class="comment">% maintenant on va ajouter les path pour Analyse</span>
+    addpath(An_path);
+
+  <span class="keyword">else</span> <span class="comment">% on travaille avec Octave</span>
+
+    <span class="comment">% La commande pathdef(), nous renvoie la liste des paths pour Octave</span>
+    pdef =pathdef();
+    <span class="comment">% on va resetter le path &agrave; partir des valeurs obtenues</span>
+    path(pdef);
+    <span class="comment">% maintenant on va ajouter les path pour Analyse</span>
+    addpath(An_path);
+    <span class="comment">% on va changer la valeur par d&eacute;faut pour la sauvegarde des fichiers</span>
+    save_default_options (<span class="string">'-v7'</span>);
+
+  <span class="keyword">end</span>
+
+  <span class="keyword">if</span> exist(<span class="string">'LANGUE'</span>,<span class="string">'var'</span>)
+    reInitLangue([bpath SD <span class="string">'analyse'</span> SD <span class="string">'lang'</span>], [bpath SD <span class="string">'analyse'</span> SD <span class="string">'doc'</span> SD]);
+    mots =sprintf(<span class="string">'Les base de donn&eacute;es multi-langues sont recr&eacute;es.\n'</span>);
+    disp(mots);
+  <span class="keyword">end</span>
+
+  <span class="comment">% On peut maintenant d&eacute;marrer Analyse</span>
+  mots =sprintf(<span class="string">'Les paths sont d&eacute;finis.\nLancement d''Analyse...'</span>);
+  disp(mots);
+
+  analyse();
+
+<span class="keyword">end</span>
+
+<span class="keyword">function</span> reInitLangue(lePathSrc, lePathDest)
+  <span class="comment">% pour revenir dans le path original, on sauvegarde o&ugrave; on est.</span>
+  lePath =pwd();
+  <span class="comment">% on se transporte dans le dossier qui a les mfiles utiles pour recr&eacute;er les bd</span>
+  cd(lePathSrc);
+  <span class="comment">% on va lancer les fonction "langue_xx.m" ou le xx sera: fr, en, es ...</span>
+  langue_fr([lePathDest <span class="string">'fr.mat'</span>]);
+  langue_en([lePathDest <span class="string">'en.mat'</span>]);
+  langue_es([lePathDest <span class="string">'es.mat'</span>]);
+  <span class="comment">% le trvail est fini, on retourne dans le dossier de d&eacute;part</span>
+  cd(lePath);
+<span class="keyword">end</span>
+</pre><pre class="codeoutput">Les paths sont d&eacute;finis.
+Lancement d'Analyse...
+</pre><img vspace="5" hspace="5" src="startAnalyse_01.png" alt=""> <p class="footer"><br><a href="http://www.mathworks.com/products/matlab/">Published with MATLAB&reg; R2013b</a><br></p></div><!--
+##### SOURCE BEGIN #####
+%% 
+%% 
+%
+% Cette fonction va définir les path utiles pour travailler avec Analyse puis va
+% démarrer Analyse. Mais avant tout, il faut avoir downloadé les dossiers
+% nécessaires comme suit, soit que l'ensemble des dossiers est regrouppé dans "src"
+%
+% src/
+% src/startAnalyse.m
+%     analyse/
+%             Cgrame/
+%             Cml/
+%             doc/
+%             emg/
+%             Igrame/
+%             install/
+%             lang/
+%             Outil/
+%     communs/
+%             CGrame/
+%
+% Le fichier "startAnalyse.m" se trouve dans "src/analyse/install"
+% Faites-en une copie dans le dossier "src"
+% pour lancer "startAnalyse", placez-vous dans le dossier "src"
+%
+% Si l'affichage des caractère accentués se fait mal, appelez "startAnalyse" avec le
+% paramètre "1", soit
+%     startAnalyse(1)
+% Ceci aura pour effet de recréer les fichiers contenant la structure des strings pour
+% les différentes langues dans l'environnement que vous utilisez.
+%
+%% 
+function startAnalyse(LANGUE, varargin)
+
+  % Comme on va travailler avec les paths, il faut savoir dans quel OS on travaille
+  % le caractère pour Séparer les Dossiers sera
+  SD =filesep();
+
+  % On va récupérer le path complet du fichier "startAnalyse.m"
+  moi =which('startAnalyse');
+
+  % On va en extirper le path
+  [bpath, fnom] =fileparts(moi);
+
+  % Au cas ou 'startAnalyse' serait encore dans "src/analyse/install"
+  txtpath =[SD 'analyse' SD 'install'];
+  ltxt =length(txtpath);
+  if strcmp(bpath(end-ltxt+1:end), txtpath)
+    bpath(end-ltxt+1:end) =[];
+  end
+
+  % fabrication du path à ajouter
+  bpath_an =[bpath SD 'analyse;'];
+  bpath_anCg =[bpath SD 'analyse' SD 'Cgrame;'];
+  bpath_anCml =[bpath SD 'analyse' SD 'Cml;'];
+  bpath_anEmg =[bpath SD 'analyse' SD 'emg;'];
+  bpath_anIg =[bpath SD 'analyse' SD 'Igrame;'];
+  bpath_anOu =[bpath SD 'analyse' SD 'Outil;'];
+  bpath_anBat =[bpath SD 'analyse' SD 'batch;'];
+  bpath_com =[bpath SD 'communs;'];
+  bpath_comCG =[bpath SD 'communs' SD 'CGrame;'];
+  An_path =[bpath_an bpath_anCg bpath_anIg bpath_anCml bpath_anEmg bpath_anOu bpath_anBat bpath_com bpath_comCG];
+
+  % Maintenant il faut savoir si on est en Matlab ou en Octave
+  % les deux environnements utilisent la fonction ver()
+  matlab =isempty(ver('Octave'));
+
+  %REPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASH-
+  % Pour ceux qui ne veulent pas faire un reset des Paths déjà établis
+  % conserver uniquement les lignes "addpath..." ci-bas
+  %REPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASH-
+
+  if matlab  % on travaille avec Matlab
+
+    % le path par défaut sera ré-installé par restoredefaultpath()
+    restoredefaultpath();
+    % maintenant on va ajouter les path pour Analyse
+    addpath(An_path);
+
+  else % on travaille avec Octave
+
+    % La commande pathdef(), nous renvoie la liste des paths pour Octave
+    pdef =pathdef();
+    % on va resetter le path à partir des valeurs obtenues
+    path(pdef);
+    % maintenant on va ajouter les path pour Analyse
+    addpath(An_path);
+    % on va changer la valeur par défaut pour la sauvegarde des fichiers
+    save_default_options ('-v7');
+
+  end
+
+  if exist('LANGUE','var')
+    reInitLangue([bpath SD 'analyse' SD 'lang'], [bpath SD 'analyse' SD 'doc' SD]);
+    mots =sprintf('Les base de données multi-langues sont recrées.\n');
+    disp(mots);
+  end
+
+  % On peut maintenant démarrer Analyse
+  mots =sprintf('Les paths sont définis.\nLancement d''Analyse...');
+  disp(mots);
+
+  analyse();
+
+end
+
+function reInitLangue(lePathSrc, lePathDest)
+  % pour revenir dans le path original, on sauvegarde où on est.
+  lePath =pwd();
+  % on se transporte dans le dossier qui a les mfiles utiles pour recréer les bd
+  cd(lePathSrc);
+  % on va lancer les fonction "langue_xx.m" ou le xx sera: fr, en, es ...
+  langue_fr([lePathDest 'fr.mat']);
+  langue_en([lePathDest 'en.mat']);
+  langue_es([lePathDest 'es.mat']);
+  % le trvail est fini, on retourne dans le dossier de départ
+  cd(lePath);
+end
+
+##### SOURCE END #####
+--></body></html>

@@ -40,12 +40,33 @@ classdef (Sealed) CJournal < CJournalGUI
     % Si aucun objet CJournal existe, il appelle le constructeur
     % autrement il retourne le handle sur l'objet existant.
     %-----------------------------------------------------------
-    function sObj = getInstance
+    function sObj = getInstance(MAJ)
       persistent localObj;
-      if isempty(localObj) || ~isa(localObj, 'CJournal')
-        localObj =CJournal();
+      if ~exist('MAJ','var')
+        MAJ =false;
+      elseif MAJ
+        localObj.delete();
+        localObj =[];
+      end
+      try
+        if isempty(localObj) | ~isvalid(localObj) | ~isa(localObj, 'CJournal')
+          localObj =CJournal();
+        end
+      catch sss;
+        if isempty(localObj) | isempty(localObj.fig) | ~isa(localObj, 'CJournal')
+          localObj =CJournal();
+        end
       end
       sObj =localObj;
+    end
+
+    %-------------------------------------------------------------------------
+    % "On tue" l'instance active si elle existe, puis on en crée une nouvelle.
+    % Ceci nous empêche d'avoir à faire un "clear classes" avant de recréer
+    % une instance d'une classe sealed.
+    %-------------------------------------------------------------------------
+    function sObj = resetInstance
+      sObj =CJournal.getInstance(true);
     end
 
   end  % methods (Static)
@@ -58,15 +79,22 @@ classdef (Sealed) CJournal < CJournalGUI
     function delete(tO)
       if ~isempty(tO.fig)
         delete(tO.fig);
+        tO.fig =[];
       end
     end
 
     function initLesmots(tO)
-      OA =CAnalyse.getInstance();
-      tO.lesmots ={['Analyse, version ' OA.Fic.vermot]};
-      tO.lesmots{end+1} =' ';
-      tO.lesmots{end+1} =['Début de la journalisation: ' datestr(now)];
-      tO.lesmots{end+1} ='----------------------------------------------------------------------------';
+      try
+        OA =CAnalyse.getInstance();
+        laver =OA.Fic.vermot;
+        tO.lesmots ={['Analyse, version ' laver]};
+        tO.lesmots{end+1} =' ';
+        tO.lesmots{end+1} =['Début de la journalisation: ' datestr(now)];
+        tO.lesmots{end+1} ='----------------------------------------------------------------------------';
+      catch sss;
+        disp(sss.message);
+        disp(sss.stack(end))
+      end
     end
 
   end

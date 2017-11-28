@@ -14,15 +14,15 @@ function fig = GUIBatchEditExec(Ppa)
     delete(findobj('tag', 'IpBatch'));
     pause(0.25);
     fig  =figure('Name','TRAITEMENT EN LOT','tag','IpBatch','Resize','on',...
-                 'Position', lapos,'CloseRequestFcn',@terminus,'MenuBar','none',...
+                 'Position', lapos,'CloseRequestFcn',{@quienllama,'terminus'},'MenuBar','none',...
                  'defaultuicontrolunits','Normalized',...
                  'DefaultUIControlBackgroundColor',GRIS,...
                  'DefaultUIPanelBackgroundColor',GRIS,'DefaultUIPanelTitlePosition','centertop',...
                  'defaultUIControlFontSize',10);
     setappdata(fig,'Ppa',Ppa);
     lemnu =uimenu('parent',fig, 'Label','&Fichier','enable','on');
-    uimenu('parent',lemnu, 'Label','&Ouvrir fichier batch','callback',@ouvrirParamBatch);
-    uimenu('parent',lemnu, 'Label','&Sauvegarder fichier batch','callback',@sauveParamBatch);
+    uimenu('parent',lemnu, 'Label','&Ouvrir fichier batch','callback',{@quienllama,'ouvrirParamBatch'});
+    uimenu('parent',lemnu, 'Label','&Sauvegarder fichier batch','callback',{@quienllama,'sauveParamBatch'});
   % position des uipanel
     A.posx=0.01;Lpan=1-2*A.posx;A.large=Lpan;dy=0.005;A.posy=0.06;hpan3=0.315;hpan2=0.255;hpan1=0.35;A.haut=hpan3;
     panAction =A.pos;
@@ -49,21 +49,21 @@ function fig = GUIBatchEditExec(Ppa)
     lastr ='****Vide****';
     A.haut=A.posy-0.06;A.posy=A.posy-A.haut;
     uicontrol('parent',pan,'tag','choixfichier','BackgroundColor',BLANC,'Style','listbox',...
-              'fontsize',9,'Position',A.pos,'String',lastr,'Value',1);
+              'fontsize',9,'Position',A.pos,'String',lastr,'value',1);
   % IMITATION D'UN BUTTONGROUP
   % **************************
     A.posx=margex;A.large=lcol2;A.haut=0.5;A.posy=memy-A.haut;memA=A.pos;
     uibg =uipanel('parent',pan,'tag','BGfichIN','backgroundColor',GRIS,'position',A.pos, ...
                   'titleposition','rightbottom','title',[num2str(Ppa.Nfich) ' fichiers à traiter']);
     A.posx=0.05;A.large=1-2*A.posx;A.haut=1/7;A.posy=1-2*A.haut;
-    uicontrol('parent',uibg,'style','radiobutton','position',A.pos,'tag','fichiermanuel','Value',0,...
-              'string','Sélectionner les fichiers manuellement','callback',@dossierFichierEntree);
+    uicontrol('parent',uibg,'style','radiobutton','position',A.pos,'tag','fichiermanuel','value',0,...
+              'string','Sélectionner les fichiers manuellement','callback',{@quienllama,'dossierFichierEntree'});
     A.posy=A.posy-2*A.haut;
-    uicontrol('parent',uibg,'style','radiobutton','position',A.pos,'tag','undosstousfich','Value',0,...
-              'string','Un dossier contenant tous les fichiers','callback',@dossierFichierEntree);
+    uicontrol('parent',uibg,'style','radiobutton','position',A.pos,'tag','undosstousfich','value',0,...
+              'string','Un dossier contenant tous les fichiers','callback',{@quienllama,'dossierFichierEntree'});
     A.posy=A.posy-2*A.haut;
-    uicontrol('parent',uibg,'style','radiobutton','position',A.pos,'tag','dossousdoss','Value',0,...
-              'string','Contenu d''un dossier+sous-dossiers','callback',@dossierFichierEntree);
+    uicontrol('parent',uibg,'style','radiobutton','position',A.pos,'tag','dossousdoss','value',0,...
+              'string','Contenu d''un dossier+sous-dossiers','callback',{@quienllama,'dossierFichierEntree'});
     %----------------------------
     %    PANEL FICHIER SORTIE
     %----------------------------
@@ -75,26 +75,33 @@ function fig = GUIBatchEditExec(Ppa)
     try
       % 'selectionchangefcn' pour Matlab
       uibg =uibuttongroup('parent',pan,'tag','BGfichOUT','backgroundColor',GRIS,...
-                          'selectionchangefcn',@dossierFichierSortie,'position',A.pos);
+                          'selectionchangefcn',{@quienllama,'dossierFichierSortie'},'position',A.pos);
     catch sss;
       % 'selectionchangedfcn' pour Octave
       uibg =uibuttongroup('parent',pan,'tag','BGfichOUT','backgroundColor',GRIS,...
-                          'selectionchangedfcn',@dossierFichierSortie,'position',A.pos);
+                          'selectionchangedfcn',{@quienllama,'dossierFichierSortie'},'position',A.pos);
     end
     A.large=1-1.25*A.posx;A.haut=1/9;A.posy=1-2*A.haut;membg=uibg;
-    ico =imread(which('ptiteflechdrte.bmp'),'BMP');FO=9;
+    FO=9;
     uicontrol('parent',uibg,'style','radiobutton','position',A.pos,'fontsize',FO,...
-              'string','Ré-écrire sur le fichier d''entrée','Value',0,'tag','ecrase');
+              'string','Ré-écrire sur le fichier d''entrée','value',0,'tag','ecrase');
     A.posy=A.posy-2*A.haut;
     % Valeur par défaut
-    uicontrol('parent',uibg,'style','radiobutton','position',A.pos,'Value',1,'fontsize',FO,...
-              'string','Même dossier, changer le nom de fichier','cdata',ico,'tag','changfich');
+    try
+      % Octave ne supporte pas encore la propriété "cdata"
+      ico =imread('ptiteflechdrte.bmp','BMP');
+      uicontrol('parent',uibg,'style','radiobutton','position',A.pos,'value',1,'fontsize',FO,...
+                'string','Même dossier, changer le nom de fichier','cdata',ico,'tag','changfich');
+    catch sss;
+      uicontrol('parent',uibg,'style','radiobutton','position',A.pos,'value',1,'fontsize',FO,...
+                'string','Même dossier, changer le nom de fichier','tag','changfich');
+    end
     A.posy=A.posy-2*A.haut;
     uicontrol('parent',uibg,'style','radiobutton','position',A.pos,'fontsize',FO,...
-              'string','Nouveau dossier, même nom de fichier','Value',0,'tag','changdoss');
+              'string','Nouveau dossier, même nom de fichier','value',0,'tag','changdoss');
     A.posy=A.posy-2*A.haut;
     uicontrol('parent',uibg,'style','radiobutton','position',A.pos,'fontsize',FO,...
-              'string','Nouveau dossier et changer nom de fichier','Value',0,'tag','changtout');
+              'string','Nouveau dossier et changer nom de fichier','value',0,'tag','changtout');
   % TEXT/EDIT DOSSIER SAUVEGARDE
     A.posx=lcol1+2*margex;A.large=lcol2+lcol3+lcol4+margex;A.haut=hbout;A.posy=1-1.5*A.haut;memx=A.posx;
     uicontrol('parent',pan,'style','text','position',A.pos,'string','Dossier pour la sauvegarde des résultats');
@@ -104,7 +111,7 @@ function fig = GUIBatchEditExec(Ppa)
   % BOUTTON ... CHOIX DU DOSSIER
     A.posx=A.posx+A.large;A.large=lcol5;
     uicontrol('parent',pan,'position',A.pos,'string','...','tag','boutondossierfinal',...
-              'tooltipstring','Faire la sélection du dossier de sortie','callback',@choixDossierSortie);
+              'tooltipstring','Faire la sélection du dossier de sortie','callback',{@quienllama,'choixDossierSortie'});
   % TEXT AJOUTER POUR LE (pré/suf)FIXE DU NOUVEAU NOM DE FICHIER
     A.posx=memx;A.large=lcol2;A.posy=memy-A.haut+(memy2-memy)/2;
     uicontrol('parent',pan,'style','text','position',A.pos,'string','Ajouter: ','horizontalalignment','right');
@@ -112,19 +119,32 @@ function fig = GUIBatchEditExec(Ppa)
     A.posx=A.posx+A.large;A.large=lcol3;A.posy=A.posy+A.haut;
     uicontrol('parent',pan,'style','text','position',A.pos,'string','Modification au nom de fichier','horizontalalignment','center');
     A.posy=A.posy-A.haut;
-    uicontrol('parent',pan,'Tag','editfichierpresuf','BackgroundColor',BLANC,...
+    uicontrol('parent',pan,'tag','editfichierpresuf','BackgroundColor',BLANC,...
               'Style','edit','Position',A.pos,'string','_batch');
   % BUTTONGROUP (PRÉ/SUF)FIXE
     A.posx=A.posx+A.large+margex;A.large=lcol4;A.posy=memy;A.haut=memy2-A.posy-hbout;
-    uibg =uibuttongroup('parent',pan,'tag','BGnomfichOUT','backgroundColor',GRIS,...
-                        'selectionchangefcn',@changePosteRadio,'position',A.pos);
+    try
+      % 'selectionchangefcn' pour Matlab
+      uibg =uibuttongroup('parent',pan,'tag','BGnomfichOUT','backgroundColor',GRIS,...
+                          'selectionchangefcn',{@quienllama,'changePosteRadio'},'position',A.pos);
+    catch sss;
+      % 'selectionchangedfcn' pour Octave
+      uibg =uibuttongroup('parent',pan,'tag','BGnomfichOUT','backgroundColor',GRIS,...
+                          'selectionchangedfcn',{@quienllama,'changePosteRadio'},'position',A.pos);
+    end
     A.posx=margex;A.large=1-2*A.posx;A.haut=1/5;A.posy=1-2*A.haut;
-    ico =imread(which('ptiteflechdrte.bmp'),'BMP');
     uicontrol('parent',uibg,'style','radiobutton','position',A.pos,...
-              'string','Comme préfixe','Value',0,'tag','prefix');
+              'string','Comme préfixe','value',0,'tag','prefix');
     A.posy=A.posy-2*A.haut;
-    uicontrol('parent',uibg,'style','radiobutton','position',A.pos,'Value',1,...
-              'string','Comme suffixe','cdata',ico,'tag','suffix');
+    try
+      % Octave ne supporte pas encore la propriété "cdata"
+      ico =imread('ptiteflechdrte.bmp','BMP');
+      uicontrol('parent',uibg,'style','radiobutton','position',A.pos,'value',1,...
+                'string','Comme suffixe','cdata',ico,'tag','suffix');
+    catch sss;
+      uicontrol('parent',uibg,'style','radiobutton','position',A.pos,'value',1,...
+                'string','Comme suffixe','tag','suffix');
+    end
   %---------------------
   %    PANEL ACTION
   %---------------------
@@ -139,24 +159,30 @@ function fig = GUIBatchEditExec(Ppa)
               'Position',A.pos,'String',Ppa.listChoixActions,'max',lemax,'value',1);
   % BOUTON FLÈCHE: AJOUT D'UNE ACTION À FAIRE
     A.posx=A.posx+A.large+0.5*margex;A.large=lcol2;A.haut=hy;A.posy=lapos(2)+lapos(4)/2;
-    ico =imread(which('longflechdrte.bmp'),'BMP');
-    uicontrol('parent',pan,'Callback',@ajouterAction,'Position',A.pos,'cdata',ico,...
-  	          'tooltipstring','Ajouter l''action sélectionnée');
-  % LISTBOX DES ACTIONS SÉLECTIONNÉES
+    try
+      % Octave ne supporte pas encore la propriété "cdata"
+      ico =imread(which('longflechdrte.bmp'),'BMP');
+      uicontrol('parent',pan,'Callback',{@quienllama,'ajouterAction'},'Position',A.pos,'cdata',ico,...
+  	            'tooltipstring','Ajouter l''action sélectionnée');
+    catch sss;
+      uicontrol('parent',pan,'Callback',{@quienllama,'ajouterAction'},'Position',A.pos,'string','==>',...
+  	            'tooltipstring','Ajouter l''action sélectionnée');
+    end
+    % LISTBOX DES ACTIONS SÉLECTIONNÉES
   	A.posx=A.posx+A.large+0.5*margex;A.large=lcol3;A.posy=lapos(2);A.haut=lapos(4);
     uicontrol('parent',pan,'tag','batchafaire','BackgroundColor',BLANC,'Style','listbox',...
-              'Position',A.pos,'String','','max',1,'Value',1);
+              'Position',A.pos,'String','','max',1,'value',1);
     A.posx=A.posx+A.large+margex;A.large=lcol4;A.haut=hy;A.posy=debuty-((debuty-finy-5*A.haut)/2)-A.haut;
-    uicontrol('parent',pan,'Callback',@effacerAction,'Position',A.pos,'String','Supprimer');
+    uicontrol('parent',pan,'Callback',{@quienllama,'effacerAction'},'Position',A.pos,'String','Supprimer');
     A.posy =A.posy-A.haut;
-    uicontrol('parent',pan,'Callback',@monterAction,'Position',A.pos,'String','Monter');
+    uicontrol('parent',pan,'Callback',{@quienllama,'monterAction'},'Position',A.pos,'String','Monter');
     A.posy =A.posy-A.haut;
-    uicontrol('parent',pan,'Callback',@descendreAction,'Position',A.pos,'String','Descendre');
+    uicontrol('parent',pan,'Callback',{@quienllama,'descendreAction'},'Position',A.pos,'String','Descendre');
     A.posy =A.posy-2*A.haut;
-    uicontrol('parent',pan,'Callback',@modifierAction,'Position',A.pos,'String','Configurer');
+    uicontrol('parent',pan,'Callback',{@quienllama,'modifierAction'},'Position',A.pos,'String','Configurer');
   % ********AU TWAFFAILLE, foyons, fé qui kia encowe pis mes dents... :-B
     A.posx=(1-A.large)/2; A.haut=bouty/3; A.posy=bouty/4;
-    uicontrol('parent',fig,'Callback',@auTravail,'Position',A.pos,'String','Au travail');
+    uicontrol('parent',fig,'Callback',{@quienllama,'auTravail'},'Position',A.pos,'String','Au travail');
     % on fait le ménage des objets inutiles
     delete(A);
     % on rend la figure modal
@@ -166,105 +192,36 @@ function fig = GUIBatchEditExec(Ppa)
 end
 
 %
-% on call la method "Ppa.terminus"
+% on call la method "Ppa.(autre)"
 %
-function terminus(varargin)
+function quienllama(src,evt, autre)
   Ppa =getappdata(gcf,'Ppa');
-  Ppa.terminus();
-end
-
-%
-% on call la method "Ppa.ouvrirParamBatch"
-%
-function ouvrirParamBatch(varargin)
-  Ppa =getappdata(gcf,'Ppa');
-  Ppa.ouvrirParamBatch();
-end
-
-%
-% on call la method "Ppa.sauveParamBatch"
-%
-function sauveParamBatch(varargin)
-  Ppa =getappdata(gcf,'Ppa');
-  Ppa.sauveParamBatch();
-end
-
-%
-% on call la method "Ppa.dossierFichierEntree"
-%
-function dossierFichierEntree(varargin)
-  Ppa =getappdata(gcf,'Ppa');
-  Ppa.dossierFichierEntree();
-end
-
-%
-% on call la method "Ppa.dossierFichierSortie"
-%
-function dossierFichierSortie(varargin)
-  Ppa =getappdata(gcf,'Ppa');
-  Ppa.dossierFichierSortie();
-end
-
-%
-% on call la method "Ppa.choixDossierSortie"
-%
-function choixDossierSortie(varargin)
-  Ppa =getappdata(gcf,'Ppa');
-  Ppa.choixDossierSortie();
-end
-
-%
-% on call la method "Ppa.changePosteRadio"
-%
-function changePosteRadio(varargin)
-  Ppa =getappdata(gcf,'Ppa');
-  Ppa.changePosteRadio();
-end
-
-%
-% on call la method "Ppa.ajouterAction"
-%
-function ajouterAction(varargin)
-  Ppa =getappdata(gcf,'Ppa');
-  Ppa.ajouterAction();
-end
-
-%
-% on call la method "Ppa.effacerAction"
-%
-function effacerAction(varargin)
-  Ppa =getappdata(gcf,'Ppa');
-  Ppa.effacerAction();
-end
-
-%
-% on call la method "Ppa.monterAction"
-%
-function monterAction(varargin)
-  Ppa =getappdata(gcf,'Ppa');
-  Ppa.monterAction();
-end
-
-%
-% on call la method "Ppa.descendreAction"
-%
-function descendreAction(varargin)
-  Ppa =getappdata(gcf,'Ppa');
-  Ppa.descendreAction();
-end
-
-%
-% on call la method "Ppa.modifierAction"
-%
-function modifierAction(varargin)
-  Ppa =getappdata(gcf,'Ppa');
-  Ppa.modifierAction();
-end
-
-%
-% on call la method "Ppa.auTravail"
-%
-function auTravail(varargin)
-  Ppa =getappdata(gcf,'Ppa');
-  Ppa.auTravail();
+  switch autre
+  case 'terminus'
+    Ppa.terminus();
+  case 'ouvrirParamBatch'
+    Ppa.ouvrirParamBatch(src);
+  case 'sauveParamBatch'
+    Ppa.sauveParamBatch(src);
+  case 'dossierFichierEntree'
+    Ppa.dossierFichierEntree(src);
+  case 'dossierFichierSortie'
+    Ppa.dossierFichierSortie(src);
+  case 'choixDossierSortie'
+    Ppa.choixDossierSortie(src);
+  case 'changePosteRadio'
+    Ppa.changePosteRadio(src);
+  case 'ajouterAction'
+    Ppa.ajouterAction(src);
+  case 'effacerAction'
+    Ppa.effacerAction(src);
+  case 'monterAction'
+    Ppa.monterAction(src);
+  case 'descendreAction'
+    Ppa.descendreAction(src);
+  case 'modifierAction'
+    Ppa.modifierAction(src);
+  case 'auTravail'
+    Ppa.auTravail(src);
+  end
 end

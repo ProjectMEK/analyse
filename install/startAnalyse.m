@@ -1,3 +1,5 @@
+%% 
+%% 
 %
 % Cette fonction va définir les path utiles pour travailler avec Analyse puis va
 % démarrer Analyse. Mais avant tout, il faut avoir downloadé les dossiers
@@ -27,6 +29,7 @@
 % Ceci aura pour effet de recréer les fichiers contenant la structure des strings pour
 % les différentes langues dans l'environnement que vous utilisez.
 %
+%% 
 function startAnalyse(LANGUE, varargin)
 
   % Comme on va travailler avec les paths, il faut savoir dans quel OS on travaille
