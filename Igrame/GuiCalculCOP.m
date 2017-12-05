@@ -2,6 +2,7 @@
 % ***INTERFACE (GUI) POUR LE CALCUL DU CENTRE DE PRESSION***
 %
 function GuiCalculCOP(Ppa,Listadname)
+try
   BLANC =[1 1 1];
   nad =length(Listadname);
   largeur =525; hauteur =575;
@@ -11,8 +12,8 @@ function GuiCalculCOP(Ppa,Listadname)
           'DefaultUIPanelBackgroundColor',Ppa.couleurRef, 'DefaultUIControlUnits','pixels', ...
           'DefaultUIPanelUnits','pixels', 'DefaultUIControlFontUnits','pixels', ...
           'DefaultUIControlFontSize',12, 'DefaultUIPanelTitlePosition','rightbottom', ...
-          'DefaultUIControlFontName','MS Sans Serif', 'DefaultUITableFontName','FixedWidth');
-  setappdata(fig,'Ppa',Ppa);
+          'DefaultUIControlFontName','MS Sans Serif');
+  UITABLEFONTNAME ='FixedWidth';
   Ppa.fig =fig;
   hbout =25; bordure =2*hbout; dx =15; dy =20; dy2 =dy-5; lbout =100;
   %------------------
@@ -53,19 +54,19 @@ function GuiCalculCOP(Ppa,Listadname)
     posx =dx; large =lpan-2*posx; haut =hbout; posy =posy-haut-dy;
     uicontrol('Parent',pan, 'FontWeight','bold', 'Position',[posx posy large haut],...
               'HorizontalAlignment','center', 'String','Choix des canaux', 'Style','text');
-    set(pan, 'DefaultUIControlFontSize', 11);
+    FS =11;
     %---
     % Fx
     posx =1; largeText =90; largeBox =lpan-2*largeText-posx; posy =posy-haut-dy2;
-    uicontrol('Parent',pan, 'Style','text', 'position',[posx posy+1 largeText haut-2], ...
+    uicontrol('Parent',pan,'Style','text','fontsize',FS,'position',[posx posy+1 largeText haut-2], ...
               'FontWeight','bold', 'String','Fx:  ', 'HorizontalAlignment','right');
     cualCanal =(Ppa.getCanFx <= nad)*Ppa.getCanFx+1;
     uicontrol('Parent',pan, 'Style','popupmenu', 'Tag','CanauxFx', 'Position',[posx+largeText posy largeBox haut], ...
-              'FontSize',10, 'String',lesCanaux, 'Value',cualCanal, 'callback',{@quienllama,'changeCanFx'});
+              'fontsize',10, 'String',lesCanaux, 'Value',cualCanal, 'callback',{@quienllama,'changeCanFx'});
     %---
     % Fy
     posy =posy-haut-dy2;
-    uicontrol('Parent',pan, 'Style','text', 'position',[posx posy+1 largeText haut-2], ...
+    uicontrol('Parent',pan,'Style','text','fontsize',FS,'position',[posx posy+1 largeText haut-2], ...
               'FontWeight','bold', 'String','Fy:  ', 'HorizontalAlignment','right');
     cualCanal =(Ppa.getCanFy <= nad)*Ppa.getCanFy+1;
     uicontrol('Parent',pan, 'Style','popupmenu', 'Tag','CanauxFy', 'Position',[posx+largeText posy largeBox haut], ...
@@ -73,7 +74,7 @@ function GuiCalculCOP(Ppa,Listadname)
     %---
     % Fz
     posy =posy-haut-dy2;
-    uicontrol('Parent',pan, 'Style','text', 'position',[posx posy+1 largeText haut-2], ...
+    uicontrol('Parent',pan,'Style','text','fontsize',FS,'position',[posx posy+1 largeText haut-2], ...
               'FontWeight','bold', 'String','Fz:  ', 'HorizontalAlignment','right');
     cualCanal =(Ppa.getCanFz <= nad)*Ppa.getCanFz+1;
     uicontrol('Parent',pan, 'Style','popupmenu', 'Tag','CanauxFz', 'Position',[posx+largeText posy largeBox haut], ...
@@ -81,7 +82,7 @@ function GuiCalculCOP(Ppa,Listadname)
     %---
     % Mx
     posy =posy-haut-dy2;
-    uicontrol('Parent',pan, 'Style','text', 'position',[posx posy+1 largeText haut-2], ...
+    uicontrol('Parent',pan,'Style','text','fontsize',FS,'position',[posx posy+1 largeText haut-2], ...
               'FontWeight','bold', 'String','Mx:  ', 'HorizontalAlignment','right');
     cualCanal =(Ppa.getCanMx <= nad)*Ppa.getCanMx+1;
     uicontrol('Parent',pan, 'Style','popupmenu', 'Tag','CanauxMx', 'Position',[posx+largeText posy largeBox haut], ...
@@ -89,7 +90,7 @@ function GuiCalculCOP(Ppa,Listadname)
     %---
     % My
     posy =posy-haut-dy2;
-    uicontrol('Parent',pan, 'Style','text', 'position',[posx posy+1 largeText haut-2], ...
+    uicontrol('Parent',pan,'Style','text','fontsize',FS,'position',[posx posy+1 largeText haut-2], ...
               'FontWeight','bold', 'String','My:  ', 'HorizontalAlignment','right');
     cualCanal =(Ppa.getCanMy <= nad)*Ppa.getCanMy+1;
     uicontrol('Parent',pan, 'Style','popupmenu', 'Tag','CanauxMy', 'Position',[posx+largeText posy largeBox haut], ...
@@ -97,7 +98,7 @@ function GuiCalculCOP(Ppa,Listadname)
     %---
     % Mz
     posy =posy-haut-dy2;
-    uicontrol('Parent',pan, 'Style','text', 'position',[posx posy+1 largeText haut-2], ...
+    uicontrol('Parent',pan,'Style','text','fontsize',FS,'position',[posx posy+1 largeText haut-2], ...
               'FontWeight','bold', 'String','Mz:  ', 'HorizontalAlignment','right');
     cualCanal =(Ppa.getCanMz <= nad)*Ppa.getCanMz+1;
     uicontrol('Parent',pan, 'Style','popupmenu', 'Tag','CanauxMz', 'Position',[posx+largeText posy largeBox haut], ...
@@ -105,13 +106,13 @@ function GuiCalculCOP(Ppa,Listadname)
     %-----------
     % Calcul COG
     posy =posy-haut-dy2;
-    uicontrol('Parent',pan, 'Style','radiobutton', 'position',[posx+largeText posy largeBox haut], ...
+    uicontrol('Parent',pan,'Style','radiobutton','fontsize',FS,'position',[posx+largeText posy largeBox haut], ...
               'callback',{@quienllama,'changeCOPseul'}, 'String','Calculer seulement le COP', 'value',Ppa.getCOPseul, ...
               'tooltipstring','Si non coché, on calcul le COP et le COG', 'tag','COPseul');
     % EXPORTER PARAMÈTRES
     large =2*lbout; posx =round((lpan-large)/2); haut =hbout; posy =posy-haut-dy;
     lesInfos ='Vous pouvez exporter les paramètres afin de les utiliser dans une prochaîne session de travail';
-    uicontrol('Parent',pan, 'Position',[posx posy large haut], 'callback',{@quienllama,'exportParam'}, ...
+    uicontrol('Parent',pan,'fontsize',FS,'Position',[posx posy large haut],'callback',{@quienllama,'exportParam'}, ...
               'ToolTipString',lesInfos, 'String','Exporter param.');
 
   %------------------
@@ -141,9 +142,9 @@ function GuiCalculCOP(Ppa,Listadname)
       end
     end
     hautTable =150; haut =hautTable; posy =posy-haut; posx =25; large =lpan-2*posx; largeCell =round(large/6.5);
-    uitable('parent',pan, 'position',[posx, posy, large, haut], 'tag','LaTableMC', 'FontSize',10, ...
+    uitable('parent',pan,'position',[posx, posy, large, haut],'tag','LaTableMC','FontSize',10,'fontname',UITABLEFONTNAME,...
             'UserData',leFormat, 'CellEditCallback',@formatDataUITable, 'ColumnEditable',[true], ...
-          'ColumnName',{'1';'2';'3';'4';'5';'6'}, 'ColumnWidth',{largeCell}, 'Data',letext);
+            'ColumnName',{'1';'2';'3';'4';'5';'6'}, 'ColumnWidth',{largeCell}, 'Data',letext);
     % Pour la AMTI seulement
     if ~Ppa.getNewplt()
       %-----------------------------
@@ -165,7 +166,7 @@ function GuiCalculCOP(Ppa,Listadname)
         end
       end
       haut =hautTable; posy =posy-haut; largeCell =round(large/2.4);
-      uitable('parent',pan, 'position',[posx, posy, large, haut], 'tag','LaTableGain', ...
+      uitable('parent',pan,'position',[posx, posy, large, haut],'tag','LaTableGain','fontname',UITABLEFONTNAME, ...
               'FontSize',10, 'RowName',{'Fx';'Fy';'Fz';'Mx';'My';'Mz'}, 'ColumnName',{'Gain';'Vex'}, ...
               'UserData',leFormat, 'ColumnWidth',{largeCell}, 'CellEditCallback',@formatDataUITable, ...
               'Data',letext, 'ColumnEditable',[true], 'BackGroundColor',[1 1 0.1]);
@@ -197,7 +198,7 @@ function GuiCalculCOP(Ppa,Listadname)
               'HorizontalAlignment','center', 'String','Plateforme de force', 'Style','text');
     haut =posy-hbout; posy =posy-haut;
     uicontrol('Parent',pan, 'Position',[posx posy large haut], 'Max',15, 'Min',1, ...
-              'HorizontalAlignment','left', 'String',leTexte, 'Style','edit', 'FontName','FixedWidth');
+              'HorizontalAlignment','left', 'String',leTexte, 'Style','edit', 'FontName',UITABLEFONTNAME);
   %----------------
   % Panel du Status
   lpan =largeur; hpan =hbout; posx =0; posy =0;
@@ -213,8 +214,17 @@ function GuiCalculCOP(Ppa,Listadname)
   % AU TRAVAIL
   large =lbout; posx =round((lpan-large)/2); posy =2*haut;
   uicontrol('Parent',fig,'tag','boutonTravail','Position',[posx posy large haut],...
-            'callback',@Ppa.auTravail, 'String','Au travail');
+            'callback',{@quienllama,'auTravail'}, 'String','Au travail');
+  setappdata(fig,'Ppa',Ppa);
   set(fig,'WindowStyle','modal');
+
+catch sss;
+disp(sss.message)
+for U=1:length(sss.stack)
+  disp(sss.stack(U))
+end
+end
+
 end
 
 %

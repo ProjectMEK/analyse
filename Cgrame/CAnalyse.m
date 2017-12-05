@@ -105,6 +105,7 @@ classdef (Sealed) CAnalyse < handle
       tO.Vg =[];
       if ~isempty(tO.OFig)
         delete(tO.OFig);
+        tO.OFig =[];
       end
     end
 
