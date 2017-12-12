@@ -67,7 +67,7 @@ classdef CCalculCOPParam < handle
     function importation(tO, p)
       if isa(p,'struct')
         obj =CCalculCOPParam();
-        champ =fields(p);
+        champ =fieldnames(p);
         for u =1:length(champ)
           if ~isempty(obj.findprop(champ{u}))
             tO.(champ{u}) =p.(champ{u});

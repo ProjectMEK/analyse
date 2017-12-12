@@ -45,7 +45,7 @@ classdef CParamStat4COP < handle
     function importation(tO, p)
       if isa(p,'struct')
         obj =CParamStat4COP();
-        champ =fields(p);
+        champ =fieldnames(p);
         delete(obj);
         for u =1:length(champ)
           if ~isempty(tO.findprop(champ{u}))

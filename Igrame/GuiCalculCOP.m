@@ -2,228 +2,240 @@
 % ***INTERFACE (GUI) POUR LE CALCUL DU CENTRE DE PRESSION***
 %
 function GuiCalculCOP(Ppa,Listadname)
-try
-  BLANC =[1 1 1];
-  nad =length(Listadname);
-  largeur =525; hauteur =575;
-  posfig =positionfen('G','C',largeur,hauteur,gcf);
-  fig =figure('Name', 'Calcul  COP-COG', 'Position',posfig, 'resize', 'off', ...				
-          'CloseRequestFcn',{@quienllama,'terminus'}, 'DefaultUIControlBackgroundColor',Ppa.couleurRef, ...
-          'DefaultUIPanelBackgroundColor',Ppa.couleurRef, 'DefaultUIControlUnits','pixels', ...
-          'DefaultUIPanelUnits','pixels', 'DefaultUIControlFontUnits','pixels', ...
-          'DefaultUIControlFontSize',12, 'DefaultUIPanelTitlePosition','rightbottom', ...
-          'DefaultUIControlFontName','MS Sans Serif');
-  UITABLEFONTNAME ='FixedWidth';
-  Ppa.fig =fig;
-  hbout =25; bordure =2*hbout; dx =15; dy =20; dy2 =dy-5; lbout =100;
-  %------------------
-  % Panel des onglets
-  lpan =largeur; hpan =hbout; posx =0; posy =hauteur-hpan; ppan =[posx posy lpan hpan];
-  pan =uipanel('Parent',fig, 'Tag','PanelOnglet', 'title','', 'Position',ppan, 'BackgroundColor',Ppa.couleurRef);
-      %--------------
-      % onglet Canaux
-      letit ='Canaux'; posx =0; posy =0; large =length(letit')*6+30; haut =hpan-2;
-      o1 =uicontrol('Parent',pan, 'Tag','BoutonOnglet', 'Position',[posx posy large haut], 'String',letit, ...
-                    'callback',{@quienllama,'showPanel'});
-      %-------------------
-      % onglet Calibration
-      letit ='Calibration'; posx =posx+large-1; large =length(letit')*6+30;
-      o2 =uicontrol('Parent',pan, 'Tag','BoutonOnglet', 'Position',[posx posy large haut], 'String',letit, ...
-                    'callback',{@quienllama,'showPanel'}, 'BackgroundColor',Ppa.couleurPan);
-      %-------------
-      % onglet Autre
-      letit ='Un poco mas lejos'; posx =posx+large-1; large =length(letit')*6+30;
-      o3 =uicontrol('Parent',pan, 'Tag','BoutonOnglet', 'Position',[posx posy large haut], 'String',letit, ...
-                    'TooltipString','Un peu plus loin...', 'callback',{@quienllama,'showPanel'});
-  posx =2; lpan =largeur-2*posx+1; posy =2*bordure; hpan =hauteur-posy-ppan(4); posPan =[posx posy lpan hpan];
-  %-------------
-  % Panel Canaux
-  pan =uipanel('Parent',fig, 'Tag','PanelCanaux', 'title','Canaux', 'Position',posPan, ...
-               'BorderType','beveledin', 'Visible','off');
-    set(o1, 'Userdata',pan);
-    posy =hpan;
-    % IMPORTER PARAMÈTRES
-    large =2*lbout; posx =round((lpan-large)/2); haut =hbout; posy =posy-haut-2*dy;
-    lesInfos ='Vous pouvez importer les paramètres que vous avez déjà exporté auparavent';
-    uicontrol('Parent',pan, 'Position',[posx posy large haut], 'callback',{@quienllama,'importParam'}, ...
-              'ToolTipString',lesInfos, 'String','Importer param.');
-    %-----------------
-    % CHOIX DES CANAUX
-    lesCanaux ={'aucun...'};
-    lesCanaux(2:nad+1) =Listadname;
-    posx =dx; large =lpan-2*posx; haut =hbout; posy =posy-haut-dy;
-    uicontrol('Parent',pan, 'FontWeight','bold', 'Position',[posx posy large haut],...
-              'HorizontalAlignment','center', 'String','Choix des canaux', 'Style','text');
-    FS =11;
-    %---
-    % Fx
-    posx =1; largeText =90; largeBox =lpan-2*largeText-posx; posy =posy-haut-dy2;
-    uicontrol('Parent',pan,'Style','text','fontsize',FS,'position',[posx posy+1 largeText haut-2], ...
-              'FontWeight','bold', 'String','Fx:  ', 'HorizontalAlignment','right');
-    cualCanal =(Ppa.getCanFx <= nad)*Ppa.getCanFx+1;
-    uicontrol('Parent',pan, 'Style','popupmenu', 'Tag','CanauxFx', 'Position',[posx+largeText posy largeBox haut], ...
-              'fontsize',10, 'String',lesCanaux, 'Value',cualCanal, 'callback',{@quienllama,'changeCanFx'});
-    %---
-    % Fy
-    posy =posy-haut-dy2;
-    uicontrol('Parent',pan,'Style','text','fontsize',FS,'position',[posx posy+1 largeText haut-2], ...
-              'FontWeight','bold', 'String','Fy:  ', 'HorizontalAlignment','right');
-    cualCanal =(Ppa.getCanFy <= nad)*Ppa.getCanFy+1;
-    uicontrol('Parent',pan, 'Style','popupmenu', 'Tag','CanauxFy', 'Position',[posx+largeText posy largeBox haut], ...
-              'FontSize',10, 'String',lesCanaux, 'Value',cualCanal, 'callback',{@quienllama,'changeCanFy'});
-    %---
-    % Fz
-    posy =posy-haut-dy2;
-    uicontrol('Parent',pan,'Style','text','fontsize',FS,'position',[posx posy+1 largeText haut-2], ...
-              'FontWeight','bold', 'String','Fz:  ', 'HorizontalAlignment','right');
-    cualCanal =(Ppa.getCanFz <= nad)*Ppa.getCanFz+1;
-    uicontrol('Parent',pan, 'Style','popupmenu', 'Tag','CanauxFz', 'Position',[posx+largeText posy largeBox haut], ...
-              'FontSize',10, 'String',lesCanaux, 'Value',cualCanal, 'callback',{@quienllama,'changeCanFz'});
-    %---
-    % Mx
-    posy =posy-haut-dy2;
-    uicontrol('Parent',pan,'Style','text','fontsize',FS,'position',[posx posy+1 largeText haut-2], ...
-              'FontWeight','bold', 'String','Mx:  ', 'HorizontalAlignment','right');
-    cualCanal =(Ppa.getCanMx <= nad)*Ppa.getCanMx+1;
-    uicontrol('Parent',pan, 'Style','popupmenu', 'Tag','CanauxMx', 'Position',[posx+largeText posy largeBox haut], ...
-              'FontSize',10, 'String',lesCanaux, 'Value',cualCanal, 'callback',{@quienllama,'changeCanMx'});
-    %---
-    % My
-    posy =posy-haut-dy2;
-    uicontrol('Parent',pan,'Style','text','fontsize',FS,'position',[posx posy+1 largeText haut-2], ...
-              'FontWeight','bold', 'String','My:  ', 'HorizontalAlignment','right');
-    cualCanal =(Ppa.getCanMy <= nad)*Ppa.getCanMy+1;
-    uicontrol('Parent',pan, 'Style','popupmenu', 'Tag','CanauxMy', 'Position',[posx+largeText posy largeBox haut], ...
-              'FontSize',10, 'String',lesCanaux, 'Value',cualCanal, 'callback',{@quienllama,'changeCanMy'});
-    %---
-    % Mz
-    posy =posy-haut-dy2;
-    uicontrol('Parent',pan,'Style','text','fontsize',FS,'position',[posx posy+1 largeText haut-2], ...
-              'FontWeight','bold', 'String','Mz:  ', 'HorizontalAlignment','right');
-    cualCanal =(Ppa.getCanMz <= nad)*Ppa.getCanMz+1;
-    uicontrol('Parent',pan, 'Style','popupmenu', 'Tag','CanauxMz', 'Position',[posx+largeText posy largeBox haut], ...
-              'FontSize',10, 'String',lesCanaux, 'Value',cualCanal, 'callback',{@quienllama,'changeCanMz'});
-    %-----------
-    % Calcul COG
-    posy =posy-haut-dy2;
-    uicontrol('Parent',pan,'Style','radiobutton','fontsize',FS,'position',[posx+largeText posy largeBox haut], ...
-              'callback',{@quienllama,'changeCOPseul'}, 'String','Calculer seulement le COP', 'value',Ppa.getCOPseul, ...
-              'tooltipstring','Si non coché, on calcul le COP et le COG', 'tag','COPseul');
-    % EXPORTER PARAMÈTRES
-    large =2*lbout; posx =round((lpan-large)/2); haut =hbout; posy =posy-haut-dy;
-    lesInfos ='Vous pouvez exporter les paramètres afin de les utiliser dans une prochaîne session de travail';
-    uicontrol('Parent',pan,'fontsize',FS,'Position',[posx posy large haut],'callback',{@quienllama,'exportParam'}, ...
-              'ToolTipString',lesInfos, 'String','Exporter param.');
-
-  %------------------
-  % Panel Calibration
-  pan =uipanel('Parent',fig, 'Tag','PanelCalibration', 'title','Calibration', 'Position',posPan, ...
-               'TitlePosition','rightbottom', 'BorderType','beveledin');
-    Ppa.setCurPan(pan); set(o2, 'Userdata',pan);
-    %----------------------------
-    % MATRICE DE CALIBRATION AMTI
-    % OU: MATRICE DES FACTEURS DE CONVERSION
-    posx =dx; large =lpan-2*posx; haut =hbout; posy =hpan-haut-2*dy;
-    if Ppa.getNewplt()
-      % on a utilisé la plateforme Optima
-      LETITRE ='Matrice des facteurs de conversion (OPTIMA)';
-      matCal =Ppa.getOptimaFC();
-    else
-      % on a utilisé la  vieille plateforme
-      LETITRE ='Matrice de calibration (AMTI)';
-      matCal =Ppa.getAmtiMC();
-    end
-    uicontrol('Parent',pan, 'FontWeight','bold', 'Position',[posx posy large haut],...
-              'HorizontalAlignment','center', 'String',LETITRE, 'Style','text');
-    leFormat ={'%8.3f', '%8.3f', '%8.3f', '%8.3f', '%8.3f', '%8.3f'};
-    for U =1:size(matCal, 1)
-      for V =1:size(matCal, 2)
-        letext{U, V} =sprintf(leFormat{V}, matCal(U, V));
-      end
-    end
-    hautTable =150; haut =hautTable; posy =posy-haut; posx =25; large =lpan-2*posx; largeCell =round(large/6.5);
-    uitable('parent',pan,'position',[posx, posy, large, haut],'tag','LaTableMC','FontSize',10,'fontname',UITABLEFONTNAME,...
-            'UserData',leFormat, 'CellEditCallback',@formatDataUITable, 'ColumnEditable',[true], ...
-            'ColumnName',{'1';'2';'3';'4';'5';'6'}, 'ColumnWidth',{largeCell}, 'Data',letext);
-    % Pour la AMTI seulement
-    if ~Ppa.getNewplt()
-      %-----------------------------
-      % GAIN ET VOLTAGE D'EXCITATION
-      large =round(large/2); haut =hbout; posy =posy-bordure;
+  try
+    BLANC =[1 1 1];
+    nad =length(Listadname);
+    largeur =525; hauteur =575;
+    posfig =positionfen('G','C',largeur,hauteur,gcf);
+    fig =figure('Name', 'Calcul  COP-COG', 'Position',posfig, 'resize', 'off', ...				
+            'CloseRequestFcn',{@quienllama,'terminus'}, 'DefaultUIControlBackgroundColor',Ppa.couleurRef, ...
+            'DefaultUIPanelBackgroundColor',Ppa.couleurRef, 'DefaultUIControlUnits','pixels', ...
+            'DefaultUIPanelUnits','pixels', 'DefaultUIControlFontUnits','pixels', ...
+            'DefaultUIControlFontSize',12, 'DefaultUIPanelTitlePosition','rightbottom', ...
+            'DefaultUIControlFontName','MS Sans Serif');
+    UITABLEFONTNAME ='FixedWidth';
+    Ppa.fig =fig;
+    hbout =25; bordure =2*hbout; dx =15; dy =20; dy2 =dy-5; lbout =100;
+    %------------------
+    % Panel des onglets
+    lpan =largeur; hpan =hbout; posx =0; posy =hauteur-hpan; ppan =[posx posy lpan hpan];
+    pan =uipanel('Parent',fig, 'Tag','PanelOnglet', 'title','', 'Position',ppan, 'BackgroundColor',Ppa.couleurRef);
+        %--------------
+        % onglet Canaux
+        letit ='Canaux'; posx =0; posy =0; large =length(letit')*6+30; haut =hpan-2;
+        o1 =uicontrol('Parent',pan, 'Tag','BoutonOnglet', 'Position',[posx posy large haut], 'String',letit, ...
+                      'callback',{@quienllama,'showPanel'});
+        %-------------------
+        % onglet Calibration
+        letit ='Calibration'; posx =posx+large-1; large =length(letit')*6+30;
+        o2 =uicontrol('Parent',pan, 'Tag','BoutonOnglet', 'Position',[posx posy large haut], 'String',letit, ...
+                      'callback',{@quienllama,'showPanel'}, 'BackgroundColor',Ppa.couleurPan);
+        %-------------
+        % onglet Autre
+        letit ='Un poco mas lejos'; posx =posx+large-1; large =length(letit')*6+30;
+        o3 =uicontrol('Parent',pan, 'Tag','BoutonOnglet', 'Position',[posx posy large haut], 'String',letit, ...
+                      'TooltipString','Un peu plus loin...', 'callback',{@quienllama,'showPanel'});
+    posx =2; lpan =largeur-2*posx+1; posy =2*bordure; hpan =hauteur-posy-ppan(4); posPan =[posx posy lpan hpan];
+    %-------------
+    % Panel Canaux
+    pan =uipanel('Parent',fig, 'Tag','PanelCanaux', 'title','Canaux', 'Position',posPan, ...
+                 'BorderType','beveledin', 'Visible','off');
+      set(o1, 'Userdata',pan);
+      posy =hpan;
+      % IMPORTER PARAMÈTRES
+      large =2*lbout; posx =round((lpan-large)/2); haut =hbout; posy =posy-haut-2*dy;
+      lesInfos ='Vous pouvez importer les paramètres que vous avez déjà exporté auparavent';
+      uicontrol('Parent',pan, 'Position',[posx posy large haut], 'callback',{@quienllama,'importParam'}, ...
+                'ToolTipString',lesInfos, 'String','Importer param.');
+      %-----------------
+      % CHOIX DES CANAUX
+      lesCanaux ={'aucun...'};
+      lesCanaux(2:nad+1) =Listadname;
+      posx =dx; large =lpan-2*posx; haut =hbout; posy =posy-haut-dy;
       uicontrol('Parent',pan, 'FontWeight','bold', 'Position',[posx posy large haut],...
-                'HorizontalAlignment','center', 'String','Gain et Voltage d''excitation', 'Style','text');
-      losDatos =[Ppa.getGainFx() Ppa.getVFx(); ...
-                 Ppa.getGainFy() Ppa.getVFy(); ...
-                 Ppa.getGainFz() Ppa.getVFz(); ...
-                 Ppa.getGainMx() Ppa.getVMx(); ...
-                 Ppa.getGainMy() Ppa.getVMy(); ...
-                 Ppa.getGainMz() Ppa.getVMz()];
-      letext =[];
-      leFormat ={'%11.3f', '%9.3f'};
-      for U =1:size(losDatos, 1)
-        for V =1:size(losDatos, 2)
-          letext{U, V} =sprintf(leFormat{V}, losDatos(U, V));
+                'HorizontalAlignment','center', 'String','Choix des canaux', 'Style','text');
+      FS =11;
+      %---
+      % Fx
+      posx =1; largeText =90; largeBox =lpan-2*largeText-posx; posy =posy-haut-dy2;
+      uicontrol('Parent',pan,'Style','text','fontsize',FS,'position',[posx posy+1 largeText haut-2], ...
+                'FontWeight','bold', 'String','Fx:  ', 'HorizontalAlignment','right');
+      cualCanal =(Ppa.getCanFx <= nad)*Ppa.getCanFx+1;
+      uicontrol('Parent',pan, 'Style','popupmenu', 'Tag','CanauxFx', 'Position',[posx+largeText posy largeBox haut], ...
+                'fontsize',10, 'String',lesCanaux, 'Value',cualCanal, 'callback',{@quienllama,'changeCanFx'});
+      %---
+      % Fy
+      posy =posy-haut-dy2;
+      uicontrol('Parent',pan,'Style','text','fontsize',FS,'position',[posx posy+1 largeText haut-2], ...
+                'FontWeight','bold', 'String','Fy:  ', 'HorizontalAlignment','right');
+      cualCanal =(Ppa.getCanFy <= nad)*Ppa.getCanFy+1;
+      uicontrol('Parent',pan, 'Style','popupmenu', 'Tag','CanauxFy', 'Position',[posx+largeText posy largeBox haut], ...
+                'FontSize',10, 'String',lesCanaux, 'Value',cualCanal, 'callback',{@quienllama,'changeCanFy'});
+      %---
+      % Fz
+      posy =posy-haut-dy2;
+      uicontrol('Parent',pan,'Style','text','fontsize',FS,'position',[posx posy+1 largeText haut-2], ...
+                'FontWeight','bold', 'String','Fz:  ', 'HorizontalAlignment','right');
+      cualCanal =(Ppa.getCanFz <= nad)*Ppa.getCanFz+1;
+      uicontrol('Parent',pan, 'Style','popupmenu', 'Tag','CanauxFz', 'Position',[posx+largeText posy largeBox haut], ...
+                'FontSize',10, 'String',lesCanaux, 'Value',cualCanal, 'callback',{@quienllama,'changeCanFz'});
+      %---
+      % Mx
+      posy =posy-haut-dy2;
+      uicontrol('Parent',pan,'Style','text','fontsize',FS,'position',[posx posy+1 largeText haut-2], ...
+                'FontWeight','bold', 'String','Mx:  ', 'HorizontalAlignment','right');
+      cualCanal =(Ppa.getCanMx <= nad)*Ppa.getCanMx+1;
+      uicontrol('Parent',pan, 'Style','popupmenu', 'Tag','CanauxMx', 'Position',[posx+largeText posy largeBox haut], ...
+                'FontSize',10, 'String',lesCanaux, 'Value',cualCanal, 'callback',{@quienllama,'changeCanMx'});
+      %---
+      % My
+      posy =posy-haut-dy2;
+      uicontrol('Parent',pan,'Style','text','fontsize',FS,'position',[posx posy+1 largeText haut-2], ...
+                'FontWeight','bold', 'String','My:  ', 'HorizontalAlignment','right');
+      cualCanal =(Ppa.getCanMy <= nad)*Ppa.getCanMy+1;
+      uicontrol('Parent',pan, 'Style','popupmenu', 'Tag','CanauxMy', 'Position',[posx+largeText posy largeBox haut], ...
+                'FontSize',10, 'String',lesCanaux, 'Value',cualCanal, 'callback',{@quienllama,'changeCanMy'});
+      %---
+      % Mz
+      posy =posy-haut-dy2;
+      uicontrol('Parent',pan,'Style','text','fontsize',FS,'position',[posx posy+1 largeText haut-2], ...
+                'FontWeight','bold', 'String','Mz:  ', 'HorizontalAlignment','right');
+      cualCanal =(Ppa.getCanMz <= nad)*Ppa.getCanMz+1;
+      uicontrol('Parent',pan, 'Style','popupmenu', 'Tag','CanauxMz', 'Position',[posx+largeText posy largeBox haut], ...
+                'FontSize',10, 'String',lesCanaux, 'Value',cualCanal, 'callback',{@quienllama,'changeCanMz'});
+      %-----------
+      % Calcul COG
+      posy =posy-haut-dy2;
+      uicontrol('Parent',pan,'Style','radiobutton','fontsize',FS,'position',[posx+largeText posy largeBox haut], ...
+                'callback',{@quienllama,'changeCOPseul'}, 'String','Calculer seulement le COP', 'value',Ppa.getCOPseul, ...
+                'tooltipstring','Si non coché, on calcul le COP et le COG', 'tag','COPseul');
+      % EXPORTER PARAMÈTRES
+      large =2*lbout; posx =round((lpan-large)/2); haut =hbout; posy =posy-haut-dy;
+      lesInfos ='Vous pouvez exporter les paramètres afin de les utiliser dans une prochaîne session de travail';
+      uicontrol('Parent',pan,'fontsize',FS,'Position',[posx posy large haut],'callback',{@quienllama,'exportParam'}, ...
+                'ToolTipString',lesInfos, 'String','Exporter param.');
+
+    %------------------
+    % Panel Calibration
+    pan =uipanel('Parent',fig, 'Tag','PanelCalibration', 'title','Calibration', 'Position',posPan, ...
+                 'TitlePosition','rightbottom', 'BorderType','beveledin');
+      Ppa.setCurPan(pan); set(o2, 'Userdata',pan);
+      %----------------------------
+      % MATRICE DE CALIBRATION AMTI
+      % OU: MATRICE DES FACTEURS DE CONVERSION
+      posx =dx; large =lpan-2*posx; haut =hbout; posy =hpan-haut-2*dy;
+      if Ppa.getNewplt()
+        % on a utilisé la plateforme Optima
+        LETITRE ='Matrice des facteurs de conversion (OPTIMA)';
+        matCal =Ppa.getOptimaFC();
+      else
+        % on a utilisé la  vieille plateforme
+        LETITRE ='Matrice de calibration (AMTI)';
+        matCal =Ppa.getAmtiMC();
+      end
+      uicontrol('Parent',pan, 'FontWeight','bold', 'Position',[posx posy large haut],...
+                'HorizontalAlignment','center', 'String',LETITRE, 'Style','text');
+      leFormat ={'%8.3f', '%8.3f', '%8.3f', '%8.3f', '%8.3f', '%8.3f'};
+      for U =1:size(matCal, 1)
+        for V =1:size(matCal, 2)
+          letext{U, V} =sprintf(leFormat{V}, matCal(U, V));
         end
       end
-      haut =hautTable; posy =posy-haut; largeCell =round(large/2.4);
-      uitable('parent',pan,'position',[posx, posy, large, haut],'tag','LaTableGain','fontname',UITABLEFONTNAME, ...
-              'FontSize',10, 'RowName',{'Fx';'Fy';'Fz';'Mx';'My';'Mz'}, 'ColumnName',{'Gain';'Vex'}, ...
-              'UserData',leFormat, 'ColumnWidth',{largeCell}, 'CellEditCallback',@formatDataUITable, ...
-              'Data',letext, 'ColumnEditable',[true], 'BackGroundColor',[1 1 0.1]);
-      %---------
-      % Z OFFSET
-      large =large-posx; posx =large+3*posx;  posy =posy+haut; haut =hbout;
-      leTexte ='Z-Offset';
-      uicontrol('Parent',pan, 'FontWeight','bold', 'Position',[posx posy large haut],...
-                'HorizontalAlignment','center', 'String',leTexte, 'Style','text');
-      leTexte ='Distance (mètre) entre le dessus de la plate-forme et son origine réelle';
-      haut =2*hbout; posy =posy-haut;
-      uicontrol('Parent',pan, 'Position',[posx posy large haut],...
-                'HorizontalAlignment','center', 'String',leTexte, 'Style','text');
-      haut =hbout; posy =posy-haut; posx =posx+round((large-lbout)/2); large =lbout;
-      uicontrol('Parent',pan, 'Position',[posx posy large haut], 'tag','EditZoff', ...
-                'BackGroundColor',BLANC, 'HorizontalAlignment','center', ...
-                'String',num2str(Ppa.getZOff()), 'Style','edit', 'callback',{@quienllama,'surveilleZOffset'});
-  end
-  %------------------
-  % Panel un poco mas
-  pan =uipanel('Parent',fig, 'Tag','PanelUnPocoMas', 'title','Un poco mas lejos', 'Position',posPan, ...
-               'TitlePosition','rightbottom', 'BorderType','beveledin', 'Visible','off');
-  set(o3, 'Userdata',pan);
-    %-----
-    % Aide
-    leTexte =lireLeHelp(Ppa.getNewplt());
-    posx =50; large =lpan-2*posx; haut =hbout; posy =hpan-3*haut;
-    uicontrol('Parent',pan, 'Position',[posx posy large haut], 'FontWeight','bold', ...
-              'HorizontalAlignment','center', 'String','Plateforme de force', 'Style','text');
-    haut =posy-hbout; posy =posy-haut;
-    uicontrol('Parent',pan, 'Position',[posx posy large haut], 'Max',15, 'Min',1, ...
-              'HorizontalAlignment','left', 'String',leTexte, 'Style','edit', 'FontName',UITABLEFONTNAME);
-  %----------------
-  % Panel du Status
-  lpan =largeur; hpan =hbout; posx =0; posy =0;
-  pan =uipanel('Parent',fig, 'Tag','PanelStatus', 'title','', 'Position',[posx posy lpan hpan], ...
-               'BackgroundColor',Ppa.couleurPan, 'BorderType','beveledout');
-      %-------
-      % Status
-      posx =dx; large =lpan-2*dx; haut =hpan;
-      ss =uicontrol('Parent',pan, 'Style','text', 'position',[posx posy large haut], 'FontSize',14, ...
-                    'BackgroundColor',Ppa.couleurPan, 'String','', 'FontWeight','bold', ...
-                    'Tag','TextStatus', 'HorizontalAlignment','center');
-      Ppa.afficheStatus();
-  % AU TRAVAIL
-  large =lbout; posx =round((lpan-large)/2); posy =2*haut;
-  uicontrol('Parent',fig,'tag','boutonTravail','Position',[posx posy large haut],...
-            'callback',{@quienllama,'auTravail'}, 'String','Au travail');
-  setappdata(fig,'Ppa',Ppa);
-  set(fig,'WindowStyle','modal');
+      hautTable =150; haut =hautTable; posy =posy-haut; posx =25; large =lpan-2*posx; largeCell =round(large/6.5);
+      try
+        uitable('parent',pan,'position',[posx, posy, large, haut],'tag','LaTableMC','FontSize',10,...
+                'fontname',UITABLEFONTNAME,'UserData',leFormat, 'CellEditCallback',@formatDataUITable,...
+                'ColumnEditable',[true],'ColumnName',{'1';'2';'3';'4';'5';'6'}, 'ColumnWidth',{largeCell}, 'Data',letext);
+      catch ss;
+        uitable_OCT('parent',pan,'position',[posx, posy, large, haut],'tag','LaTableMC','fontname',UITABLEFONTNAME,...
+                    'FontSize',10,'UserData',leFormat,'ColumnName',{'1';'2';'3';'4';'5';'6'},'Data',letext);
+      end
+      % Pour la AMTI seulement
+      if ~Ppa.getNewplt()
+        %-----------------------------
+        % GAIN ET VOLTAGE D'EXCITATION
+        large =round(large/2); haut =hbout; posy =posy-bordure;
+        uicontrol('Parent',pan, 'FontWeight','bold', 'Position',[posx posy large haut],...
+                  'HorizontalAlignment','center', 'String','Gain et Voltage d''excitation', 'Style','text');
+        losDatos =[Ppa.getGainFx() Ppa.getVFx(); ...
+                   Ppa.getGainFy() Ppa.getVFy(); ...
+                   Ppa.getGainFz() Ppa.getVFz(); ...
+                   Ppa.getGainMx() Ppa.getVMx(); ...
+                   Ppa.getGainMy() Ppa.getVMy(); ...
+                   Ppa.getGainMz() Ppa.getVMz()];
+        letext =[];
+        leFormat ={'%11.3f', '%9.3f'};
+        for U =1:size(losDatos, 1)
+          for V =1:size(losDatos, 2)
+            letext{U, V} =sprintf(leFormat{V}, losDatos(U, V));
+          end
+        end
+        haut =hautTable; posy =posy-haut; largeCell =round(large/2.4);
+        try
+          uitable('parent',pan,'position',[posx, posy, large, haut],'tag','LaTableGain','fontname',UITABLEFONTNAME, ...
+                  'FontSize',10, 'RowName',{'Fx';'Fy';'Fz';'Mx';'My';'Mz'}, 'ColumnName',{'Gain';'Vex'}, ...
+                  'UserData',leFormat, 'ColumnWidth',{largeCell}, 'CellEditCallback',@formatDataUITable, ...
+                  'Data',letext, 'ColumnEditable',[true], 'BackGroundColor',[1 1 0.1]);
+        catch ss;
+          uitable_OCT('parent',pan,'position',[posx, posy, large, haut],'tag','LaTableGain','fontname',UITABLEFONTNAME, ...
+                      'FontSize',10, 'RowName',{'Fx';'Fy';'Fz';'Mx';'My';'Mz'}, 'ColumnName',{'Gain';'Vex'}, ...
+                      'UserData',leFormat,'Data',letext,'BackGroundColor',[1 1 0.1]);
+        end
+        %---------
+        % Z OFFSET
+        large =large-posx; posx =large+3*posx;  posy =posy+haut; haut =hbout;
+        leTexte ='Z-Offset';
+        uicontrol('Parent',pan, 'FontWeight','bold', 'Position',[posx posy large haut],...
+                  'HorizontalAlignment','center', 'String',leTexte, 'Style','text');
+        leTexte ='Distance (mètre) entre le dessus de la plate-forme et son origine réelle';
+        haut =2*hbout; posy =posy-haut;
+        uicontrol('Parent',pan, 'Position',[posx posy large haut],...
+                  'HorizontalAlignment','center', 'String',leTexte, 'Style','text');
+        haut =hbout; posy =posy-haut; posx =posx+round((large-lbout)/2); large =lbout;
+        uicontrol('Parent',pan, 'Position',[posx posy large haut], 'tag','EditZoff', ...
+                  'BackGroundColor',BLANC, 'HorizontalAlignment','center', ...
+                  'String',num2str(Ppa.getZOff()), 'Style','edit', 'callback',{@quienllama,'surveilleZOffset'});
+    end
+    %------------------
+    % Panel un poco mas
+    pan =uipanel('Parent',fig, 'Tag','PanelUnPocoMas', 'title','Un poco mas lejos', 'Position',posPan, ...
+                 'TitlePosition','rightbottom', 'BorderType','beveledin', 'Visible','off');
+    set(o3, 'Userdata',pan);
+      %-----
+      % Aide
+      leTexte =lireLeHelp(Ppa.getNewplt());
+      posx =50; large =lpan-2*posx; haut =hbout; posy =hpan-3*haut;
+      uicontrol('Parent',pan, 'Position',[posx posy large haut], 'FontWeight','bold', ...
+                'HorizontalAlignment','center', 'String','Plateforme de force', 'Style','text');
+      haut =posy-hbout; posy =posy-haut;
+      uicontrol('Parent',pan, 'Position',[posx posy large haut], 'Max',15, 'Min',1, ...
+                'HorizontalAlignment','left', 'String',leTexte, 'Style','edit', 'FontName',UITABLEFONTNAME);
+    %----------------
+    % Panel du Status
+    lpan =largeur; hpan =hbout; posx =0; posy =0;
+    pan =uipanel('Parent',fig, 'Tag','PanelStatus', 'title','', 'Position',[posx posy lpan hpan], ...
+                 'BackgroundColor',Ppa.couleurPan, 'BorderType','beveledout');
+        %-------
+        % Status
+        posx =dx; large =lpan-2*dx; haut =hpan;
+        ss =uicontrol('Parent',pan, 'Style','text', 'position',[posx posy large haut], 'FontSize',14, ...
+                      'BackgroundColor',Ppa.couleurPan, 'String','', 'FontWeight','bold', ...
+                      'Tag','TextStatus', 'HorizontalAlignment','center');
+        Ppa.afficheStatus();
+    % AU TRAVAIL
+    large =lbout; posx =round((lpan-large)/2); posy =2*haut;
+    uicontrol('Parent',fig,'tag','boutonTravail','Position',[posx posy large haut],...
+              'callback',{@quienllama,'auTravail'}, 'String','Au travail');
+    setappdata(fig,'Ppa',Ppa);
+    set(fig,'WindowStyle','modal');
 
-catch sss;
-disp(sss.message)
-for U=1:length(sss.stack)
-  disp(sss.stack(U))
-end
-end
+  catch sss;
+    disp(sss.message)
+    for U=1:length(sss.stack)
+      disp(sss.stack(U))
+    end
+    set(fig,'WindowStyle','normal');
+  end
 
 end
 
@@ -231,9 +243,11 @@ end
 % on call la method "Ppa.(autre)"
 %
 function quienllama(src,evt, autre)
+try
   Ppa =getappdata(gcf,'Ppa');
   switch autre
   case 'terminus'
+    % delete(Ppa);
     Ppa.terminus();
   case 'showPanel'
     Ppa.showPanel(src);
@@ -260,6 +274,15 @@ function quienllama(src,evt, autre)
   case 'auTravail'
     Ppa.auTravail();
   end
+
+
+catch sss;
+disp(sss.message)
+for U=1:length(sss.stack)
+  disp(sss.stack(U))
+end
+end
+  
 end
 
 %--------------------------------------%

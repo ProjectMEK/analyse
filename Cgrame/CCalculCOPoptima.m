@@ -28,7 +28,7 @@ classdef CCalculCOPoptima < CCalculCOPGUI
     %----------------------------------------------------------------------------
 
     % -------------------------------------
-    % overload de la classe CGUICalculCOP()
+    % overload de la classe CCalculCOPGUI()
     %-------------------------------
     function auTravail(tO, varargin)
       if ~isempty(tO.fig)
@@ -37,17 +37,15 @@ classdef CCalculCOPoptima < CCalculCOPGUI
       R =tO.verifNbCan();
       if isempty(R.lesCan)
         tO.afficheStatus('Il faut sélectionner 3 ou 6 canaux!!!');
-        return;
-      end
-      if ~tO.COPseul & ~R.COG
+      elseif ~tO.COPseul & ~R.COG
         tO.afficheStatus('Il faut sélectionner un canal pour Fx et/ou Fy');
-        return;
+      else
+        OA =CAnalyse.getInstance();
+        Fhnd =OA.findcurfich();
+        tO.cParti(Fhnd, R);
+        gaglobal('editnom');
+        tO.terminus();
       end
-      OA =CAnalyse.getInstance();
-      Fhnd =OA.findcurfich();
-      tO.cParti(Fhnd, R);
-      gaglobal('editnom');
-      tO.terminus();
     end
 
     %-------------------------------------------------------
@@ -64,19 +62,23 @@ classdef CCalculCOPoptima < CCalculCOPGUI
       fpltOptima(tO, Ofich, S);
     end
 
-    %--------------------------------------
+    %--------------------------------------------------------
     % overload de la classe CCalculCOPGUI()
     % on synchronise les valeurs de FC (faceur de conversion)
     % avec celle du GUI
-    %---------------------------
+    %--------------------------------------------------------
     function syncObjetConGui(tO)
-      tO.optimaFC =convCellArray2Mat(get(findobj('tag','LaTableMC'), 'Data'));
+      try
+        tO.optimaFC =convCellArray2Mat(get(findobj('tag','LaTableMC'), 'Data'));
+      catch ss;
+        tO.optimaFC =convEditArray2Mat_OCT(findobj('tag','LaTableMC'));
+      end
     end
 
-    % -------------------------------------
-    % overload de la classe CGUICalculCOP()
+    % --------------------------------------
+    % overload de la classe CCalculCOPGUI()
     % Lecture des paramètres dans un ficheir
-    %---------------------
+    %---------------------------------------
     function lireParam(tO)
       param =importCalculCOPoptima(tO);
       tO.importation(param);

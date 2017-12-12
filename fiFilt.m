@@ -254,7 +254,7 @@ function [sp,i] =quelfilt(sp)
   end
   pala =fullfile(pname,fname);
   letout =load(pala);
-  champ =fields(letout);
+  champ =fieldnames(letout);
   spok =false;
   lesfiltres ={};
   for U =1:length(champ)

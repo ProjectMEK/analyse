@@ -253,7 +253,7 @@ function fpltOptima(hObj, oF, R)
   tmpDt =CDtchnl();
   nTmp ='tmp';
   if length(canal) == 3
-    delete([hFz hMx hMy]);
+    delete hFz hMx hMy;
     clear hFz hMx hMy;
     % sauve Fz
     sD.tmp =DoFz; clear DoFz;
@@ -276,7 +276,7 @@ function fpltOptima(hObj, oF, R)
     tmpDt.Dato =sD;
     oF.setcanal(tmpDt, n.cpy);
   elseif length(canal) == 6
-    delete([hFx hFy hFz hMx hMy hMz]);
+    delete hFx hFy hFz hMx hMy hMz;
     clear hFx hFy hFz hMx hMy hMz;
     % sauve Fx
     sD.tmp =DoFx; clear DoFx;

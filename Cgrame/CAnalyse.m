@@ -128,8 +128,8 @@ classdef (Sealed) CAnalyse < handle
     % il doit avoir une propriété: thatObj.fig
     %------------------------------------------------
     function delFigTravailFini(tO, thatObj)
-      if ~isempty(thatObj)
-        set(tO.OFig.fig, 'WindowButtonMotionFcn',{@CValet.GarbageCollector, thatObj});
+      if exist('thatObj','var')
+        set(tO.OFig.fig, 'WindowButtonMotionFcn',{@garbageCollector, thatObj});
         set(thatObj.fig, 'WindowStyle','normal', 'Visible','off');
       end
     end

@@ -24,6 +24,16 @@ classdef CCalculCOPGUI < CBasePourFigureAnalyse & COngletUtil & CCalculCOPParam
 
   methods
 
+    %------------------
+    % DESTRUCTOR
+    %------------------
+    function delete(tO)
+      if ~isempty(tO.fig)
+        delete(tO.fig);
+        tO.fig =[];
+      end
+    end
+
     %-------------------------------------------------------------
     % on appel le GUI GuiCalculCOP() et les param peuvent être lus
     % directement d'un fichier
@@ -32,7 +42,7 @@ classdef CCalculCOPGUI < CBasePourFigureAnalyse & COngletUtil & CCalculCOPParam
     %   true  -->  se sera les valeurs par défauts.
     %-------------------------------------------------------------
     function guiCalculCOP(tO, conGUI)
-      if ~exist('conGUI')
+      if ~exist('conGUI','var')
         conGUI =true;
       end
       if ~conGUI
