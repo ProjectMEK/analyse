@@ -107,10 +107,10 @@ classdef CPref < handle
 
   methods
 
-    %-------------------------------------------
+    %---------------------------------------------
     % Mise à jour des propriétés à partir de "a"
     % a  --> structure ou objet de la classe CPref
-    %------------------
+    %---------------------------------------------
     function maj(tO, a)
       if isa(a,'struct')
         tO.appendStruct(a);
@@ -309,13 +309,14 @@ classdef CPref < handle
       end
     end
 
-    %--------------------------------------
+    %-----------------------------------------
     % on ajoute/modifi les propriétés de tO
     % avec les propriétés de l'objet CPref "v"
-    %--------------------------
+    %-----------------------------------------
     function appendCPref(tO, v)
+      champ =fieldnames(v);
       for U =1:length(tO.listProp)
-        if isprop(v, tO.listProp{U})
+        if ismember(tO.listProp{U},champ)
           tO.(tO.listProp{U}) =v.(tO.listProp{U});
         end
       end

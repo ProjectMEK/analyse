@@ -104,14 +104,21 @@ function fig =GUICorrige(Ppa)
   pan =pan2;
   % GROUPE BOUTON
   posx =0; posy =0; large =Lpan2; haut =Hpan2-my2;
+  gBout =[];
   try
   	% 'SelectionChangeFcn' pour Matlab
+    % L'ordre des propriétés est crucial car on va rechercher le handle du uigroup selon
+    % le "tag". Si ça plante dans Octave, il faut en tenir compte car 2 uigroup seront
+    % quand même créés.
     gBout =uibuttongroup('Parent',pan, 'Units','pixels', 'Position',[posx posy large haut], ...
-                         'tag','GroupBtn', 'SelectionChangeFcn',{@quienllama,'Voirpoints'});
+                         'SelectionChangeFcn',{@quienllama,'Voirpoints'},'tag','GroupBTN');
   catch rien;
-  	% 'SelectionChangedFcn' pour Octave
+  	% 'SelectionChangedFcn' pour Octave et on delete gBout s'il existe
+  	if ~isempty(gBout)
+  	  delete(gBout);
+  	end
     gBout =uibuttongroup('parent',pan, 'units','pixels', 'position',[posx posy large haut], ...
-                         'tag','GroupBtn', 'selectionchangedfcn',{@quienllama,'Voirpoints'});
+                         'selectionchangedfcn',{@quienllama,'Voirpoints'},'tag','GroupBTN');
   end
   % RADIO-BUTTON CORRECTION
   letyp ={'Données manquantes <= à';'Données manquantes >= à';...
@@ -120,8 +127,8 @@ function fig =GUICorrige(Ppa)
   posx =mx; large =large-2*mx; haut =hbtn; posy =Hpan2-3*my2;
   for U =1:length(letyp)
     posy =posy-haut;
-    uicontrol('Parent',gBout, 'Position',[posx posy large haut], 'String',letyp{U}, 'Style', 'radiobutton', ...
-              'tag',['RB-' num2str(U)]);
+    uicontrol('Parent',gBout,'Position',[posx posy large haut],'String',letyp{U},...
+              'Style','radiobutton','tag',['RB-' num2str(U)]);
   end
   %----------------------
   % PANELS DES PARAMÈTRES
@@ -158,7 +165,8 @@ function fig =GUICorrige(Ppa)
   uicontrol('Parent',pan, 'tag','COrdrePoly', 'BackgroundColor',[1 1 1], 'Style','edit', ...
             'Position',[posx+La posy Lb haut], 'Visible', 'off', 'String','3');
   % AU TRAVAIL
-  uicontrol('Parent',pan, 'callback',{@quienllama,'AuTravail'}, 'Position',PosTrav, 'String','Au travail', ...
+  uicontrol('Parent',pan,'callback',{@quienllama,'AuTravail'},'Position',PosTrav,...
+            'tag','MaW','enable','off','String','Au travail', ...
             'TooltipString','Utilisez pour recalculer les données manquantes  >, <, ou = à une valeur');
   %________________
   % COUPER LES PICS
@@ -227,8 +235,9 @@ function fig =GUICorrige(Ppa)
             'HorizontalAlignment','left', 'String','±Pi/2,   (Par défaut: ±Pi)',...
             'Style','checkbox', 'Value',0);
   % AU TRAVAIL
-  uicontrol('Parent',pan, 'callback',{@quienllama,'AuTravail'}, 'Position',PosTrav, 'String','Au travail', ...
-            'TooltipString','Utilisez afin de corriger les valeurs d''angles. Ex: les sauts de -180 à +180');
+  uicontrol('parent',pan,'callback',{@quienllama,'AuTravail'},'position',PosTrav,...
+            'String','Au travail','TooltipString',...
+            'Utilisez afin de corriger les valeurs d''angles. Ex: les sauts de -180 à +180');
 end
 
 %
@@ -249,6 +258,8 @@ function quienllama(src,evt, autre)
     Ppa.ChangeInterv(src);
   case 'ChangeCanPoint'
     Ppa.ChangeCanPoint(src);
+  case 'Voirpoints'
+    Ppa.Voirpoints(src,evt);
   case 'VoirDebFin'
     Ppa.VoirDebFin(src);
   case 'Voirpoly'

@@ -2,7 +2,6 @@
 % classdef CBasePourFigureAnalyse < CBasePourFigure
 %
 % METHODS
-%       delete(tO)                 % DESTRUCTOR
 %       terminus(tO, src, event)
 %
 classdef CBasePourFigureAnalyse < CBasePourFigure

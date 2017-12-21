@@ -25,7 +25,7 @@ function fpltAmti(hObj, oF, R)
   hdchnl =oF.Hdchnl;
   vg =oF.Vg;
   canal =R.lesCan;
-  leWb =laWaitbar(0, 'Calcul du centre de pression...', 'C', 'C', gcf);
+  leWb =laWaitbarModal(0, 'Calcul du centre de pression...', 'C', 'C', gcf);
   leBout =5+vg.ess+(R.COG*vg.ess);
   if R.COG & R.canFx > 0 & R.canFy > 0
     leBout =leBout+vg.ess;

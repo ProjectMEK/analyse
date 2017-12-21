@@ -84,8 +84,13 @@ classdef CCalculCOPGUI < CBasePourFigureAnalyse & COngletUtil & CCalculCOPParam
     % on synchronise l'objet "tO" avec les valeurs du GUI
     %----------------------------------------------------
     function syncObjetConGui(tO)
-      tO.amtiMC =convCellArray2Mat(get(findobj('tag','LaTableMC'), 'Data'));
-      matGainVext =convCellArray2Mat(get(findobj('tag','LaTableGain'), 'Data'));
+      try
+        tO.amtiMC =convCellArray2Mat(get(findobj('tag','LaTableMC'), 'Data'));
+        matGainVext =convCellArray2Mat(get(findobj('tag','LaTableGain'), 'Data'));
+      catch ss;
+        tO.amtiMC =convEditArray2Mat_OCT(findobj('tag','LaTableMC'));
+        matGainVext =convEditArray2Mat_OCT(findobj('tag','LaTableGain'));
+      end
       tO.setGain(matGainVext(:, 1));
       tO.setVext(matGainVext(:, 2));
       tO.zOff =str2num(get(findobj('tag','EditZoff'), 'String'));
@@ -110,7 +115,8 @@ classdef CCalculCOPGUI < CBasePourFigureAnalyse & COngletUtil & CCalculCOPParam
         delete(tO.fig);
         pause(0.5);
         tO.fig =[];
-        tO.initGui();
+        % tO.initGui();
+        tO.guiCalculCOP();
       end
     end
 

@@ -80,6 +80,7 @@ classdef CCalculCOPoptima < CCalculCOPGUI
     % Lecture des paramètres dans un ficheir
     %---------------------------------------
     function lireParam(tO)
+      % à cause d'octave
       param =importCalculCOPoptima(tO);
       tO.importation(param);
     end

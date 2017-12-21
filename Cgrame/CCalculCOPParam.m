@@ -63,13 +63,15 @@ classdef CCalculCOPParam < handle
     %-----------------------------
     % importation des propriétés à
     % partir de la structure "p"
-    %--------------------------
+    %-----------------------------
     function importation(tO, p)
       if isa(p,'struct')
         obj =CCalculCOPParam();
+        Champs =fieldnames(obj);
+        delete(obj);
         champ =fieldnames(p);
         for u =1:length(champ)
-          if ~isempty(obj.findprop(champ{u}))
+          if ismember(champ{u},Champs)
             tO.(champ{u}) =p.(champ{u});
           end
         end

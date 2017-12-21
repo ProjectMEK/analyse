@@ -250,7 +250,7 @@ function lirtextverti(fnom,tO)
         hHdchnl.sweeptime(j,tranche) =(ligne - 1)/tO.frq;
         hHdchnl.nsmpls(j,tranche) =ligne - 1;
         hHdchnl.comment{j,tranche} =[fnom(Z).name ':' elnombre{j} '//'];
-        waitbar(((bonbon*0.8)+((j/tO.col)*(bonbon*0.2))),dd2);
+        waitbar(((bonbon*0.8)+((j/tO.col)*(bonbon*0.2)))/bonbon,dd2);
       end
       tO.sauveEssai(dtchnl, Dt, tranche);
       tranche =tranche+1;
@@ -272,7 +272,7 @@ function lirtextverti(fnom,tO)
   hVg.valeur =1;
   P.hdchnl =hHdchnl.databrut();
   P.vg =hVg.databrut();
-  save(hF.Info.fitmp, '-Struct', 'P', '-Append');
+  save(hF.Info.fitmp, '-struct', 'P', '-append');
   delete(Dt);
   close(dd1);
 end

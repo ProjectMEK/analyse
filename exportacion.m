@@ -108,7 +108,9 @@ function exportacion(varargin)
     nombre =length(canaux);
     nombress =length(essai);
     pas =str2double(get(sh.ed(1),'String'));
+    set(sh.fig(1),'WindowStyle','normal');      % à cause d'Octave
     [nomfich,lieu] =uiputfile('*.*','Exportation');
+    set(sh.fig(1),'WindowStyle','modal');
     pcourant =pwd;
     cd(lieu);
     fileident =fopen(nomfich,'w');

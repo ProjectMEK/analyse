@@ -49,31 +49,31 @@ classdef CLirTexte < CLirOutils
       if isdir(nombre) || isempty(nombre)
         % le nom de ficheir est un dossier ou est vide
     		set(findobj('tag','MultiFichier'), 'Value',1, 'string',tipoint);
-    		return;
-      end
-      hV =tO.Fich.Info;
-      U =dir(nombre);
-      if isempty(U)
-        % le nom entré ne correspond à aucun fichier
-    		set(findobj('tag','MultiFichier'), 'Value',1, 'string',tipoint);
       else
-        [a, b, c] =fileparts(nombre);
-        if isempty(a)
-          a =pwd();
-        end
-        cd(a);
-        % on bâti la liste des fichiers dans le dossier
-        Fichiers ={};
-        for S =1:length(U)
-          if ~U(S).isdir
-            Fichiers{end+1} =U(S).name;
-          end
-        end
-        if isempty(Fichiers)
+        hV =tO.Fich.Info;
+        U =dir(nombre);
+        if isempty(U)
+          % le nom entré ne correspond à aucun fichier
       		set(findobj('tag','MultiFichier'), 'Value',1, 'string',tipoint);
         else
-          Fichiers =sort(Fichiers);
-      		set(findobj('tag','MultiFichier'), 'Value',1, 'string',Fichiers);
+          [a, b, c] =fileparts(nombre);
+          if isempty(a)
+            a =pwd();
+          end
+          cd(a);
+          % on bâti la liste des fichiers dans le dossier
+          Fichiers ={};
+          for S =1:length(U)
+            if ~U(S).isdir
+              Fichiers{end+1} =U(S).name;
+            end
+          end
+          if isempty(Fichiers)
+        		set(findobj('tag','MultiFichier'), 'Value',1, 'string',tipoint);
+          else
+            Fichiers =sort(Fichiers);
+        		set(findobj('tag','MultiFichier'), 'Value',1, 'string',Fichiers);
+          end
         end
       end
     end

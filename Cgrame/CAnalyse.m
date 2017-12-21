@@ -107,6 +107,12 @@ classdef (Sealed) CAnalyse < handle
         delete(tO.OFig);
         tO.OFig =[];
       end
+      % on test pour éliminer les figures qui pourraient être "visible Off"
+      pause(0.5);
+      foo =findobj('type','figure');
+      for U=1:length(foo)
+        delete(foo(U));
+      end
     end
 
     %------------------------------------------------

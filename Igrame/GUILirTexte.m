@@ -24,7 +24,7 @@ function GUILirTexte(Ppa)
         'DefaultUIControlBackgroundColor',[0.8 0.8 0.8],...
         'defaultUIControlunits','pixels',...
         'defaultUIControlFontSize',11,...
-      	'Resize','off', 'CloseRequestFcn',@Ppa.Fermeture);
+      	'Resize','off', 'CloseRequestFcn',{@quienllama,'Fermeture'});
   Ppa.Fig =lafig;
   haut =haut-35;
   largeur =large-(2*lebord1);
@@ -35,12 +35,12 @@ function GUILirTexte(Ppa)
   largeur =large-bouton-(2*lebord1); Llarg =round(largeur/5);largeur =largeur-Llarg;
   uicontrol('Parent',lafig, 'tag','NomdeFichier', 'BackgroundColor',[1 1 1], ...
            'FontSize',10, 'HorizontalAlignment','Left', 'Style','edit', ...
-           'Position',[lebord1 haut largeur epais], 'Callback',@Ppa.Fichiermanuel);
+           'Position',[lebord1 haut largeur epais], 'Callback',{@quienllama,'Fichiermanuel'});
   uicontrol('Parent',lafig, 'tag','MultiFichier', 'FontSize',10, ...
            'BackgroundColor',[1 1 1], 'Position',[lebord1+largeur haut Llarg epais], ...
            'HorizontalAlignment','Right', 'Style','popupmenu','string',tipoint);
   largeur =lebord1+largeur+Llarg;
-  uicontrol('Parent',lafig, 'Callback',@Ppa.choixFichier, ...
+  uicontrol('Parent',lafig, 'Callback',{@quienllama,'choixFichier'}, ...
 	          'Position',[largeur haut-1 bouton epais], 'String','...');
   haut =haut-15;
   largeur =large-(2*lebord1);
@@ -51,7 +51,7 @@ function GUILirTexte(Ppa)
   posx =lebord3; posy =part3;
   uicontrol('Parent',lafig, 'tag','toggleModEss', 'position',[posx posy 3*bouton epais],...
             'TooltipString','Si plusieurs essais par fichier, ils sont les uns au dessus des autres', ...
-            'style','togglebutton','value',0, 'callback',@Ppa.ToggleEssai, 'string','ESS :', 'Enable','off');
+            'style','togglebutton','value',0, 'callback',{@quienllama,'ToggleEssai'}, 'string','ESS :', 'Enable','off');
   % ****************on étale de gauche à droite
   if adroite
     lebord = lebord2;
@@ -242,10 +242,10 @@ function GUILirTexte(Ppa)
         'Position',[largeur1+lebord haut fenetre], ...
         'Style','togglebutton','tag','elprimero', ...
         'TooltipString','Si la première colonne n''est pas répété et qu''elle contient le numéro d''échantillon',...
-        'value',0,'string','Non', 'Callback',@Ppa.ToggleColon);
+        'value',0,'string','Non', 'Callback',{@quienllama,'ToggleColon'});
 % ***********Fin des fenêtres d'édition
   haut = haut-60; largeur=100;posx=floor((large-largeur)/2);
-  uicontrol('Parent',lafig, 'Callback',@Ppa.Lecture, ...     % Au Travail
+  uicontrol('Parent',lafig, 'Callback',{@quienllama,'Lecture'}, ...     % Au Travail
 	          'FontSize',11, 'Position',[posx haut largeur epais], 'String','Au Travail');
   exemple ={'Ligne d''entête';'Essai 1';'C1 C2 C3';' 1  2  3';' 4  5  6';' 7  8  9';...
             'Essai 2';'11 12 13';'14 15 16';'17 18 19';...
@@ -266,5 +266,37 @@ function GUILirTexte(Ppa)
   uicontrol('Parent',lafig,'tag','textefenhoriz', 'FontName','FixedWidth', ...
             'position',[posx posy lfen hfen],'visible','off', 'style','text', ...
             'HorizontalAlignment','left','FontSize',9, 'string',exemple);
-  set(lafig,'WindowStyle','modal');
+  setappdata(lafig,'Ppa',Ppa);
+%  set(lafig,'WindowStyle','modal');
+end
+
+%-----------------------------------------
+% Callback des différents uicontrol du GUI
+% on call la method "Ppa.(autre)"
+%-----------------------------------------
+function quienllama(src,evt, autre)
+  Ppa =getappdata(gcf,'Ppa');
+  switch autre
+  case 'Fermeture'
+    Ppa.Fermeture();
+  case 'Fichiermanuel'
+    Ppa.Fichiermanuel(src);
+  case 'choixFichier'
+    Ppa.choixFichier();
+  case 'ToggleEssai'
+    Ppa.ToggleEssai(src);
+  case 'ToggleColon'
+    Ppa.ToggleColon(src);
+  case 'Lecture'
+    Ppa.Lecture();
+  case 'Fichiermanuel'
+    Ppa.Fichiermanuel(src);
+  end
+
+% catch sss;
+%   disp(sss.message)
+%   for U=1:length(sss.stack)
+%     disp(sss.stack(U))
+%   end
+% end
 end

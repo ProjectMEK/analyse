@@ -7,7 +7,7 @@ function GuiCalculCOP(Ppa,Listadname)
     nad =length(Listadname);
     largeur =525; hauteur =575;
     posfig =positionfen('G','C',largeur,hauteur,gcf);
-    fig =figure('Name', 'Calcul  COP-COG', 'Position',posfig, 'resize', 'off', ...				
+    fig =figure('Name','Calcul  COP-COG','Position',posfig,'resize', 'off','menubar','none',...				
             'CloseRequestFcn',{@quienllama,'terminus'}, 'DefaultUIControlBackgroundColor',Ppa.couleurRef, ...
             'DefaultUIPanelBackgroundColor',Ppa.couleurRef, 'DefaultUIControlUnits','pixels', ...
             'DefaultUIPanelUnits','pixels', 'DefaultUIControlFontUnits','pixels', ...
@@ -239,15 +239,14 @@ function GuiCalculCOP(Ppa,Listadname)
 
 end
 
-%
+%-----------------------------------------
+% Callback des différents uicontrol du GUI
 % on call la method "Ppa.(autre)"
-%
+%-----------------------------------------
 function quienllama(src,evt, autre)
-try
   Ppa =getappdata(gcf,'Ppa');
   switch autre
   case 'terminus'
-    % delete(Ppa);
     Ppa.terminus();
   case 'showPanel'
     Ppa.showPanel(src);
@@ -274,15 +273,6 @@ try
   case 'auTravail'
     Ppa.auTravail();
   end
-
-
-catch sss;
-disp(sss.message)
-for U=1:length(sss.stack)
-  disp(sss.stack(U))
-end
-end
-  
 end
 
 %--------------------------------------%

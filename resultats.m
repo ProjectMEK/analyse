@@ -150,7 +150,9 @@ function resultats(varargin)
     guidata(gcf,wr);
   case 'au travail'
     saut = [char(13) char(10)];
+    set(wr.fig(1),'WindowStyle','normal');
     [fname,pname] = uiputfile('*.*','Écriture des résultats');
+    set(wr.fig(1),'WindowStyle','modal');
     if ~ischar(fname)
       return
     end

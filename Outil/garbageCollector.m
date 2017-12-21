@@ -8,6 +8,6 @@
 %-------------------------------------------------------------------------
 function garbageCollector(src, event, thatObj)
   set(src, 'WindowButtonMotionFcn','');
-  pause(0.2);
+  pause(0.15);
   delete(thatObj);
 end

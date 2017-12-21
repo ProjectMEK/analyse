@@ -1,5 +1,5 @@
 %
-% classdef CGuiPreference < CBasePourFigureAnalyse & COngletUtil & CPref
+% classdef CPreferenceGui < CBasePourFigureAnalyse & COngletUtil & CPref
 %
 % Gestion des callback du GUI GuiPreference
 %
@@ -11,7 +11,7 @@
 %       initGui(tO)
 %  cur =lireLesOnglets(tO)
 %
-classdef CGuiPreference < CBasePourFigureAnalyse & COngletUtil & CPref
+classdef CPreferenceGui < CBasePourFigureAnalyse & COngletUtil & CPref
 
   methods
 
@@ -31,10 +31,10 @@ classdef CGuiPreference < CBasePourFigureAnalyse & COngletUtil & CPref
     % la case dela colonne de droite correspondante.
     %---------------------------------
     function activAmigo(tO, src, evnt)
-      leTag =get(src, 'Tag');
+      leTag =get(src, 'tag');
       leTag(end-2:end) =[];
-      ONOFF =CEOnOff(get(src, 'Value'));
-      set(findobj('Tag',leTag), 'Enable',char(ONOFF));  % {get(src, 'Value')+1});
+      ONOFF =CEOnOff(get(src, 'value'));
+      set(findobj('tag',leTag), 'enable',char(ONOFF));
     end
 
     %---------------------------------------
@@ -45,7 +45,7 @@ classdef CGuiPreference < CBasePourFigureAnalyse & COngletUtil & CPref
 
       % lecture des uicontrol type "Value"
       for U =1:length(tO.lstPropV)
-        tO.(tO.lstPropV{U}) =get(findobj('Tag',tO.lstPropV{U}), 'Value');
+        tO.(tO.lstPropV{U}) =get(findobj('tag',tO.lstPropV{U}), 'Value');
       end
 
       tO.setDispError(tO.dispError-1);
@@ -53,12 +53,12 @@ classdef CGuiPreference < CBasePourFigureAnalyse & COngletUtil & CPref
 
       % lecture des uicontrol type "Numéric"
       for U =1:length(tO.lstPropN)
-        tO.(tO.lstPropN{U}) =str2num(get(findobj('Tag',tO.lstPropN{U}), 'String'));
+        tO.(tO.lstPropN{U}) =str2num(get(findobj('tag',tO.lstPropN{U}), 'String'));
       end
 
       % lecture des uicontrol type "Texte"
       for U =1:length(tO.lstPropT)
-        tO.(tO.lstPropT{U}) =get(findobj('Tag',tO.lstPropT{U}), 'String');
+        tO.(tO.lstPropT{U}) =get(findobj('tag',tO.lstPropT{U}), 'String');
       end
 
     end
@@ -70,7 +70,7 @@ classdef CGuiPreference < CBasePourFigureAnalyse & COngletUtil & CPref
       if nargin == 1
         leStatus ='Entrez vos préférences afin d''améliorer votre session de travail';
       end
-      set(findobj('Tag','TextStatus'), 'String',leStatus);
+      set(findobj('tag','TextStatus'), 'String',leStatus);
     end
 
     %--------------------------------------

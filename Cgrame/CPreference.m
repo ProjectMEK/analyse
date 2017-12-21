@@ -1,13 +1,13 @@
 %
-% classdef CPreference < CGuiPreference
+% classdef CPreference < CPreferenceGui
 %
 % METHODS
 %    tO = CPreference()
 %         auTravail(tO, varargin)
 %
-% Va hériter de CGuiPreference, qui fait la gestion du GUI
+% Va hériter de CPreferenceGui, qui fait la gestion du GUI
 %
-classdef CPreference < CGuiPreference
+classdef CPreference < CPreferenceGui
 
   methods
 
@@ -23,7 +23,7 @@ classdef CPreference < CGuiPreference
     % on sauvegarde et ferme le GUI
     %-------------------------------
     function auTravail(tO, varargin)
-      auTravail@CGuiPreference(tO);
+      auTravail@CPreferenceGui(tO);
       OA =CAnalyse.getInstance();
       OA.Fic.pref.maj(tO.getObjData());
       OA.Fic.majFichRecent();

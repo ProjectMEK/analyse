@@ -30,9 +30,9 @@ classdef CCorrige < CBasePourFigureAnalyse
 
   methods
 
-    %------------
+    %-----------------------
     % CONSTRUCTOR
-    %------------------------
+    %-----------------------
     function tO = CCorrige()
       OA =CAnalyse.getInstance();
       tO.Ofich =OA.findcurfich();
@@ -43,7 +43,17 @@ classdef CCorrige < CBasePourFigureAnalyse
       tO.setFigModal();
     end
 
-    %-------------------------------
+    %-----------------------
+    % DESTRUCTOR
+    %-----------------------
+    function delete(tO)
+      if ~isempty(tO.fig)
+        delete(tO.fig);
+        tO.fig =[];
+      end
+    end
+
+    %---------------------------------
     % Callback pour changer le canal
     %---------------------------------
     function CualCanEs(tO, src, event)
@@ -167,20 +177,21 @@ classdef CCorrige < CBasePourFigureAnalyse
     % au type de correction sélectionné à gauche.
     %----------------------------------
     function Voirpoints(tO, src, event)
-      set(tO.LesPan, 'Visible','off');
-      switch get(event.NewValue, 'Tag')
+      set(tO.LesPan, 'visible','off');
+      switch get(event.NewValue, 'tag')
       %---
       case {'RB-1', 'RB-2', 'RB-3'}
-        set(findobj('Tag','lePan3'), 'Visible','on');
+        set(findobj('tag','MaW'),'enable','on');
+        set(findobj('tag','lePan3'), 'Visible','on');
       %---
       case 'RB-4'
-        set(findobj('Tag','lePan4'), 'Visible','on');
+        set(findobj('tag','lePan4'), 'Visible','on');
       %---
       case 'RB-5'
-        set(findobj('Tag','lePan5'), 'Visible','on');
+        set(findobj('tag','lePan5'), 'Visible','on');
       %---
       case 'RB-6'
-        set(findobj('Tag','lePan6'), 'Visible','on');
+        set(findobj('tag','lePan6'), 'Visible','on');
       end
     end
 

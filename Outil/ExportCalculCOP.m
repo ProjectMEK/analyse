@@ -6,7 +6,10 @@
 % hObj  handle de la classe CCalculCOP/CCalculCOPoptima
 %
 function ExportCalculCOP(hObj)
+  % Octave ayant de la misère à gérer par dessus une fenêtre "modal"
+  set(hObj.fig,'WindowStyle','normal');
   [f, p] =uiputfile({'*.INI', 'Afficher les fichiers *.ini'; '*.*', 'Afficher tous les fichiers' });
+  set(hObj.fig,'WindowStyle','modal');
   % si on a annulé, on sort
   if (length(f) == 1 && f == 0) || (length(p) == 1 && p == 0)
     return;

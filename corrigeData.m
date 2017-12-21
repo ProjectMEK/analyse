@@ -11,13 +11,19 @@
 % Fonction pour corriger les données manquantes et/ou mises à zéros par les logiciels
 %
 function ETPUIS =corrigeData(hO)
+  % Barre de défilement
+  txtWb ='Correction des datas... ';
+  leWb =laWaitbarModal(0, txtWb, 'C', 'C', gcf);
+  % on récupère les infos du fichier à traiter
   ETPUIS =false;
   Ofich =hO.Ofich;
   vg =hO.Vg;
   dtchnl =CDtchnl();
   hdchnl =hO.Hdchnl;
   ptchnl =Ofich.Ptchnl;
-  Foo =get(get(findobj('tag','GroupBtn'), 'SelectedObject'), 'Tag');
+  % quel tache a été choisi?
+  ccc =get(findobj('tag','GroupBTN'), 'selectedobject');
+  Foo =get(ccc, 'tag');
   vcritic =0;
   fen ='0';
   tiempo =0;
@@ -75,6 +81,10 @@ function ETPUIS =corrigeData(hO)
   rayon =str2num(fen);                             % Nb de point pour le lissage en chiffre
   lescan =hO.CualCan;
   nombre =length(lescan);
+  % paramètre pour la barre de défilement
+  leBout =nombre*nbess*NbPasse+1;
+  renduA =1;
+  waitbar(renduA/leBout, leWb);
   if ~hO.ecraser
     hdchnl.duplic(lescan);
   end
@@ -91,6 +101,10 @@ function ETPUIS =corrigeData(hO)
       % ON TRAITE UN ESSAI À LA FOIS
       %-------------------------------------------
       for jj = 1:nbess
+        % barre de défilement
+        renduA =renduA+1;
+        lesMots =[txtWb 'passe: ' num2str(qQ) ', canal: ' num2str(i) ', essai: ' num2str(jj)];
+        waitbar((renduA)/leBout, leWb,lesMots);
         alldata =hdchnl.nsmpls(lec, lesess(jj));
         Vrate =hdchnl.rate(hO.lecan(i), lesess(jj));
         Nrate =hdchnl.rate(lec, lesess(jj));
@@ -342,6 +356,7 @@ function ETPUIS =corrigeData(hO)
       end
     end
   end
+  delete(leWb);
   ETPUIS =true;
 end
 

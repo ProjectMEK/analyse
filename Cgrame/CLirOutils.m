@@ -79,7 +79,7 @@ classdef CLirOutils < handle
 
     %-----------------------------------------------------------
     % Ici, on va créer un fichier temporaire de travail (Unique)
-    %-------------------
+    %-----------------------------------------------------------
     function prepare(tO)
       Fan =tO.Fich.Info;
       [Va Vb Vc] =fileparts(tO.fname{1});
@@ -100,7 +100,7 @@ classdef CLirOutils < handle
 
     %--------------------------------------------------------
     % On ferme proprement l'objet et sa figure s'il y a lieu.
-    %---------------------------------
+    %--------------------------------------------------------
     function Fermeture(tO, src, event)
       if ~isempty(tO.Fig)
 	      delete(tO.Fig);
@@ -108,7 +108,7 @@ classdef CLirOutils < handle
       delete(tO.Fich);
     end
 
-    %--------------------------
+    %-------------------------------------------------------------------------------
     % Choix du fichier à ouvrir
     % on inscrira le choix du fichier dans la propriété tO.fname
     % EN ENTRÉE
@@ -117,7 +117,7 @@ classdef CLirOutils < handle
     % multifich    --> 0 (un fichier à la fois), 1 (peut choisir plusieurs fichiers)
     %
     % si un fichier est choisi on retourne une valeur > 0
-    %--------------------------------------------------------------------
+    %-------------------------------------------------------------------------------
     function varargout = selection(tO, extension, description, multifich)
       [tO.fname, pname, CoK] =quelfich(extension, description, multifich);
       varargout{1} =CoK;
