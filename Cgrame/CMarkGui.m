@@ -1,5 +1,5 @@
 %
-% Classe  CGuiMark
+% Classe  CMarkGui
 %
 % Gestion du GUI GuiMark, ici on va répondre à ces callback
 %
@@ -36,7 +36,7 @@
 %                valpardef(obj,src,evnt)
 %                varGlobal(obj, s)
 %
-classdef CGuiMark < COngletUtil & CMLMark
+classdef CMarkGui < COngletUtil & CMLMark
 
   properties
     fig =[];                    % Interface du marquage auto
@@ -433,9 +433,13 @@ classdef CGuiMark < COngletUtil & CMLMark
       s.EcraseVers =get(findobj('Tag','LBCanalExportRemplace'), 'Value');
       s.reptout =get(findobj('Parent',obj.curPan, 'Tag','CBToutInt'), 'value');
       s.occur =get(findobj('Parent',obj.curPan, 'Tag','SMarkTempRepet'),'String');
-      if ~isempty(s.occur) & ~isempty(str2num(s.occur))
-        foo =str2num(s.occur);
-        s.occur =foo(1);
+      if ~isempty(s.occur)
+        if ~isempty(str2num(s.occur))
+          foo =str2num(s.occur);
+          s.occur =foo(1);
+        else
+          s.occur =1;
+        end
       else
         s.occur =1;
       end
@@ -520,7 +524,7 @@ classdef CGuiMark < COngletUtil & CMLMark
       for U =1:length(quien)
         foo =str2num(get(findobj('Tag',['SEmgAGLR' quien{U}]),'string'));
         if isempty(foo) | ~isnumeric(foo) | foo <= 0
-          me =MException('ANALYSE:CGuiMark:lirVarPanelEmg', ...
+          me =MException('ANALYSE:CMarkGui:lirVarPanelEmg', ...
               'Le paramètre "%s" n''est pas valide.', quien{U});
           throw(me);
         else
@@ -541,7 +545,7 @@ classdef CGuiMark < COngletUtil & CMLMark
         k =str2num(foo);
         pat ='[^0-9]';
         if isempty(k) || ~isempty(regexp(foo, pat))
-          me =MException('ANALYSE:CGuiMark:lirVarPanelBidon', ...
+          me =MException('ANALYSE:CMarkGui:lirVarPanelBidon', ...
               'Expression du numéro de point: %s non valide', foo);
           throw(me);
         else

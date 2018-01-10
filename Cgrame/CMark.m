@@ -1,5 +1,5 @@
 %
-% classdef (Sealed)  CMark < CGuiMark
+% classdef (Sealed)  CMark < CMarkGui
 %                    Classe SINGLETON   -->  obj = CMark.getInstance()
 %
 % METHODS (Access =private)
@@ -36,14 +36,14 @@
 %    * on pourrait y remédier via les préférences???         *
 %    *********************************************************
 %
-classdef (Sealed)  CMark < CGuiMark
+classdef (Sealed)  CMark < CMarkGui
 
   methods (Access =private)
 
-    %------------
+    %--------------------
     % CONSTRUCTOR
-    %------------------
-    function tO = CMark
+    %--------------------
+    function tO = CMark()
       texto =GuiMark(tO);
       tO.initGui(texto);
       delete(texto);
@@ -276,15 +276,21 @@ classdef (Sealed)  CMark < CGuiMark
       end
     end
 
-    %-------------------------------
+    %----------------------------------------------
     % LE POINT MAXIMUM ET/OU MINIMUM
     % val sera un objet de la classe CMarkVarCalcul
     % Ofich un objet de la classe CFichierAnalyse
-    %--------------------------------------
+    %----------------------------------------------
     function fncPanelMinMax(tO, Ofich, val)
       if ~(val.leMin || val.leMax)
-        me =MException('CMark:fncPanelMinMax', tO.potravchmnm);
-        throw(me);
+        % on a pas sélectionné 'min' ou 'max'
+        try
+          me =MException('CMark:fncPanelMinMax', tO.potravchmnm);
+          throw(me);
+        catch ss;
+          me =Oct_MException('CMark:fncPanelMinMax', tO.potravchmnm);
+          rethrow(me);
+        end
       end
       hdchnl =val.hdchnl;
       ptchnl =val.ptchnl;
@@ -296,7 +302,7 @@ classdef (Sealed)  CMark < CGuiMark
           if smplmax == 1
             smplmax =hdchnl.nsmpls(val.csrc(ii),val.alltri(jj));
           end
-          esp2 =max(ptchnl.valeurDePoint(val.leDebut,val.csrc(ii),val.alltri(jj)), 1);
+          esp2 =max(max(ptchnl.valeurDePoint(val.leDebut,val.csrc(ii),val.alltri(jj))), 1);
           indpt =val.lpts;
           if val.leMin
             [a,temps] =min(dt.Dato.(dt.Nom)(esp2:smplmax,val.alltri(jj)));
@@ -369,7 +375,7 @@ classdef (Sealed)  CMark < CGuiMark
           end
           deltaY =val.deltaY;
           if deltaY < 0
-            %voir CGuiMark.lirVarPanelMontee(tO, s)
+            %voir CMarkGui.lirVarPanelMontee(tO, s)
             % On prend alors le pourcentage de l'amplitude(max-min)
             deltaY =-(max(dt.Dato.(dt.Nom)(dbut:smplmax,val.alltri(jj)))-min(dt.Dato.(dt.Nom)(dbut:smplmax,val.alltri(jj))))*deltaY/100;
           end
@@ -912,105 +918,3 @@ classdef (Sealed)  CMark < CGuiMark
 
   end  % methods
 end % classdef
-
-%-----------------------------------------------------------
-% fonction pour trouver les pentes montantes on doit fournir
-%   dato    canal des vitesse instantannées ([0; diff(can)])
-%   vref    variation d'amplitude seuil
-%   tsmpl   temps maximum pour que l'amplitude varie de vref
-%           jouera le rôle d'une fenêtre "glissante"
-%-----------------------------------------------
-function V =trouveLesMontants(dato, vref, tsmpl)
-  %
-  % si on trouve un point qui répond aux critères detaY/deltaX, on va faire
-  % une vérification au cas ou ce serait seulement un pic de bruit. Puis,
-  % on fait un saut de "inc" sample plus loin pour continuer la recherche.
-  % Si tsmpl est petit, ça ne fera pas de différence. Mais si il est grand,
-  % on va accélérer la recherche.
-  %
-  inc =max(floor(tsmpl/4), 1);
-  gpls(tsmpl) =0;
-  % VITESSE INSTANTANNÉE DE RÉFÉRENCE
-  vitinst =vref/tsmpl;
-  %N SERA LA LIMITE SUPÉRIEURE POUR LA BOUCLE WHILE
-  N =length(dato)-tsmpl+1;
-  %V SERA NOTRE TABLEAU POUR LES INDEX DES PENTES TROUVÉES
-  V(round(N/3)) =0.0;
-  Vind =1;
-  U =2;
-  while U <= N
-    if tsmpl > 2
-      gpls(:) =dato(U:U+tsmpl-1);
-      %ON VÉRIFIE AVEC LA VIT. INSTANT.
-      leTest =find(gpls > vitinst, 1);
-      if ~isempty(leTest)
-        %ON S'ASSURE QUE CE N'EST PAS SEULEMENT UN PIC DE BRUIT
-        vitmoy =cumsum(gpls);
-        leTest =find(vitmoy > vref, 1);
-        if ~isempty(leTest)
-          V(Vind) =U+leTest-1;
-          Vind =Vind+1;
-          U =U+leTest+inc;
-        end
-      end
-
-    %COMME NOTRE FENÊTRE A SEULEMENT UN SAMPLE DE LARGE
-    %ON TRAVAILLE DIRECTEMENT AVEC LES VIT. INSTANT.
-    elseif dato(U+1) > vref
-      V(Vind) =U;
-      Vind =Vind+1;
-      U =U+1;
-    end
-    U =U+inc;
-  end
-  V(Vind:end) =[];
-end
-
-%---------------------
-% Trouver une descente
-%------------------------------------------------
-function V =trouveLesDescentes(dato, vref, tsmpl)
-  %
-  % si on trouve un point qui répond aux critères detaY/deltaX, on va faire
-  % une vérification au cas ou ce serait seulement un pic de bruit. Puis,
-  % on fait un saut de "inc" sample plus loin pour continuer la recherche.
-  % Si tsmpl est petit, ça ne fera pas de différence. Mais si il est grand,
-  % on va accélérer la recherche.
-  %
-  inc =max(floor(tsmpl/4), 1);
-  gmns(tsmpl) =0;
-  % VITESSE INSTANTANNÉE DE RÉFÉRENCE
-  vitinst =vref/tsmpl;
-  %N SERA LA LIMITE SUPÉRIEURE POUR LA BOUCLE WHILE
-  N =length(dato)-tsmpl+1;
-  %V SERA NOTRE TABLEAU POUR LES INDEX DES PENTES TROUVÉES
-  V(round(N/3)) =0.0;
-  Vind =1;
-  U =2;
-  while U <= N
-    if tsmpl > 2
-      gmns =dato(U:U+tsmpl-1);
-      %ON VÉRIFIE AVEC LA VIT. INSTANT.
-      leTest =find(gmns < -vitinst, 1);
-      if ~isempty(leTest)
-        %ON S'ASSURE QUE CE N'EST PAS SEULEMENT UN PIC DE BRUIT
-        vitmoy =cumsum(gmns);
-        leTest =find(vitmoy < -vref, 1);
-        if ~isempty(leTest)
-          V(Vind) =U+leTest-1;
-          Vind =Vind+1;
-          U =U+leTest+inc;
-        end
-      end
-
-    %COMME NOTRE FENÊTRE A SEULEMENT UN SAMPLE DE LARGE
-    %ON TRAVAILLE DIRECTEMENT AVEC LES VIT. INSTANT.
-    elseif dato(U+1) < -vref
-      V(Vind) =U;
-      Vind =Vind+1;
-      U =U+1;
-    end
-    U =U+inc;
-  end
-  V(Vind:end) =[];
-end

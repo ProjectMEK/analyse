@@ -167,10 +167,12 @@ function exportacion(varargin)
     fclose(fileident);
     close(h1);
     delete(sh.fig(1));
+    figure(OA.OFig.fig);
     cd(pcourant);
   %------------
   case 'fermer'
      delete(sh.fig(1));
+     figure(OA.OFig.fig);
   %--
   end
 end

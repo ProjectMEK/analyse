@@ -274,7 +274,7 @@ classdef CTpchnlAnalyse < CTpchnl
       delete(obj.Fig);
       obj.ResetMenu();
       hA =CAnalyse.getInstance();
-      hA.OFig.affiche();
+      hA.OFig.affiche(hA.OFig.fig);
     end
 
     %---------------------------------

@@ -242,37 +242,11 @@ end
 %-----------------------------------------
 % Callback des différents uicontrol du GUI
 % on call la method "Ppa.(autre)"
+% et on passe le param "src"
 %-----------------------------------------
 function quienllama(src,evt, autre)
   Ppa =getappdata(gcf,'Ppa');
-  switch autre
-  case 'terminus'
-    Ppa.terminus();
-  case 'showPanel'
-    Ppa.showPanel(src);
-  case 'importParam'
-    Ppa.importParam();
-  case 'changeCanFx'
-    Ppa.changeCanFx(src);
-  case 'changeCanFy'
-    Ppa.changeCanFy(src);
-  case 'changeCanFz'
-    Ppa.changeCanFz(src);
-  case 'changeCanMx'
-    Ppa.changeCanMx(src);
-  case 'changeCanMy'
-    Ppa.changeCanMy(src);
-  case 'changeCanMz'
-    Ppa.changeCanMz(src);
-  case 'changeCOPseul'
-    Ppa.changeCOPseul(src);
-  case 'exportParam'
-    Ppa.exportParam();
-  case 'surveilleZOffset'
-    Ppa.surveilleZOffset(src);
-  case 'auTravail'
-    Ppa.auTravail();
-  end
+  Ppa.(autre)(src);
 end
 
 %--------------------------------------%

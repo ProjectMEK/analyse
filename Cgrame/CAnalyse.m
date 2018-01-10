@@ -137,6 +137,7 @@ classdef (Sealed) CAnalyse < handle
       if exist('thatObj','var')
         set(tO.OFig.fig, 'WindowButtonMotionFcn',{@garbageCollector, thatObj});
         set(thatObj.fig, 'WindowStyle','normal', 'Visible','off');
+        figure(tO.OFig.fig);
       end
     end
 

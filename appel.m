@@ -81,7 +81,7 @@ function appel(varargin)
       delete(hEC);
 
     case 'EditEchelTps'                   % Édition des échelle de temps
-      ITpchnl();
+      GUITpchnl();
 
     %_____________________________________________________________________________
     %------- MENU MODIFIER *****

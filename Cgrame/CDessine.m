@@ -332,14 +332,19 @@ classdef CDessine < handle
       end
     end
 
-    %--------------------------------------------
-    % fonction pour gérer l'affichage des courbes
-    % (Dans une autre vie c'était woutil.m)
-    %--------------------
-    function affiche(obj)
+    %----------------------------------------------------------------------------------
+    % fonction pour gérer l'affichage des courbes (Dans une autre vie c'était woutil.m)
+    % si quelFig est présent, ça doit être un handle de figure sur lequel
+    % on va focusser à la sortie de l'affichage.
+    %----------------------------------------------------------------------------------
+    function affiche(obj,quelFig)
       try
 
-        fendebut =gcf;
+        if exist('quelFig','var')
+          fendebut =quelFig;
+        else
+          fendebut =gcf;
+        end
         OA =CAnalyse.getInstance();
   
         if OA.Vg.peinture;
@@ -388,7 +393,7 @@ classdef CDessine < handle
         end
 
         figure(fendebut);
-        pause(.2)
+        pause(.1)
         obj.toggleActiveBtous(OA, true);
 
       catch moo;

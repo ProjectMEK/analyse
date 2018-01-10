@@ -93,6 +93,7 @@ function cpCan(varargin)
   case 'fermer'
     lafig =findobj('tag','ICopieCanal');
     delete(lafig);
+    figure(hA.OFig.fig);
   %--
   end
 end

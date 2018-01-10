@@ -20,9 +20,9 @@ function editCan(varargin)
   switch(commande)
   %---------------
   case 'ouverture'
-    edi.can=1;
-    edi.nom=0;
-    edi.freq=0;
+    edi.can =1;
+    edi.nom =false;
+    edi.freq =false;
     larg =450;
     haut =325;
     lapos =positionfen('G','H', larg, haut, gcf);
@@ -83,19 +83,19 @@ function editCan(varargin)
   %-----------------
   case 'ChangeCanal'
     edi.can =get(findobj('tag','ECChoixCanal'),'Value');
-    edi.nom =0;
-    edi.freq =0;
+    edi.nom =false;
+    edi.freq =false;
     tmp =hdchnl.adname{edi.can};
     set(findobj('tag','ECNomCanal'),'String',tmp);
     set(findobj('tag','ECFreqCanal'),'String',num2str(hdchnl.rate(edi.can,1)));
     guidata(gcf,edi);
   %------------
   case 'Ncanal'
-    edi.nom =1;
+    edi.nom =true;
     guidata(gcf,edi);
   %-----------
   case 'Fcanal'
-    edi.freq =1;
+    edi.freq =true;
     guidata(gcf,edi);
   %-------------
   case 'comment'
@@ -114,7 +114,9 @@ function editCan(varargin)
       else
         hdchnl.rate(edi.can,:) =lafreq;
         hdchnl.sweeptime(edi.can,:) =hdchnl.nsmpls(edi.can,:)/lafreq;
+        vg.sauve =1;
       end
+      edi.freq =false;
     end
     if edi.nom
       lenom =deblank(get(findobj('tag','ECNomCanal'),'String'));
@@ -122,11 +124,13 @@ function editCan(varargin)
       hdchnl.ResetListAdname();
       set(findobj('tag','ECChoixCanal'),'String',hdchnl.Listadname);
       vg.sauve =1;
+      edi.nom =false;
     end
+    guidata(gcf,edi);
   %------------
   case 'fermer'
     delete(edi.fig(1));
-    gaglobal('editnom');
+    gaglobal('editnom',hA.OFig.fig);
   %--
   end
 end

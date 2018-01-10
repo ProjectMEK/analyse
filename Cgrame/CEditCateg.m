@@ -389,7 +389,9 @@ classdef CEditCateg < handle
       if ~obj.hF.Vg.niveau
       	obj.hF.Vg.affniv =false;
       end
-      delete(obj.hFig)
+      hA =CAnalyse.getInstance();
+      delete(obj.hFig);
+      figure(hA.OFig.fig);
       obj.hF.editcats();
       obj.hF.editess();
     end

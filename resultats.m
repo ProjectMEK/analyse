@@ -196,9 +196,11 @@ function resultats(varargin)
     fclose(fid);
     cd(wr.curpath);
     delete(wr.fig(1));
+    figure(hA.OFig.fig);
     vg.valeur=0;
   case 'fermer'
     delete(wr.fig(1));
+    figure(hA.OFig.fig)
     vg.valeur=0;
   end
 end

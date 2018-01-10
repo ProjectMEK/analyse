@@ -4,6 +4,7 @@
 % On retrouve les mêmes champs dans CGuiMLMark
 %
 classdef CMLMark < handle
+
   properties (SetAccess=private)
     po_ou =[];
     po_et =[];
@@ -29,30 +30,25 @@ classdef CMLMark < handle
     potravfermer =[];
     potravmaw =[];
     barstatus =[];
-    
   end
+
   methods
     %
-    % initialisation des propriétés à partir de la structure S
+    % initialisation des propriétés à partir de la structure ou Objet S
     %
     function initTexto(tO, S)
       foo =CMLMark();
-
-      K =CParamGlobal.getInstance();
-      if K.matlab
-        % Matlab permet l'utilisation de la commande "properties"
-        ch =getProp(foo);
-      else
-        % Octave ne le permet pas
-        ch =fieldnames(foo);
-      end
-
+      CH =fieldnames(foo);
+      ch =fieldnames(S);
       delete(foo);
-      for U =1:length(ch)
-        if isfield(S, ch{U}) || isprop(S, ch{U})
-          tO.(ch{U}) =S.(ch{U});
+      for U =1:length(CH)
+        if ismember(CH(U),ch)
+          tO.(CH{U}) =S.(CH{U});
         end
       end
+
     end
+
   end
+
 end
