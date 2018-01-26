@@ -299,18 +299,22 @@ classdef (Sealed)  CMark < CMarkGui
       	Ofich.getcanal(dt, val.csrc(ii));
         for jj =1:val.nombres
           smplmax =ptchnl.valeurDePoint(val.laFin,val.csrc(ii),val.alltri(jj));
-          if smplmax == 1
-            smplmax =hdchnl.nsmpls(val.csrc(ii),val.alltri(jj));
-          end
-          esp2 =max(max(ptchnl.valeurDePoint(val.leDebut,val.csrc(ii),val.alltri(jj))), 1);
-          indpt =val.lpts;
-          if val.leMin
-            [a,temps] =min(dt.Dato.(dt.Nom)(esp2:smplmax,val.alltri(jj)));
-            indpt =tO.copieVersExtra(hdchnl, ptchnl, val, ii, jj, indpt, temps, esp2);
-          end
-          if val.leMax
-            [a,temps] =max(dt.Dato.(dt.Nom)(esp2:smplmax,val.alltri(jj)));
-            indpt =tO.copieVersExtra(hdchnl, ptchnl, val, ii, jj, indpt, temps, esp2);
+          if ~isempty(smplmax)
+            if smplmax == 1
+              smplmax =hdchnl.nsmpls(val.csrc(ii),val.alltri(jj));
+            end
+            esp2 =max(max(ptchnl.valeurDePoint(val.leDebut,val.csrc(ii),val.alltri(jj))), 1);
+            if ~isempty(esp2)
+              indpt =val.lpts;
+              if val.leMin
+                [a,temps] =min(dt.Dato.(dt.Nom)(esp2:smplmax,val.alltri(jj)));
+                indpt =tO.copieVersExtra(hdchnl, ptchnl, val, ii, jj, indpt, temps, esp2);
+              end
+              if val.leMax
+                [a,temps] =max(dt.Dato.(dt.Nom)(esp2:smplmax,val.alltri(jj)));
+                indpt =tO.copieVersExtra(hdchnl, ptchnl, val, ii, jj, indpt, temps, esp2);
+              end
+            end
           end
         end  % for jj =1:nombres
       end % for ii =1:nombre
@@ -642,13 +646,18 @@ classdef (Sealed)  CMark < CMarkGui
     function [t, inc] = validInterval(tO, ptchnl, debut, fin, txtr, txti, can, ess)
       t =ptchnl.valeurDePoint(txtr, can, ess);  % en échantillon
       if isempty(t) || (t < debut) || (t > fin)
-        me =MException('ANALYSE:CMark:validInterval', tO.potravetmperr);
-        throw(me);
+        try
+          me =MException('ANALYSE:CMark:validInterval', tO.potravetmperr);
+          throw(me);
+        catch moo;
+          me =MException('ANALYSE:CMark:validInterval', tO.potravetmperr);
+          rethrow(me);
+        end
       end
-      inc =ptchnl.valeurDeTemps(txti, can, ess);  % en sec
-      if isempty(inc)
-        me =MException('ANALYSE:CMark:validInterval', tO.potraveincerr);
-        throw(me);
+      try
+        inc =ptchnl.valeurDeTemps(txti, can, ess);  % en sec
+      catch moo;
+        rethrow(moo);
       end
     end
 

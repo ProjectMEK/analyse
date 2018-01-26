@@ -220,33 +220,35 @@ function hCx =parPoint2D(tO, Ofich, hdchnl, vg)
     P1 =ptchnl.valeurDePoint(tO.PI, canP, U);
     P2 =ptchnl.valeurDePoint(tO.PF, canP, U);
  		if isempty(P1) || isempty(P2) ||P1 == 0 || P2 == 0
- 			continue;
+ 			% rien à faire
  		elseif P2 == P1
-			continue;
-		elseif P2 < P1
-			A =P2;
-			P2 =P1;
-			P1 =A;
-		end
- 		p1txt =num2str(round(P1/hdchnl.rate(lec, U)*1000)*0.001);
- 		p2txt =num2str(round((P2-1)/hdchnl.rate(lec, U)*1000)*0.001);
-    hdchnl.comment{lec, U} =['Dist-Parcourue/entre ' p1txt ' et ' p2txt '/' comment];
- 		lat1 =hCy.Dato.(Ny)(1:P2-1, U)*Radi;
- 		lat2 =hCy.Dato.(Ny)(2:P2, U)*Radi;
- 		lon1 =hCx.Dato.(Nx)(1:P2-1, U)*Radi;
- 		lon2 =hCx.Dato.(Nx)(2:P2, U)*Radi;
-    R =Aa*cos(lat1);
-    S =R.*(lon1-lon2);
-    M =Aa*(lat1-lat2);
-    t5 =sqrt(S.*S+M.*M);
-	  for V = P1:P2-1
-      if Vit(V+1, U)
-        D(V+1, U) =D(V, U)+t5(V);
-      else
-        D(V+1, U) =D(V, U);
+ 			% rien à faire
+		else
+		  if P2 < P1
+  			A =P2;
+  			P2 =P1;
+  			P1 =A;
+  		end
+   		p1txt =num2str(round(P1/hdchnl.rate(lec, U)*1000)*0.001);
+   		p2txt =num2str(round((P2-1)/hdchnl.rate(lec, U)*1000)*0.001);
+      hdchnl.comment{lec, U} =['Dist-Parcourue/entre ' p1txt ' et ' p2txt '/' comment];
+   		lat1 =hCy.Dato.(Ny)(1:P2-1, U)*Radi;
+   		lat2 =hCy.Dato.(Ny)(2:P2, U)*Radi;
+   		lon1 =hCx.Dato.(Nx)(1:P2-1, U)*Radi;
+   		lon2 =hCx.Dato.(Nx)(2:P2, U)*Radi;
+      R =Aa*cos(lat1);
+      S =R.*(lon1-lon2);
+      M =Aa*(lat1-lat2);
+      t5 =sqrt(S.*S+M.*M);
+  	  for V = P1:P2-1
+        if Vit(V+1, U)
+          D(V+1, U) =D(V, U)+t5(V);
+        else
+          D(V+1, U) =D(V, U);
+        end
       end
+      hdchnl.nsmpls(lec, U) =P2;
     end
-    hdchnl.nsmpls(lec, U) =P2;
 	end
 	S =max(hdchnl.nsmpls(lec, :));
   hCx.Dato.(Nx) =D(1:S,:);

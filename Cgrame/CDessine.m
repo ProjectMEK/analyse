@@ -347,58 +347,57 @@ classdef CDessine < handle
         end
         OA =CAnalyse.getInstance();
   
-        if OA.Vg.peinture;
-          % On arrête tout de go car on est déjà entrain d'afficher
-          return
-  
-        else
-          %___________________________________________________________________
+        if ~ OA.Vg.peinture;
+          %___________________________________________________________________plot
           % On désactive les boîtes de sélection pour ne pas que l'utilisateur
           % clique sans arrêt et que l'ordi ne soit pas en mesure de répondre adéquatement
           %-------------------------------------------------------------------------------
           obj.toggleActiveBtous(OA, false);
   
-        end
+          %___________________________________________________
+          % On s'assure de travailler avec le fichier en cours
+          %---------------------------------------------------
+          Ofich =OA.findcurfich();
+          vg =Ofich.Vg;
 
-        %___________________________________________________
-        % On s'assure de travailler avec le fichier en cours
-        %---------------------------------------------------
-        Ofich =OA.findcurfich();
-        vg =Ofich.Vg;
+          %_______________________________________________
+          % Si on est en mode XY, il faut avoir défini des
+          % canaux au préalable.
+          %-----------------------------------------------
+          if vg.xy && (isempty(Ofich.ModeXY.YY) || isempty(vg.y))
+            % rien à faire pour l'instant
+          else
 
-        %_______________________________________________
-        % Si on est en mode XY, il faut avoir défini des
-        % canaux au préalable.
-        %-----------------------------------------------
-        if vg.xy && (isempty(Ofich.ModeXY.YY) || isempty(vg.y))
-          obj.toggleActiveBtous(OA, true);
-          return;
-        end
+            % on prépare les variables pour garder les traces de l'affichage
+            gr =Ofich.Gr;
+            cc =Ofich.Catego;
+            obj.fabrikgr(gr,vg,cc);
+            nbtotfen =length(vg.multiaff)+1;
 
-        % on prépare les variables pour garder les traces de l'affichage
-        gr =Ofich.Gr;
-        cc =Ofich.Catego;
-        obj.fabrikgr(gr,vg,cc);
-        nbtotfen =length(vg.multiaff)+1;
+            for mfen =1:nbtotfen
+              [lestri, cfini] =obj.canalessai(gr, vg, cc, mfen-1);
+              if cfini
+              	continue;
+              elseif mfen == 1
+                Ofich.Lestri =lestri;
+              end
+              obj.detruitpt();
+              obj.finition(Ofich);
+            end
 
-        for mfen =1:nbtotfen
-          [lestri, cfini] =obj.canalessai(gr, vg, cc, mfen-1);
-          if cfini
-          	continue;
-          elseif mfen == 1
-            Ofich.Lestri =lestri;
+            figure(fendebut);
+            pause(.1)
+
           end
-          obj.detruitpt();
-          obj.finition(Ofich);
-        end
 
-        figure(fendebut);
-        pause(.1)
-        obj.toggleActiveBtous(OA, true);
+          obj.toggleActiveBtous(OA, true);
+
+        end
 
       catch moo;
+        disp('on passe ici')
         CQueEsEsteError.dispOct(moo);
-        obj.commentaire('L''affichage s''est terminée anormalement')
+        obj.commentaire('L''affichage s''est terminée Anormalement')
       end
 
     end
